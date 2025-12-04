@@ -1,0 +1,59 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@400;700&family=Open+Sans:wght@400;700&display=swap");
+
+@theme {
+  --font-montserrat: "Montserrat", sans-serif;
+  --font-lato: "Lato", sans-serif;
+  --font-open-sans: "Open Sans", sans-serif;
+
+  @keyframes slide-left {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(0%);
+    }
+  }
+
+  @keyframes slide-right {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+}
+
+/* ✅ Tell Tailwind these are valid utilities */
+@utility font-montserrat {
+  font-family: var(--font-montserrat);
+}
+
+@utility font-lato {
+  font-family: var(--font-lato);
+}
+
+@utility font-open-sans {
+  font-family: var(--font-open-sans);
+}
+
+/* Optional reusable heading class */
+@layer components {
+  .heading-primary {
+    @apply text-3xl lg:text-5xl font-semibold font-open-sans  tracking-wide;
+  }
+  .heading-secondary {
+    @apply text-lg sm:text-xl lg:text-3xl font-semibold font-open-sans  tracking-wide;
+  }
+  .title-primary {
+    @apply text-xl lg:text-3xl font-semibold font-open-sans  tracking-tight;
+  }
+  .title-secondary {
+    @apply text-base lg:text-xl font-medium font-open-sans  tracking-tight;
+  }
+  .button-primary {
+    @apply text-base sm:text-lg lg:text-2xl font-montserrat font-medium cursor-pointer;
+  }
+  
+}
