@@ -14,7 +14,7 @@ const ProductSummary = () => {
           <ProductDetails />
         </div>
       </div>
-      <ProductDescription />
+      {/* <ProductDescription /> */}
     </div>
   );
 };

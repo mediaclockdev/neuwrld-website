@@ -1,49 +1,65 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchProductDetails } from "../../features/products/productSlice";
 
 const ProductImages = () => {
   const { id } = useParams();
-  const products = useSelector((state) => state.products);
-  const allProducts = [...products.men, ...products.women];
+  const dispatch = useDispatch();
+  const { product, loading, error } = useSelector((s) => s.product);
 
-  // Finding the product by id
-  const product = allProducts.find((p) => p.id === parseInt(id));
+  // Always dispatch inside useEffect
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchProductDetails(id));
+    }
+  }, [id, dispatch]);
 
-  if (!product) {
-    return <p className="p-4">Product not found.</p>;
+  // PREPARE IMAGES SAFELY **AFTER** product is loaded
+  let images = [];
+  if (product?.data?.product?.all_review_images?.length > 0) {
+    images = product.data.product.all_review_images;
+  } else if (product?.data?.product?.image) {
+    images = [product.data.product.image];
   }
-  // All images for this product
-  const productImages = product.images || [product.img];
 
-  // State for main displayed image
-  const [mainImage, setMainImage] = useState(productImages[0]);
+  // Hook MUST ALWAYS RUN, even if images is empty
+  const [mainImage, setMainImage] = useState(null);
+
+  // Set main image when images arrive
+  useEffect(() => {
+    if (images.length > 0) {
+      setMainImage(images[0]);
+    }
+  }, [product]);
+
+  // SAFE RETURNS (AFTER HOOKS)
+  if (loading) return <p className="p-4">Loading...</p>;
+  if (error) return <p className="p-4">Error: {String(error)}</p>;
+  if (!product) return <p className="p-4">Product not found.</p>;
 
   return (
     <div className="container mx-auto px-4 py-6 max-w-2xl space-y-6">
       <div className="flex flex-row lg:flex-col gap-4">
-        {/* Main Image */}
-        <div className="w-full  order-2 lg:order-1">
-          <img
-            src={mainImage}
-            alt={product.name}
-            className="w-80 lg:w-full aspect-square object-cover rounded shadow-md transition-all duration-300"
-          />
+        <div className="w-full order-2 lg:order-1">
+          {mainImage && (
+            <img
+              src={mainImage}
+              alt="Product"
+              className="w-80 lg:w-full aspect-square object-cover rounded shadow-md"
+            />
+          )}
         </div>
 
-        {/* Thumbnails */}
-        <div className="flex flex-col lg:flex-row gap-4 overflow-x-auto justify-center sm:justify-start order-1 lg:order-2">
-          {productImages.map((img, index) => (
+        <div className="flex flex-col lg:flex-row gap-4 overflow-x-auto justify-center order-1 lg:order-2">
+          {images.map((img, i) => (
             <img
-              key={index}
+              key={i}
               src={img}
-              alt={`${product.name}-view-${index}`}
-              className={`w-10 lg:w-20 h-10 lg:h-20 object-cover rounded cursor-pointer border-2 transition-all duration-200 flex-shrink-0 ${
-                mainImage === img ? "border-gray-100" : "border-transparent"
+              className={`w-10 lg:w-20 h-10 lg:h-20 rounded cursor-pointer border-2 ${
+                mainImage === img ? "border-black" : "border-transparent"
               }`}
               onClick={() => setMainImage(img)}
-              onMouseEnter={() => setMainImage(img)}
             />
           ))}
         </div>

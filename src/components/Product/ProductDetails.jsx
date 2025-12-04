@@ -1,136 +1,192 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import uploadicon from "../../assets/svg/icons/upload.svg";
 import { addToCart } from "../../features/cart/cartSlice";
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const products = useSelector((state) => state.products);
-  const allProducts = [...products.men, ...products.women];
-  const product = allProducts.find((p) => p.id === parseInt(id));
   const dispatch = useDispatch();
 
-  const sizeOptions = ["XS", "S", "M", "L", "XL"];
-  const [selectedSize, setSelectedSize] = useState(null);
+  // Get product details from Redux
+  const { product, loading, error } = useSelector((state) => state.product);
+
+  // Extract product safely
+  const data = product?.data?.product || null;
+
+  // Safely extract color & size options from attribute_options
+  const colorOptions = data?.attribute_options?.[0]?.options || [];
+  const sizeOptionsFromApi = data?.attribute_options?.[1]?.options || [];
+
+  // If no sizes exist in API, fallback to static sizes
+  const sizeOptions =
+    sizeOptionsFromApi.length > 0
+      ? sizeOptionsFromApi.map((s) => s.value)
+      : ["XS", "S", "M", "L", "XL"];
+
+  // Material options (you can also get this from API if available)
+  const materialOptions = ["Cotton", "Polyester", "Leather", "Silk"];
+
+  const [selectedSize, setSelectedSize] = useState("L");
+  const [selectedColor, setSelectedColor] = useState("Red");
+  const [selectedMaterial, setSelectedMaterial] = useState("Cotton");
   const [quantity, setQuantity] = useState(1);
 
-  if (!product) {
-    return <p className="p-4">Product not found.</p>;
-  }
+  if (loading) return <p className="p-4">Loading...</p>;
+  if (error) return <p className="p-4">Error loading product.</p>;
+  if (!data) return <p className="p-4">Product not found.</p>;
 
   return (
-    <div className="container mx-auto px-4 py-6 max-w-2xl space-y-3 lg:space-y-6">
-      {/* Badges */}
-      <div className="flex gap-2">
-        <span className="bg-black text-white text-xs px-2 py-1 rounded">
-          HOT
-        </span>
-        <span className="bg-gray-700 text-white text-xs px-2 py-1 rounded">
-          LIMITED EDITION
-        </span>
-      </div>
+    <div className="bg-white min-h-screen">
+      <div className="container mx-auto px-4 py-6 lg:py-12">
+        <div className="max-w-7xl mx-auto">
+          <div className="space-y-6 lg:space-y-8">
+            {/* Product Title */}
+            <div>
+              <h1 className="text-2xl lg:text-4xl font-medium text-gray-900 mb-2">
+                Product Details
+              </h1>
+              <p className="text-base lg:text-lg text-gray-700 leading-relaxed">
+                {data.details ||
+                  "Elevate your ethnic wardrobe with this stylish blouse from NEUWRL0. Designed in Style 1, this blouse offers a perfect blend of comfort and elegance. The regular fit ensures ease of movement, making it ideal for all-day wear during festive occasions, weddings, and cultural events. Expertly crafted in India, it reflects fine craftsmanship and attention to detail. Whether paired with a traditional saree or a contemporary drape, this blouse adds a touch of sophistication to your overall look. Comes with a 7-day return policy for a worry-free shopping experience."}
+              </p>
+            </div>
 
-      {/* Product Title + Price */}
-      <div>
-        <h2 className="text-lg lg:text-2xl font-semibold">{product.name}</h2>
-        <div className="flex items-center gap-3 mt-2">
-          <p className="text-base lg:text-xl ">{product.price}</p>
-          <p className="line-through text-gray-500">{product.originalPrice}</p>
-          <span className="bg-gray-800 text-white text-xs px-2 py-1 rounded">
-            25% OFF
-          </span>
-        </div>
-      </div>
+            {/* Product Specifications */}
+            <div className="border-t pt-6">
+              <h2 className="text-xl lg:text-2xl font-medium mb-4">
+                Product Specifications
+              </h2>
+              <p className="text-sm lg:text-base text-gray-700">
+                <span className="font-semibold">Category:</span> Blouses.{" "}
+                <span className="font-semibold">Material:</span> Assorted
+                Fabrics.{" "}
+                <span className="font-semibold">Available Colors:</span> Red,
+                Blue, Green, Brown.{" "}
+                <span className="font-semibold">Sizes:</span> XS, S, M, L, XL
+                (where applicable).
+              </p>
+            </div>
 
-      {/* Colors */}
-      <div>
-        <p className="font-medium">Color</p>
-        <div className="flex gap-3 mt-2">
-          <div className="size-5 lg:size-7 rounded-full border border-black bg-gray-400 cursor-pointer"></div>
-          <div className="size-5 lg:size-7 rounded-full border border-gray-300 bg-gray-600 cursor-pointer"></div>
-          <div className="size-5 lg:size-7 rounded-full border border-gray-300 bg-gray-800 cursor-pointer"></div>
-        </div>
-      </div>
+            {/* Select Color */}
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Select Color</h3>
+              <div className="flex gap-3 flex-wrap">
+                {["Red", "Blue", "Green", "Black"].map((color) => (
+                  <button
+                    key={color}
+                    onClick={() => setSelectedColor(color)}
+                    className={`px-6 py-2 rounded-md text-sm font-medium transition-colors ${
+                      selectedColor === color
+                        ? "bg-black text-white"
+                        : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                    }`}
+                  >
+                    {color}
+                  </button>
+                ))}
+              </div>
+            </div>
 
-      {/* Sizes */}
-      <div className="space-y-2">
-        <p className="font-medium ">Size</p>
-        <div className="flex gap-2 ">
-          {sizeOptions.map((item) => (
+            {/* Select Material */}
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Select Material</h3>
+              <div className="flex gap-3 flex-wrap">
+                {materialOptions.map((material) => (
+                  <button
+                    key={material}
+                    onClick={() => setSelectedMaterial(material)}
+                    className={`px-6 py-2 rounded-md text-sm font-medium transition-colors ${
+                      selectedMaterial === material
+                        ? "bg-black text-white"
+                        : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                    }`}
+                  >
+                    {material}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Select Size */}
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Select Size</h3>
+              <div className="flex gap-3 flex-wrap">
+                {sizeOptions.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    className={`px-6 py-2 rounded-md text-sm font-medium transition-colors min-w-[60px] ${
+                      selectedSize === size
+                        ? "bg-black text-white"
+                        : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Quantity */}
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Quantity</h3>
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  className="w-10 h-10 border-2 border-gray-300 rounded-md hover:border-gray-400 flex items-center justify-center text-base font-normal"
+                >
+                  -
+                </button>
+
+                <span className="text-lg font-normal min-w-[40px] text-center">
+                  {quantity}
+                </span>
+
+                <button
+                  onClick={() => setQuantity((q) => q + 1)}
+                  className="w-10 h-10 border-2 border-gray-300 rounded-md hover:border-gray-400 flex items-center justify-center text-base font-normal"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            {/* Add to Cart */}
             <button
-              key={item}
-              onClick={() => setSelectedSize(item)}
-              className={`px-4 lg:px-6 py-2 border rounded-md text-sm lg:text-base ${
-                selectedSize === item
-                  ? "border-black"
-                  : "border-gray-300 hover:border-black"
-              }`}
+              onClick={() =>
+                dispatch(
+                  addToCart({
+                    ...data,
+                    quantity,
+                    selectedSize,
+                    selectedColor,
+                    selectedMaterial,
+                  })
+                )
+              }
+              className="w-full bg-black hover:bg-black/85 text-white py-4 rounded-md font-normal text-base transition-colors"
             >
-              {item}
+              Add to Cart – {data.price}
             </button>
-          ))}
+
+            {/* Shipping & Returns */}
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Shipping & Returns</h3>
+              <p className="text-sm lg:text-base text-gray-700">
+                {data.shipping_return_policy ||
+                  "Free shipping on orders over $50. 7-day return policy for a worry-free shopping experience."}
+              </p>
+            </div>
+          </div>
+
+          {/* Reviews */}
+          <div className="border-t pt-6">
+            <h3 className="text-lg font-semibold mb-2">Customer Reviews</h3>
+            <p className="text-sm text-gray-600">
+              {data.total_rating || 0} Reviews
+            </p>
+          </div>
         </div>
-        <p className="text-sm text-gray-600  cursor-pointer underline">
-          Size Guide
-        </p>
-      </div>
-
-      {/* Custom Embroidery */}
-      <div>
-        <p className="font-medium">Custom Embroidery (Optional)</p>
-        <div className="border-2 border-dashed border-gray-300 rounded-md p-6 flex flex-col items-center justify-center text-center gap-2">
-          <img src={uploadicon} alt="upload" className="w-6 h-6" />
-          <p className="text-sm text-gray-600">Upload your design</p>
-          <input type="file" id="fileUpload" className="hidden" />
-          <label
-            htmlFor="fileUpload"
-            className="cursor-pointer px-4 py-2 border rounded-md text-sm hover:bg-gray-100"
-          >
-            Choose File
-          </label>
-        </div>
-      </div>
-
-      {/* Quantity */}
-      <div>
-        <p className="font-medium">Quantity</p>
-        <div className="flex items-center gap-3 mt-2">
-          <button
-            onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-            className="border px-3 py-1 rounded"
-          >
-            -
-          </button>
-          <span className="px-4">{quantity}</span>
-          <button
-            onClick={() => setQuantity((q) => q + 1)}
-            className="border px-3 py-1 rounded"
-          >
-            +
-          </button>
-        </div>
-      </div>
-
-      {/* Add to Cart */}
-      <button
-        onClick={() => dispatch(addToCart(product))}
-        className="w-full bg-black text-white py-3 rounded-md font-medium cursor-pointer"
-      >
-        Add to Cart - {product.price}
-      </button>
-
-      {/* Wishlist + Share */}
-      <div className="flex items-center justify-center gap-6 text-gray-600">
-        <p className="cursor-pointer">♡ Wishlist</p>
-        <p className="cursor-pointer">↗ Share</p>
-      </div>
-
-      {/* Customer Reviews */}
-      <div className="border-t pt-4">
-        <p className="text-gray-700">Customer Reviews</p>
-        <p className="text-sm text-gray-500">Based on 127 reviews</p>
-        <p className="text-yellow-500 font-bold mt-1">★★★★☆ (4.2)</p>
       </div>
     </div>
   );

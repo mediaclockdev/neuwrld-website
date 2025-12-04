@@ -1,26 +1,37 @@
 import React from "react";
-import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const ProductDescription = () => {
-  const { id } = useParams();
-  const products = useSelector((state) => state.products);
-  const allProducts = [...products.men, ...products.women];
-  const product = allProducts.find((p) => p.id === parseInt(id));
+  // Get product details from redux
+  const { product, loading, error } = useSelector((state) => state.product);
+
+  // Extract actual product safely
+  const data = product?.data?.product || null;
+
+  if (loading) return <p className="p-4">Loading...</p>;
+  if (error) return <p className="p-4">Error loading product description.</p>;
+  if (!data) return <p className="p-4">Product not found.</p>;
+
   return (
-    <div className=" max-w-screen-2xl space-y-6 px-4 lg:px-6 py-6 mx-auto">
+    <div className="max-w-screen-2xl space-y-6 px-4 lg:px-6 py-6 mx-auto">
       <div>
         <p className="text-lg font-normal font-inter">Product Description</p>
-        <p className="text-base font-light font-inter">{product.description}</p>
+        <p className="text-base font-light font-inter">
+          {data.description || "No description available."}
+        </p>
       </div>
+
       <div>
         <p className="text-lg font-normal font-inter">Material & Care</p>
-        <p className="text-base font-light font-inter">{product.material}</p>
+        <p className="text-base font-light font-inter">
+          {data.material || "Material details not provided."}
+        </p>
       </div>
+
       <div>
         <p className="text-lg font-normal font-inter">Shipping & Returns</p>
         <p className="text-base font-light font-inter">
-          {product.shippingAndReturns}
+          {data.shipping_return_policy || "No shipping info available."}
         </p>
       </div>
     </div>
