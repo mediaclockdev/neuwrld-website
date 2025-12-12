@@ -15,10 +15,14 @@ import home from "../../../assets/svg/icons/homeicon.svg";
 import newicon from "../../../assets/svg/icons/newicon.svg";
 import sale from "../../../assets/svg/icons/sale.svg";
 import { Link, NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchCategoriesAPI } from "../../../features/categories/categoriesSlice";
+import MegaMenuDialog from "../../../components/MegaMenuDialog";
+import ViewProfile from "../../../components/ViewProfile";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -26,14 +30,32 @@ const Header = () => {
       document.body.style.overflow = "auto";
     }
   }, [isMenuOpen]);
-  const cartItems = useSelector((state) => state.cart.cartItems);
+  const cartItems = useSelector((state) => state.cart.cartItems || []);
   const totalItems = cartItems.reduce(
     (sum, item) => sum + (item.quantity || 1),
     0
   );
+  const dispatch = useDispatch();
+  const { list, loading } = useSelector((state) => state.categories);
+
+  const [openMenu, setOpenMenu] = useState(null); // "men" or "women"
+
+  const handleMouseEnter = (type) => {
+    setOpenMenu(type);
+
+    // Fetch once if not already loaded
+    if (list.length === 0) {
+      dispatch(fetchCategoriesAPI());
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setOpenMenu(null);
+  };
+  const { isLoggedIn } = useSelector((state) => state.auth);
 
   return (
-    <div className="max-w-screen-2xl mx-auto px-5 lg:px-8 sticky top-0 bg-white z-50 shadow-sm">
+    <div className="max-w-screen-2xl mx-auto px-5 lg:px-8  sticky top-0 bg-white z-50 shadow-sm">
       <header>
         <nav>
           <div className="flex justify-between items-center lg:gap-4">
@@ -92,10 +114,10 @@ const Header = () => {
                               </div>
                             </div>
                             <div className="px-4 ">
-                              <ul className="flex flex-col gap-6">
+                              <ul className="flex flex-col gap-6 relative">
                                 <li>
                                   <Link to={"/"}>
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-2 cursor-pointer">
                                       <img
                                         src={home}
                                         alt="home icon"
@@ -108,7 +130,7 @@ const Header = () => {
                                   </Link>
                                 </li>
                                 <li>
-                                  <div className="flex items-center gap-2">
+                                  <div className="flex items-center gap-2 ">
                                     <img
                                       src={man}
                                       alt="men icon"
@@ -174,12 +196,15 @@ const Header = () => {
             {/* destop logo */}
             <div className="hidden lg:block">
               <Link to={"/"}>
-                <img src={logo2} alt="logo" className="size-20" />
+                <img src={logo2} alt="logo" className="size-16" />
               </Link>
             </div>
 
             {/* desktop menu */}
-            <div className="hidden lg:block">
+            <div
+              className="hidden lg:flex items-end pb-8 -mb-8 relative"
+              onMouseLeave={() => setOpenMenu(null)}
+            >
               <ul className="flex items-center gap-8">
                 <li>
                   <NavLink to="/" className="relative group">
@@ -195,7 +220,7 @@ const Header = () => {
                     )}
                   </NavLink>
                 </li>
-                <li>
+                <li onMouseEnter={() => handleMouseEnter("men")}>
                   <NavLink to="/classic" className="relative group">
                     {({ isActive }) => (
                       <p className="font-open-sans text-base transition-all duration-500">
@@ -209,7 +234,7 @@ const Header = () => {
                     )}
                   </NavLink>
                 </li>
-                <li>
+                <li onMouseEnter={() => handleMouseEnter("women")}>
                   <NavLink to="/women" className="relative group">
                     {({ isActive }) => (
                       <p className="font-open-sans text-base transition-all duration-500">
@@ -252,9 +277,20 @@ const Header = () => {
                   </NavLink>
                 </li>
               </ul>
+              {/* HOVER DIALOG BOX */}
+              {openMenu && list.length > 0 && (
+                <MegaMenuDialog
+                  type={openMenu}
+                  categories={list}
+                  onClose={() => setOpenMenu(null)}
+                />
+              )}
             </div>
             {/* desktop icons */}
-            <div className="">
+            <div
+              className="relative pb-6 -mb-8 flex items-end"
+              onMouseLeave={() => setShowProfile(false)}
+            >
               <ul className="flex items-center gap-4">
                 <li>
                   <div className="flex items-center xl:w-80 lg:bg-gray-100 px-0 lg:px-3 py-0 lg:py-2 rounded-sm  focus-within:bg-white focus-within:border border-gray-100">
@@ -273,14 +309,14 @@ const Header = () => {
                     className="size-4 lg:size-5 cursor-pointer"
                   />
                 </li>
-                <li>
-                  <Link to={"/login"}>
-                    <img
-                      src={user}
-                      alt="user icon"
-                      className="size-4 lg:size-5 cursor-pointer"
-                    />
-                  </Link>
+                <li onMouseEnter={() => setShowProfile(true)}>
+                  <img src={user} className="size-5 cursor-pointer" />
+
+                  {showProfile && (
+                    <div className="absolute right-0 top-12.5">
+                      <ViewProfile />
+                    </div>
+                  )}
                 </li>
                 <li>
                   <Link to={"/cart"}>
@@ -304,7 +340,7 @@ const Header = () => {
                   <img
                     src={notification}
                     alt="notification icon"
-                    className="size-4 lg:size-6 cursor-pointer hidden lg:block"
+                    className="size-4 lg:size-5 cursor-pointer hidden lg:block"
                   />
                 </li>
               </ul>

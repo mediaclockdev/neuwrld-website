@@ -1,127 +1,284 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import facebook from "../../assets/svg/icons/facebook.svg";
-import google from "../../assets/svg/icons/googleicon.svg";
-import apple from "../../assets/svg/icons/appleicon.svg";
+import React, { useState, useRef, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loginAPI, verifyOtpAPI } from "../../features/auth/authSlice";
 import logo2 from "../../assets/svg/icons/logo2.svg";
+import { useNavigate } from "react-router-dom";
+import { fetchUserProfile } from "../../features/auth/authSlice";
 
 const Login = () => {
-  const [activeTab, setActiveTab] = useState("email");
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.auth);
+
+  const [step, setStep] = useState("enterEmail");
+  const [emailaddress, setEmailAddress] = useState("");
+  const [otp, setOtp] = useState(new Array(6).fill(""));
+  const inputRefs = useRef([]);
+
+  const navigate = useNavigate();
+
+  // STEP 1 — LOGIN API
+  const handleContinue = () => {
+    if (!emailaddress) {
+      alert("Please enter email or mobile");
+      return;
+    }
+
+    dispatch(loginAPI({ email: emailaddress }))
+      .unwrap()
+      .then(() => {
+        setStep("enterOtp");
+      })
+      .catch(() => {
+        alert("Failed to send OTP");
+      });
+  };
+
+  // STEP 2 — VERIFY OTP API
+  const handleVerify = () => {
+    const finalOtp = otp.join("");
+
+    if (finalOtp.length !== 6) {
+      alert("Enter full 6-digit OTP");
+      return;
+    }
+
+    dispatch(verifyOtpAPI({ otp: finalOtp }))
+      .unwrap()
+      .then(() => {
+        // LOAD PROFILE BEFORE REDIRECT
+        return dispatch(fetchUserProfile()).unwrap();
+      })
+      .then(() => {
+        navigate("/", { replace: true });
+      })
+      .catch(() => alert("Invalid OTP"));
+  };
+
+  const handleOtpChange = (value, index) => {
+    if (!/^[0-9]?$/.test(value)) return;
+
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    if (value && index < 5) {
+      inputRefs.current[index + 1].focus();
+    }
+  };
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      inputRefs.current[index - 1].focus();
+    }
+  };
+
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const text = e.clipboardData.getData("text").trim();
+
+    if (/^\d{6}$/.test(text)) {
+      const newOtp = text.split("");
+      setOtp(newOtp);
+      inputRefs.current[5].focus();
+    }
+  };
+
+  const handleBackToEmail = () => {
+    setStep("enterEmail");
+    setOtp(new Array(6).fill(""));
+  };
+
+  useEffect(() => {
+    if (step === "enterOtp") {
+      inputRefs.current[0].focus();
+    }
+  }, [step]);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <div className="flex justify-center w-full items-center">
-        <Link to={"/"}>
-          <img src={logo2} alt="logo" className="size-24 " />
-        </Link>
-      </div>
-      <div className="max-w-screen-2xl mx-auto  flex flex-col items-center justify-center px-4 ">
-        <div className="bg-white shadow-md rounded-lg px-8 py-7 w-full max-w-md space-y-6">
-          {/* Title */}
-          <div className="flex flex-col items-center space-y-1">
-            <h2 className="text-xl lg:text-2xl font-semibold font-inter">
-              Welcome Back!
-            </h2>
-            <p className="text-gray-500 text-xs lg:text-sm">
-              Sign in to your account
-            </p>
-          </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 px-4 py-8 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md">
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <img
+            src={logo2}
+            alt="Logo"
+            className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-4 drop-shadow-lg"
+          />
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
+            Welcome Back
+          </h1>
+          <p className="text-sm sm:text-base text-gray-600 mt-2">
+            {step === "enterEmail"
+              ? "Sign in to continue to your account"
+              : "Verify your identity"}
+          </p>
+        </div>
 
-          {/* Tabs */}
-          <div className="flex border-b">
-            <button
-              className={`w-1/2 pb-2 text-sm font-medium ${
-                activeTab === "email"
-                  ? "border-b-2 border-black text-black"
-                  : "text-gray-500"
-              }`}
-              onClick={() => setActiveTab("email")}
-            >
-              Email Login
-            </button>
-            <button
-              className={`w-1/2 pb-2 text-sm font-medium ${
-                activeTab === "quick"
-                  ? "border-b-2 border-black text-black"
-                  : "text-gray-500"
-              }`}
-              onClick={() => setActiveTab("quick")}
-            >
-              Quick Login Card
-            </button>
-          </div>
-
-          {/* Email Login */}
-          {activeTab === "email" && (
-            <form className="space-y-4">
-              <div className="space-y-2">
-                <label className="block text-sm font-normal">
-                  Email Address
+        {/* Card */}
+        <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 space-y-6">
+          {/* STEP 1 — Email */}
+          {step === "enterEmail" && (
+            <div className="space-y-5">
+              <div>
+                <label
+                  htmlFor="email-input"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Email or Mobile Number
                 </label>
                 <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="w-full border-b border-gray-200  px-2 lg:px-3 py-1 lg:py-2 focus:outline-none focus:border-gray-500 placeholder:text-sm"
+                  id="email-input"
+                  type="text"
+                  placeholder="name@example.com or +91 98765 43210"
+                  value={emailaddress}
+                  onChange={(e) => setEmailAddress(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleContinue()}
+                  className="w-full border border-gray-300 px-4 py-3 rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none"
                 />
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-normal">Password</label>
-                <input
-                  type="password"
-                  placeholder="Enter your password"
-                  className="w-full border-b border-gray-200  px-2 lg:px-3 py-1 lg:py-2 focus:outline-none focus:border-gray-500 placeholder:text-sm"
-                />
-              </div>
-
-              <div className="flex justify-between items-center text-sm">
-                <label className="flex items-center gap-1">
-                  <input type="checkbox" />
-                  <span>Remember me</span>
-                </label>
-                <Link to={"/forgotpassword"}>
-                  <p className="text-gray-500 hover:text-black">
-                    Forgot Password?
-                  </p>
-                </Link>
               </div>
 
               <button
-                type="submit"
-                className="w-full bg-black text-white py-2 rounded-md  cursor-pointer "
+                type="button"
+                onClick={handleContinue}
+                disabled={loading}
+                className="w-full bg-black text-white py-3 rounded-lg text-sm sm:text-base font-medium hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform active:scale-95"
               >
-                Sign In
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                    Sending OTP...
+                  </span>
+                ) : (
+                  "Continue"
+                )}
               </button>
-            </form>
+            </div>
           )}
 
-          {/* Divider */}
-          <div className="flex items-center gap-2">
-            <div className="flex-1 h-px bg-gray-200" />
-            <p className="text-gray-500 text-sm">or</p>
-            <div className="flex-1 h-px bg-gray-200" />
-          </div>
+          {/* STEP 2 — OTP */}
+          {step === "enterOtp" && (
+            <div className="space-y-6">
+              <div className="text-center">
+                <p className="text-sm text-gray-600 mb-1">
+                  We've sent a verification code to
+                </p>
+                <p className="text-sm font-semibold text-gray-800 break-all px-2">
+                  {emailaddress}
+                </p>
+                <button
+                  onClick={handleBackToEmail}
+                  className="text-xs text-blue-600 hover:text-blue-700 mt-2 font-medium"
+                >
+                  Change email
+                </button>
+              </div>
 
-          {/* Social Login */}
-          <div className="flex justify-center gap-4">
-            <button className=" rounded-md p-2 w-12 h-12 flex items-center justify-center hover:bg-gray-100">
-              <img src={apple} alt="apple" />
-            </button>
-            <button className="  rounded-md p-2 w-12 h-12 flex items-center justify-center hover:bg-gray-100">
-              <img src={facebook} alt="facebook" />
-            </button>
-            <button className="rounded-md p-2 w-12 h-12 flex items-center justify-center hover:bg-gray-100">
-              <img src={google} alt="google" />
-            </button>
-          </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3 text-center">
+                  Enter 6-digit OTP
+                </label>
+                <div className="flex justify-center gap-2 sm:gap-3">
+                  {otp.map((v, i) => (
+                    <input
+                      key={i}
+                      ref={(el) => (inputRefs.current[i] = el)}
+                      maxLength="1"
+                      value={v}
+                      onChange={(e) => handleOtpChange(e.target.value, i)}
+                      onKeyDown={(e) => handleKeyDown(e, i)}
+                      onPaste={handlePaste}
+                      className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gray-300 rounded-lg text-center text-lg sm:text-xl font-semibold focus:border-black focus:ring-2 focus:ring-black focus:outline-none transition-all"
+                    />
+                  ))}
+                </div>
+              </div>
 
-          {/* Sign up link */}
-          <p className="text-center text-sm text-gray-500">
-            Don’t have an account?{" "}
-            <Link to={"/signup"} className="text-black font-medium">
-              Sign Up
-            </Link>
-          </p>
+              <button
+                type="button"
+                onClick={handleVerify}
+                disabled={loading}
+                className="w-full bg-black text-white py-3 rounded-lg text-sm sm:text-base font-medium hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform active:scale-95"
+              >
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                    Verifying...
+                  </span>
+                ) : (
+                  "Verify OTP"
+                )}
+              </button>
+
+              <div className="text-center">
+                <p className="text-xs text-gray-500">
+                  Didn't receive code?{" "}
+                  <button
+                    onClick={handleContinue}
+                    disabled={loading}
+                    className="text-blue-600 hover:text-blue-700 font-medium disabled:opacity-50"
+                  >
+                    Resend
+                  </button>
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Error Display */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-start gap-2">
+              <svg
+                className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <p className="text-sm text-red-700 flex-1">
+                {typeof error === "string" ? error : error?.message}
+              </p>
+            </div>
+          )}
         </div>
+
+        {/* Footer */}
+        <p className="text-center text-xs text-gray-500 mt-6 px-4">
+          By continuing, you agree to our Terms of Service and Privacy Policy
+        </p>
       </div>
     </div>
   );

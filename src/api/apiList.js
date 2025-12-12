@@ -4,6 +4,7 @@ export const ALL_APi_LIST = {
   login: "login",
   logout: "logout",
   userProfile: "user-profile",
+  refreshtoken: "refresh-token",
   // non auth
   allCategories: "categories",
   productList: "product-listing",
@@ -12,6 +13,13 @@ export const ALL_APi_LIST = {
   dashboard: "home-landing",
   user: "getProfile",
   customer_Dash: "home-landing",
+
+  // CART //
+  addToCart: "move-to-cart",
+  removeCart: "remove-from-cart",
+  getCart: "my-cart",
+  updateQuantity: "update-quantity",
+  applyCoupon: "apply-coupon",
 };
 
 export const BASE_URL =

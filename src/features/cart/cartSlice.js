@@ -1,91 +1,168 @@
-import { createSlice } from "@reduxjs/toolkit";
+/* eslint-disable no-unused-vars */
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { BASE_URL, ALL_APi_LIST } from "../../api/apiList";
 
-const initialState = {
-  cartItems: [],
-  totalAmount: 0,
+// Helper: auto logout on token expired
+const handleTokenError = (data, thunkAPI) => {
+  if (data?.message?.toLowerCase().includes("token")) {
+    localStorage.removeItem("token");
+    return thunkAPI.rejectWithValue("TOKEN_EXPIRED");
+  }
+  return thunkAPI.rejectWithValue(data);
 };
 
+// --------------------------------------------------
+// ADD TO CART
+// --------------------------------------------------
+export const addToCartAPI = createAsyncThunk(
+  "cart/addToCartAPI",
+  async (payload, thunkAPI) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return thunkAPI.rejectWithValue("NOT_LOGGED_IN");
+
+      const res = await fetch(`${BASE_URL}${ALL_APi_LIST.addToCart}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      if (!res.ok) return handleTokenError(data, thunkAPI);
+
+      thunkAPI.dispatch(fetchCartAPI());
+      return data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue("Network Error");
+    }
+  }
+);
+
+// --------------------------------------------------
+// FETCH CART
+// --------------------------------------------------
+export const fetchCartAPI = createAsyncThunk(
+  "cart/fetchCartAPI",
+  async (_, thunkAPI) => {
+    try {
+      const res = await fetch(`${BASE_URL}${ALL_APi_LIST.getCart}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      const data = await res.json();
+
+      // Handle token expired
+      if (data?.message === "Token expired") {
+        localStorage.removeItem("token");
+        return thunkAPI.rejectWithValue("TOKEN_EXPIRED");
+      }
+
+      if (!res.ok) return thunkAPI.rejectWithValue(data);
+
+      // Return EXACT structure needed by Redux slice
+      return {
+        items: data?.data?.cart_items || [],
+        summary: data?.data?.cart_summary || {},
+      };
+    } catch (err) {
+      return thunkAPI.rejectWithValue("Network Error");
+    }
+  }
+);
+
+// --------------------------------------------------
+// REMOVE FROM CART
+// --------------------------------------------------
+export const removeFromCartAPI = createAsyncThunk(
+  "cart/removeFromCartAPI",
+  async (product_variant_id, thunkAPI) => {
+    try {
+      const res = await fetch(`${BASE_URL}${ALL_APi_LIST.removeCart}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ product_variant_id }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) return handleTokenError(data, thunkAPI);
+
+      thunkAPI.dispatch(fetchCartAPI());
+      return data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue("Network Error");
+    }
+  }
+);
+
+// --------------------------------------------------
+// UPDATE QUANTITY
+// --------------------------------------------------
+export const updateQuantityAPI = createAsyncThunk(
+  "cart/updateQuantityAPI",
+  async ({ product_variant_id, quantity }, thunkAPI) => {
+    try {
+      const res = await fetch(`${BASE_URL}${ALL_APi_LIST.updateQuantity}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ product_variant_id, quantity }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) return handleTokenError(data, thunkAPI);
+
+      thunkAPI.dispatch(fetchCartAPI());
+      return data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue("Network Error");
+    }
+  }
+);
+
+// --------------------------------------------------
+// CART SLICE
+// --------------------------------------------------
 const cartSlice = createSlice({
   name: "cart",
-  initialState,
-  reducers: {
-    // Adds an item to the cart
-    addToCart: (state, action) => {
-      const newItem = action.payload;
-      // Convert the price string to a number.
-      const priceNumber = parseFloat(newItem.price.replace(/[^\d.]/g, ""));
+  initialState: {
+    items: [],
+    summary: null,
+    loading: false,
+    error: null,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchCartAPI.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchCartAPI.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload.items;
+        state.summary = action.payload.summary;
+      })
 
-      // Check if an item with the same id already exists in the cart.
-      const existingItem = state.cartItems.find(
-        (item) => item.id === newItem.id
-      );
+      .addCase(fetchCartAPI.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
 
-      if (existingItem) {
-        // Increase the quantity if the item exists.
-        existingItem.quantity += 1;
-      } else {
-        // Add new item with quantity set to 1.
-        state.cartItems.push({ ...newItem, quantity: 1 });
-      }
-
-      // Recalculate total amount.
-      state.totalAmount = state.cartItems.reduce((total, item) => {
-        const itemPrice = parseFloat(item.price.replace(/[^\d.]/g, ""));
-        return total + itemPrice * item.quantity;
-      }, 0);
-    },
-
-    // Removes an item from the cart based on its id
-    removeFromCart: (state, action) => {
-      state.cartItems = state.cartItems.filter(
-        (item) => item.id !== action.payload
-      );
-
-      // Recalculate total amount.
-      state.totalAmount = state.cartItems.reduce((total, item) => {
-        const itemPrice = parseFloat(item.price.replace(/[^\d.]/g, ""));
-        return total + itemPrice * item.quantity;
-      }, 0);
-    },
-
-    // Increase the quantity of a specific item in the cart.
-    increaseQuantity: (state, action) => {
-      const itemId = action.payload;
-      const existingItem = state.cartItems.find((item) => item.id === itemId);
-      if (existingItem) {
-        existingItem.quantity += 1;
-      }
-      // Recalculate total amount.
-      state.totalAmount = state.cartItems.reduce((total, item) => {
-        const itemPrice = parseFloat(item.price.replace(/[^\d.]/g, ""));
-        return total + itemPrice * item.quantity;
-      }, 0);
-    },
-
-    // Decrease the quantity of a specific item in the cart.
-    // If the quantity reaches 0 (or 1 before subtracting), the item is removed.
-    decreaseQuantity: (state, action) => {
-      const itemId = action.payload;
-      const existingItem = state.cartItems.find((item) => item.id === itemId);
-      if (existingItem) {
-        if (existingItem.quantity > 1) {
-          existingItem.quantity -= 1;
-        } else {
-          // Remove the item if quantity would drop below 1.
-          state.cartItems = state.cartItems.filter(
-            (item) => item.id !== itemId
-          );
+        if (action.payload === "TOKEN_EXPIRED") {
+          state.items = [];
+          state.summary = null;
         }
-      }
-      // Recalculate total amount.
-      state.totalAmount = state.cartItems.reduce((total, item) => {
-        const itemPrice = parseFloat(item.price.replace(/[^\d.]/g, ""));
-        return total + itemPrice * item.quantity;
-      }, 0);
-    },
+      });
   },
 });
 
-export const { addToCart, removeFromCart, increaseQuantity, decreaseQuantity } =
-  cartSlice.actions;
 export default cartSlice.reducer;

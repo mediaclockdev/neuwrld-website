@@ -1,191 +1,338 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+/* eslint-disable no-unused-vars */
+import React, { useState, useMemo, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { addToCart } from "../../features/cart/cartSlice";
+import { addToCartAPI } from "../../features/cart/cartSlice";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // Get product details from Redux
   const { product, loading, error } = useSelector((state) => state.product);
 
-  // Extract product safely
-  const data = product?.data?.product || null;
+  const data = product?.data || {};
+  console.log("🔥 FULL PRODUCT DATA:", data);
 
-  // Safely extract color & size options from attribute_options
-  const colorOptions = data?.attribute_options?.[0]?.options || [];
-  const sizeOptionsFromApi = data?.attribute_options?.[1]?.options || [];
+  const productInfo = data.product || {};
+  const attributeOptions = data.attribute_options || [];
+  const combinations = data.combinations || [];
 
-  // If no sizes exist in API, fallback to static sizes
+  // --------------------------------------------------------
+  // DYNAMIC ATTRIBUTE ID MAPPING
+  // --------------------------------------------------------
+  const COLOR_ID = attributeOptions.find((a) => a.name === "Color")?.id;
+  const SIZE_ID = attributeOptions.find((a) => a.name === "Size")?.id;
+  const MATERIAL_ID = attributeOptions.find((a) => a.name === "Material")?.id;
+
+  console.log("ATTRIBUTE IDS:", { COLOR_ID, SIZE_ID, MATERIAL_ID });
+
+  // Options
+  const colorOptions =
+    attributeOptions.find((a) => a.name === "Color")?.options || [];
   const sizeOptions =
-    sizeOptionsFromApi.length > 0
-      ? sizeOptionsFromApi.map((s) => s.value)
-      : ["XS", "S", "M", "L", "XL"];
+    attributeOptions.find((a) => a.name === "Size")?.options || [];
+  const materialOptions =
+    attributeOptions.find((a) => a.name === "Material")?.options || [];
 
-  // Material options (you can also get this from API if available)
-  const materialOptions = ["Cotton", "Polyester", "Leather", "Silk"];
+  // Defaults from API
+  const defaultColor = data?.current_attributes?.[COLOR_ID] ?? null;
+  const defaultSize = data?.current_attributes?.[SIZE_ID] ?? null;
+  const defaultMaterial = data?.current_attributes?.[MATERIAL_ID] ?? null;
 
-  const [selectedSize, setSelectedSize] = useState("L");
-  const [selectedColor, setSelectedColor] = useState("Red");
-  const [selectedMaterial, setSelectedMaterial] = useState("Cotton");
+  const [selectedColor, setSelectedColor] = useState(defaultColor);
+  const [selectedSize, setSelectedSize] = useState(defaultSize);
+  const [selectedMaterial, setSelectedMaterial] = useState(defaultMaterial);
   const [quantity, setQuantity] = useState(1);
 
-  if (loading) return <p className="p-4">Loading...</p>;
-  if (error) return <p className="p-4">Error loading product.</p>;
-  if (!data) return <p className="p-4">Product not found.</p>;
+  // Sync defaults when product loads
+  useEffect(() => {
+    setSelectedColor(defaultColor);
+    setSelectedSize(defaultSize);
+    setSelectedMaterial(defaultMaterial);
+  }, [defaultColor, defaultSize, defaultMaterial]);
+
+  // Safe compare
+  const eq = (a, b) => String(a) === String(b);
+
+  // --------------------------------------------------------
+  // AVAILABILITY CHECKS (based on real attribute ID mapping)
+  // --------------------------------------------------------
+  const isColorAvailable = (colorId) => {
+    return combinations.some((c) => {
+      const attrs = c.attributes;
+      if (!eq(attrs[COLOR_ID], colorId)) return false;
+      if (selectedSize && !eq(attrs[SIZE_ID], selectedSize)) return false;
+      if (selectedMaterial && !eq(attrs[MATERIAL_ID], selectedMaterial))
+        return false;
+      return true;
+    });
+  };
+
+  const isSizeAvailable = (sizeId) => {
+    return combinations.some((c) => {
+      const attrs = c.attributes;
+      if (!eq(attrs[SIZE_ID], sizeId)) return false;
+      if (selectedColor && !eq(attrs[COLOR_ID], selectedColor)) return false;
+      if (selectedMaterial && !eq(attrs[MATERIAL_ID], selectedMaterial))
+        return false;
+      return true;
+    });
+  };
+
+  const isMaterialAvailable = (materialId) => {
+    return combinations.some((c) => {
+      const attrs = c.attributes;
+      if (!eq(attrs[MATERIAL_ID], materialId)) return false;
+      if (selectedColor && !eq(attrs[COLOR_ID], selectedColor)) return false;
+      if (selectedSize && !eq(attrs[SIZE_ID], selectedSize)) return false;
+      return true;
+    });
+  };
+
+  // --------------------------------------------------------
+  // FIND MATCHING VARIANT ID
+  // --------------------------------------------------------
+  const selectedVariant = useMemo(() => {
+    const found =
+      combinations.find((c) => {
+        const attrs = c.attributes;
+        return (
+          eq(attrs[COLOR_ID], selectedColor) &&
+          eq(attrs[SIZE_ID], selectedSize) &&
+          eq(attrs[MATERIAL_ID], selectedMaterial)
+        );
+      }) || null;
+
+    console.log("🔍 SELECTED VARIANT:", found);
+    console.log("ONE COMBINATION:", combinations[0]);
+
+    return found;
+  }, [selectedColor, selectedSize, selectedMaterial, combinations]);
+
+  // --------------------------------------------------------
+  // SAFE LOAD STATES
+  // --------------------------------------------------------
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error loading product...</p>;
+  if (!productInfo.id) return <p>Product not found...</p>;
+
+  // --------------------------------------------------------
+  // ADD TO CART
+  // --------------------------------------------------------
+  const handleAddToCart = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return alert("Login required");
+
+    if (!selectedVariant?.variant_id) {
+      alert("No variant selected");
+      return;
+    }
+
+    const payload = {
+      product_variant_id: productInfo.id,
+      is_saved_for_later: 0, // Note: Your FormData used string "0"
+      quantity: Number(quantity), // Note: Your FormData used string of quantity
+    };
+
+    console.log("FINAL JSON PAYLOAD:", payload);
+    try {
+      await dispatch(addToCartAPI(payload)).unwrap();
+      alert("Added to cart!");
+    } catch (err) {
+      console.error("Add To Cart Error:", err);
+    }
+  };
 
   return (
     <div className="bg-white min-h-screen">
-      <div className="container mx-auto px-4 py-6 lg:py-12">
-        <div className="max-w-7xl mx-auto">
-          <div className="space-y-6 lg:space-y-8">
-            {/* Product Title */}
-            <div>
-              <h1 className="text-2xl lg:text-4xl font-medium text-gray-900 mb-2">
-                Product Details
-              </h1>
-              <p className="text-base lg:text-lg text-gray-700 leading-relaxed">
-                {data.details ||
-                  "Elevate your ethnic wardrobe with this stylish blouse from NEUWRL0. Designed in Style 1, this blouse offers a perfect blend of comfort and elegance. The regular fit ensures ease of movement, making it ideal for all-day wear during festive occasions, weddings, and cultural events. Expertly crafted in India, it reflects fine craftsmanship and attention to detail. Whether paired with a traditional saree or a contemporary drape, this blouse adds a touch of sophistication to your overall look. Comes with a 7-day return policy for a worry-free shopping experience."}
-              </p>
-            </div>
-
-            {/* Product Specifications */}
-            <div className="border-t pt-6">
-              <h2 className="text-xl lg:text-2xl font-medium mb-4">
-                Product Specifications
-              </h2>
-              <p className="text-sm lg:text-base text-gray-700">
-                <span className="font-semibold">Category:</span> Blouses.{" "}
-                <span className="font-semibold">Material:</span> Assorted
-                Fabrics.{" "}
-                <span className="font-semibold">Available Colors:</span> Red,
-                Blue, Green, Brown.{" "}
-                <span className="font-semibold">Sizes:</span> XS, S, M, L, XL
-                (where applicable).
-              </p>
-            </div>
-
-            {/* Select Color */}
-            <div>
-              <h3 className="text-lg font-semibold mb-3">Select Color</h3>
-              <div className="flex gap-3 flex-wrap">
-                {["Red", "Blue", "Green", "Black"].map((color) => (
-                  <button
-                    key={color}
-                    onClick={() => setSelectedColor(color)}
-                    className={`px-6 py-2 rounded-md text-sm font-medium transition-colors ${
-                      selectedColor === color
-                        ? "bg-black text-white"
-                        : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                    }`}
-                  >
-                    {color}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Select Material */}
-            <div>
-              <h3 className="text-lg font-semibold mb-3">Select Material</h3>
-              <div className="flex gap-3 flex-wrap">
-                {materialOptions.map((material) => (
-                  <button
-                    key={material}
-                    onClick={() => setSelectedMaterial(material)}
-                    className={`px-6 py-2 rounded-md text-sm font-medium transition-colors ${
-                      selectedMaterial === material
-                        ? "bg-black text-white"
-                        : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                    }`}
-                  >
-                    {material}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Select Size */}
-            <div>
-              <h3 className="text-lg font-semibold mb-3">Select Size</h3>
-              <div className="flex gap-3 flex-wrap">
-                {sizeOptions.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`px-6 py-2 rounded-md text-sm font-medium transition-colors min-w-[60px] ${
-                      selectedSize === size
-                        ? "bg-black text-white"
-                        : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Quantity */}
-            <div>
-              <h3 className="text-lg font-semibold mb-3">Quantity</h3>
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="w-10 h-10 border-2 border-gray-300 rounded-md hover:border-gray-400 flex items-center justify-center text-base font-normal"
-                >
-                  -
-                </button>
-
-                <span className="text-lg font-normal min-w-[40px] text-center">
-                  {quantity}
-                </span>
-
-                <button
-                  onClick={() => setQuantity((q) => q + 1)}
-                  className="w-10 h-10 border-2 border-gray-300 rounded-md hover:border-gray-400 flex items-center justify-center text-base font-normal"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-
-            {/* Add to Cart */}
-            <button
-              onClick={() =>
-                dispatch(
-                  addToCart({
-                    ...data,
-                    quantity,
-                    selectedSize,
-                    selectedColor,
-                    selectedMaterial,
-                  })
-                )
-              }
-              className="w-full bg-black hover:bg-black/85 text-white py-4 rounded-md font-normal text-base transition-colors"
-            >
-              Add to Cart – {data.price}
-            </button>
-
-            {/* Shipping & Returns */}
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Shipping & Returns</h3>
-              <p className="text-sm lg:text-base text-gray-700">
-                {data.shipping_return_policy ||
-                  "Free shipping on orders over $50. 7-day return policy for a worry-free shopping experience."}
-              </p>
+      <div className="container mx-auto px-4 py-10">
+        <div className="max-w-4xl mx-auto space-y-10">
+          {/* TITLE */}
+          <div>
+            <h1 className="text-3xl font-semibold">{productInfo.name}</h1>
+            <div className="flex gap-3 mt-3">
+              <p className="text-2xl">{productInfo.price}</p>
+              {productInfo.old_price && (
+                <p className="line-through text-gray-500">
+                  {productInfo.old_price}
+                </p>
+              )}
             </div>
           </div>
 
-          {/* Reviews */}
-          <div className="border-t pt-6">
-            <h3 className="text-lg font-semibold mb-2">Customer Reviews</h3>
-            <p className="text-sm text-gray-600">
-              {data.total_rating || 0} Reviews
-            </p>
+          {/* PRODUCT DETAILS */}
+          {productInfo.product_details && (
+            <div>
+              <h3 className="text-xl font-semibold">Product Details</h3>
+              <div
+                className="prose"
+                dangerouslySetInnerHTML={{
+                  __html: productInfo.product_details,
+                }}
+              />
+            </div>
+          )}
+
+          {/* SPECIFICATIONS */}
+          {productInfo.specifications && (
+            <div>
+              <h3 className="text-xl font-semibold">Specifications</h3>
+              <div
+                className="prose"
+                dangerouslySetInnerHTML={{
+                  __html: productInfo.specifications,
+                }}
+              />
+            </div>
+          )}
+
+          {/* CARE */}
+          {productInfo.care_maintenance && (
+            <div>
+              <h3 className="text-xl font-semibold">Care & Maintenance</h3>
+              <div
+                className="prose"
+                dangerouslySetInnerHTML={{
+                  __html: productInfo.care_maintenance,
+                }}
+              />
+            </div>
+          )}
+
+          {/* WARRANTY */}
+          {productInfo.warranty && (
+            <div>
+              <h3 className="text-xl font-semibold">Warranty</h3>
+              <div
+                className="prose"
+                dangerouslySetInnerHTML={{
+                  __html: productInfo.warranty,
+                }}
+              />
+            </div>
+          )}
+
+          {/* ------------------------------------------------------
+              COLOR
+          ------------------------------------------------------ */}
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Select Color</h3>
+            <div className="flex gap-3 flex-wrap">
+              {colorOptions.map((opt) => {
+                const available = isColorAvailable(opt.attribute_value_id);
+                return (
+                  <button
+                    key={opt.attribute_value_id}
+                    disabled={!available}
+                    onClick={() => setSelectedColor(opt.attribute_value_id)}
+                    className={`px-5 py-2 rounded-md ${
+                      eq(selectedColor, opt.attribute_value_id)
+                        ? "bg-black text-white"
+                        : "bg-gray-200"
+                    } ${!available && "opacity-40 cursor-not-allowed"}`}
+                  >
+                    {opt.value}
+                  </button>
+                );
+              })}
+            </div>
+            {!isColorAvailable(selectedColor) && selectedColor && (
+              <p className="text-sm text-red-500 mt-1">
+                This color is not available for selected size/material.
+              </p>
+            )}
           </div>
+
+          {/* ------------------------------------------------------
+              MATERIAL
+          ------------------------------------------------------ */}
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Select Material</h3>
+            <div className="flex gap-3 flex-wrap">
+              {materialOptions.map((opt) => {
+                const available = isMaterialAvailable(opt.attribute_value_id);
+                return (
+                  <button
+                    key={opt.attribute_value_id}
+                    disabled={!available}
+                    onClick={() => setSelectedMaterial(opt.attribute_value_id)}
+                    className={`px-5 py-2 rounded-md ${
+                      eq(selectedMaterial, opt.attribute_value_id)
+                        ? "bg-black text-white"
+                        : "bg-gray-200"
+                    } ${!available && "opacity-40 cursor-not-allowed"}`}
+                  >
+                    {opt.value}
+                  </button>
+                );
+              })}
+            </div>
+            {!isMaterialAvailable(selectedMaterial) && selectedMaterial && (
+              <p className="text-sm text-red-500 mt-1">
+                This material is not available for selected color/size.
+              </p>
+            )}
+          </div>
+
+          {/* ------------------------------------------------------
+              SIZE
+          ------------------------------------------------------ */}
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Select Size</h3>
+            <div className="flex gap-3 flex-wrap">
+              {sizeOptions.map((opt) => {
+                const available = isSizeAvailable(opt.attribute_value_id);
+                return (
+                  <button
+                    key={opt.attribute_value_id}
+                    disabled={!available}
+                    onClick={() => setSelectedSize(opt.attribute_value_id)}
+                    className={`px-5 py-2 rounded-md ${
+                      eq(selectedSize, opt.attribute_value_id)
+                        ? "bg-black text-white"
+                        : "bg-gray-200"
+                    } ${!available && "opacity-40 cursor-not-allowed"}`}
+                  >
+                    {opt.value}
+                  </button>
+                );
+              })}
+            </div>
+            {!isSizeAvailable(selectedSize) && selectedSize && (
+              <p className="text-sm text-red-500 mt-1">
+                This size is not available for selected color/material.
+              </p>
+            )}
+          </div>
+
+          {/* QUANTITY */}
+          <div>
+            <h3 className="text-lg font-semibold mb-3">Quantity</h3>
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                className="w-10 h-10 border rounded-md"
+              >
+                -
+              </button>
+              <span className="text-lg">{quantity}</span>
+              <button
+                onClick={() => setQuantity((q) => q + 1)}
+                className="w-10 h-10 border rounded-md"
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          {/* ADD TO CART */}
+          <button
+            onClick={handleAddToCart}
+            className="w-full bg-black text-white py-4 rounded-md text-lg"
+          >
+            Add to Cart – {productInfo.price}
+          </button>
         </div>
       </div>
     </div>

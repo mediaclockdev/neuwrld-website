@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* productSlice.js */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { ALL_APi_LIST, BASE_URL } from "../../api/apiList";
@@ -25,6 +26,7 @@ export const fetchProductDetails = createAsyncThunk(
       }
 
       const json = await res.json();
+
       return json; // keep full payload; reducer can store json.data or json as needed
     } catch (err) {
       return thunkAPI.rejectWithValue("Network Error: " + String(err));
