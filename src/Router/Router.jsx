@@ -9,6 +9,8 @@ import Login from "../components/Login/Login";
 import Signup from "../components/Login/Signup";
 import Forgetpass from "../components/Login/Forgetpass";
 import Cart from "../components/Cart/Cart";
+import AllCategory from "../components/Category/AllCategory";
+import CategoryPage from "../Views/Pages/Category/CategoryPage";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -22,6 +24,22 @@ const Router = () => {
           element: (
             <Suspense fallback={<Loader />}>
               <Home />
+            </Suspense>
+          ),
+        },
+        {
+          path: "/allcategory",
+          element: (
+            <Suspense fallback={<Loader />}>
+              <AllCategory />
+            </Suspense>
+          ),
+        },
+        {
+          path: "/category/:slug",
+          element: (
+            <Suspense fallback={<Loader />}>
+              <CategoryPage />
             </Suspense>
           ),
         },

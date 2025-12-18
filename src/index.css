@@ -37,23 +37,3 @@
 @utility font-open-sans {
   font-family: var(--font-open-sans);
 }
-
-/* Optional reusable heading class */
-@layer components {
-  .heading-primary {
-    @apply text-3xl lg:text-5xl font-semibold font-open-sans  tracking-wide;
-  }
-  .heading-secondary {
-    @apply text-lg sm:text-xl lg:text-3xl font-semibold font-open-sans  tracking-wide;
-  }
-  .title-primary {
-    @apply text-xl lg:text-3xl font-semibold font-open-sans  tracking-tight;
-  }
-  .title-secondary {
-    @apply text-base lg:text-xl font-medium font-open-sans  tracking-tight;
-  }
-  .button-primary {
-    @apply text-base sm:text-lg lg:text-2xl font-montserrat font-medium cursor-pointer;
-  }
-  
-}

@@ -8,7 +8,7 @@ import youtube from "../../../assets/svg/icons/youtube.svg";
 
 const Footer = () => {
   return (
-    <div className="max-w-screen-2xl mx-auto px-5 lg:px-8 py-4 bg-white shadow-2xl ">
+    <div className="max-w-screen-2xl mx-auto px-5 lg:px-8 py-4 bg-gray-50 shadow-2xl border-t border-gray-50">
       <footer className="space-y-5">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 py-2 ">
           <div className="space-y-1 lg:space-y-2">

@@ -32,7 +32,7 @@ const Hero = () => {
 
   return (
     <div className=" overflow-hidden">
-      <div className="relative w-full h-[55vh] sm:h-[65vh] md:h-[75vh] lg:h-[80vh]">
+      <div className="relative w-full aspect-[4/5] sm:aspect-auto sm:h-[65vh] md:h-[75vh] lg:h-[80vh]">
         <AnimatePresence mode="sync">
           {images.length > 0 && (
             <motion.div
@@ -46,15 +46,15 @@ const Hero = () => {
               <img
                 src={images[index]}
                 alt="hero"
-                className="w-full h-full object-cover object-top md:object-center "
+                className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-black/30 "></div>
+              {/* <div className="absolute inset-0 bg-black/30 "></div> */}
             </motion.div>
           )}
         </AnimatePresence>
 
         {/* dots */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-30">
+        <div className="absolute bottom-3 sm:bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-30">
           {images.map((_, i) => (
             <button
               key={i}

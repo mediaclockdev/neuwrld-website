@@ -12,16 +12,22 @@ const Login = () => {
   const [step, setStep] = useState("enterEmail");
   const [emailaddress, setEmailAddress] = useState("");
   const [otp, setOtp] = useState(new Array(6).fill(""));
+  const [emailError, setEmailError] = useState("");
+
   const inputRefs = useRef([]);
 
   const navigate = useNavigate();
+  const isValidEmail = (email) => {
+    return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+  };
 
   // STEP 1 — LOGIN API
   const handleContinue = () => {
-    if (!emailaddress) {
-      alert("Please enter email or mobile");
+    if (!isValidEmail(emailaddress)) {
+      setEmailError("Please enter a valid email address");
       return;
     }
+    setEmailError("");
 
     dispatch(loginAPI({ email: emailaddress }))
       .unwrap()
@@ -128,13 +134,25 @@ const Login = () => {
                 </label>
                 <input
                   id="email-input"
-                  type="text"
-                  placeholder="name@example.com or +91 98765 43210"
+                  type="email"
+                  placeholder="name@example.com"
                   value={emailaddress}
-                  onChange={(e) => setEmailAddress(e.target.value)}
+                  onChange={(e) => {
+                    setEmailAddress(e.target.value);
+                    setEmailError("");
+                  }}
                   onKeyDown={(e) => e.key === "Enter" && handleContinue()}
-                  className="w-full border border-gray-300 px-4 py-3 rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none"
+                  className={`w-full px-4 py-3 rounded-lg text-sm sm:text-base 
+    focus:ring-2 transition-all outline-none
+    ${
+      emailError
+        ? "border border-red-500 focus:ring-red-500"
+        : "border border-gray-300 focus:ring-black"
+    }`}
                 />
+                {emailError && (
+                  <p className="text-sm text-red-500 mt-1">{emailError}</p>
+                )}
               </div>
 
               <button

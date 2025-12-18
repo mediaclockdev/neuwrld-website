@@ -33,7 +33,7 @@ const ViewProfile = () => {
   /** ❌ NOT LOGGED IN **/
   if (!isLoggedIn) {
     return (
-      <div className="w-full max-w-sm bg-white shadow-lg rounded-lg p-4 sm:p-6">
+      <div className="w-full max-w-sm bg-white shadow-lg rounded-lg p-4 sm:p-6 space-y-2">
         <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
           Welcome
         </h2>
@@ -42,7 +42,7 @@ const ViewProfile = () => {
         </p>
         <button
           onClick={handleLoginClick}
-          className="w-full border-2 border-pink-500 text-pink-500 font-semibold py-2 sm:py-3 rounded hover:bg-pink-50 transition-colors"
+          className="w-full border-2  font-semibold py-2 sm:py-3 rounded hover:bg-gray-50 hover:text-black cursor-pointer transition-colors"
         >
           LOGIN / SIGNUP
         </button>

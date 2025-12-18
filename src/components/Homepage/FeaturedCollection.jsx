@@ -1,8 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const FeaturedCategory = () => {
   const dashboard = useSelector((state) => state.dashboard.data);
+  const navigate = useNavigate();
 
   // extract from trending_categories
   const categories =
@@ -19,23 +21,26 @@ const FeaturedCategory = () => {
           Featured Category
         </h2>
 
-        <button className="text-gray-500 hover:text-gray-700 cursor-pointer text-sm lg:text-base">
+        <button
+          onClick={() => navigate("/allcategory")}
+          className="text-gray-500 hover:text-gray-700 cursor-pointer text-sm lg:text-base"
+        >
           Show All
         </button>
       </div>
 
       {/* List */}
-      <div className="flex flex-wrap justify-center lg:justify-start gap-8">
+      <div className="flex flex-wrap justify-between  gap-8">
         {categories.map((cat, index) => (
           <div key={index} className="flex flex-col items-center">
-            <div className="w-32 h-32 rounded-full overflow-hidden shadow-md hover:scale-105 transition duration-300">
+            <div className="w-40 h-40 rounded-full overflow-hidden shadow-md hover:scale-105 transition duration-300">
               <img
                 src={cat.image}
                 alt={cat.name}
                 className="w-full h-full object-cover"
               />
             </div>
-            <p className="mt-3 text-lg font-medium text-gray-700 font-montserrat">
+            <p className="mt-3 text-xl font-medium text-gray-700  font-montserrat">
               {cat.name}
             </p>
           </div>

@@ -22,7 +22,12 @@ const ProductDetails = () => {
   // DYNAMIC ATTRIBUTE ID MAPPING
   // --------------------------------------------------------
   const COLOR_ID = attributeOptions.find((a) => a.name === "Color")?.id;
-  const SIZE_ID = attributeOptions.find((a) => a.name === "Size")?.id;
+  const SIZE_ATTR = attributeOptions.find((a) =>
+    a.name.toLowerCase().includes("size")
+  );
+
+  const SIZE_ID = SIZE_ATTR?.id;
+
   const MATERIAL_ID = attributeOptions.find((a) => a.name === "Material")?.id;
 
   console.log("ATTRIBUTE IDS:", { COLOR_ID, SIZE_ID, MATERIAL_ID });
@@ -30,10 +35,14 @@ const ProductDetails = () => {
   // Options
   const colorOptions =
     attributeOptions.find((a) => a.name === "Color")?.options || [];
-  const sizeOptions =
-    attributeOptions.find((a) => a.name === "Size")?.options || [];
+  const sizeOptions = SIZE_ATTR?.options || [];
+
   const materialOptions =
     attributeOptions.find((a) => a.name === "Material")?.options || [];
+  console.log(
+    "ATTRIBUTES:",
+    attributeOptions.map((a) => a.name)
+  );
 
   // Defaults from API
   const defaultColor = data?.current_attributes?.[COLOR_ID] ?? null;
@@ -150,7 +159,9 @@ const ProductDetails = () => {
         <div className="max-w-4xl mx-auto space-y-10">
           {/* TITLE */}
           <div>
-            <h1 className="text-3xl font-semibold">{productInfo.name}</h1>
+            <h1 className="text-3xl font-semibold">
+              {productInfo.product_name}
+            </h1>
             <div className="flex gap-3 mt-3">
               <p className="text-2xl">{productInfo.price}</p>
               {productInfo.old_price && (
@@ -247,7 +258,7 @@ const ProductDetails = () => {
           {/* ------------------------------------------------------
               MATERIAL
           ------------------------------------------------------ */}
-          <div>
+          {/* <div>
             <h3 className="text-lg font-semibold mb-2">Select Material</h3>
             <div className="flex gap-3 flex-wrap">
               {materialOptions.map((opt) => {
@@ -273,7 +284,7 @@ const ProductDetails = () => {
                 This material is not available for selected color/size.
               </p>
             )}
-          </div>
+          </div> */}
 
           {/* ------------------------------------------------------
               SIZE
@@ -304,26 +315,6 @@ const ProductDetails = () => {
                 This size is not available for selected color/material.
               </p>
             )}
-          </div>
-
-          {/* QUANTITY */}
-          <div>
-            <h3 className="text-lg font-semibold mb-3">Quantity</h3>
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="w-10 h-10 border rounded-md"
-              >
-                -
-              </button>
-              <span className="text-lg">{quantity}</span>
-              <button
-                onClick={() => setQuantity((q) => q + 1)}
-                className="w-10 h-10 border rounded-md"
-              >
-                +
-              </button>
-            </div>
           </div>
 
           {/* ADD TO CART */}

@@ -2,7 +2,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { BASE_URL, ALL_APi_LIST } from "../../api/apiList";
 
-// Helper: auto logout on token expired
+/* -----------------------------------------
+   Helper: Token Expiry Handler
+------------------------------------------ */
 const handleTokenError = (data, thunkAPI) => {
   if (data?.message?.toLowerCase().includes("token")) {
     localStorage.removeItem("token");
@@ -11,9 +13,35 @@ const handleTokenError = (data, thunkAPI) => {
   return thunkAPI.rejectWithValue(data);
 };
 
-// --------------------------------------------------
-// ADD TO CART
-// --------------------------------------------------
+/* -----------------------------------------
+   FETCH CART (ONLY ON PAGE LOAD)
+------------------------------------------ */
+export const fetchCartAPI = createAsyncThunk(
+  "cart/fetchCartAPI",
+  async (_, thunkAPI) => {
+    try {
+      const res = await fetch(`${BASE_URL}${ALL_APi_LIST.getCart}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      const data = await res.json();
+      if (!res.ok) return handleTokenError(data, thunkAPI);
+
+      return {
+        items: data?.data?.cart_items || [],
+        summary: data?.data?.cart_summary || {},
+      };
+    } catch (err) {
+      return thunkAPI.rejectWithValue("NETWORK_ERROR");
+    }
+  }
+);
+
+/* -----------------------------------------
+   ADD TO CART
+------------------------------------------ */
 export const addToCartAPI = createAsyncThunk(
   "cart/addToCartAPI",
   async (payload, thunkAPI) => {
@@ -33,52 +61,51 @@ export const addToCartAPI = createAsyncThunk(
       const data = await res.json();
       if (!res.ok) return handleTokenError(data, thunkAPI);
 
+      // Fetch cart ONCE after adding
       thunkAPI.dispatch(fetchCartAPI());
       return data;
     } catch (err) {
-      return thunkAPI.rejectWithValue("Network Error");
+      return thunkAPI.rejectWithValue("NETWORK_ERROR");
     }
   }
 );
 
-// --------------------------------------------------
-// FETCH CART
-// --------------------------------------------------
-export const fetchCartAPI = createAsyncThunk(
-  "cart/fetchCartAPI",
-  async (_, thunkAPI) => {
+/* -----------------------------------------
+   UPDATE QUANTITY (OPTIMISTIC)
+------------------------------------------ */
+export const updateQuantityAPI = createAsyncThunk(
+  "cart/updateQuantityAPI",
+  async ({ product_variant_id, quantity }, thunkAPI) => {
     try {
-      const res = await fetch(`${BASE_URL}${ALL_APi_LIST.getCart}`, {
-        method: "GET",
+      const res = await fetch(`${BASE_URL}${ALL_APi_LIST.updateQuantity}`, {
+        method: "POST",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
+        body: JSON.stringify({ product_variant_id, quantity }),
       });
 
       const data = await res.json();
 
-      // Handle token expired
-      if (data?.message === "Token expired") {
-        localStorage.removeItem("token");
-        return thunkAPI.rejectWithValue("TOKEN_EXPIRED");
+      if (!res.ok || data.success === false) {
+        return thunkAPI.rejectWithValue({
+          product_variant_id,
+          allowed_quantity: data?.data?.allowed_quantity,
+          message: data?.message,
+        });
       }
 
-      if (!res.ok) return thunkAPI.rejectWithValue(data);
-
-      // Return EXACT structure needed by Redux slice
-      return {
-        items: data?.data?.cart_items || [],
-        summary: data?.data?.cart_summary || {},
-      };
+      return { product_variant_id, quantity };
     } catch (err) {
-      return thunkAPI.rejectWithValue("Network Error");
+      return thunkAPI.rejectWithValue("NETWORK_ERROR");
     }
   }
 );
 
-// --------------------------------------------------
-// REMOVE FROM CART
-// --------------------------------------------------
+/* -----------------------------------------
+   REMOVE FROM CART (OPTIMISTIC)
+------------------------------------------ */
 export const removeFromCartAPI = createAsyncThunk(
   "cart/removeFromCartAPI",
   async (product_variant_id, thunkAPI) => {
@@ -95,55 +122,46 @@ export const removeFromCartAPI = createAsyncThunk(
       const data = await res.json();
       if (!res.ok) return handleTokenError(data, thunkAPI);
 
-      thunkAPI.dispatch(fetchCartAPI());
-      return data;
+      return product_variant_id;
     } catch (err) {
-      return thunkAPI.rejectWithValue("Network Error");
+      return thunkAPI.rejectWithValue("NETWORK_ERROR");
     }
   }
 );
 
-// --------------------------------------------------
-// UPDATE QUANTITY
-// --------------------------------------------------
-export const updateQuantityAPI = createAsyncThunk(
-  "cart/updateQuantityAPI",
-  async ({ product_variant_id, quantity }, thunkAPI) => {
-    try {
-      const res = await fetch(`${BASE_URL}${ALL_APi_LIST.updateQuantity}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ product_variant_id, quantity }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) return handleTokenError(data, thunkAPI);
-
-      thunkAPI.dispatch(fetchCartAPI());
-      return data;
-    } catch (err) {
-      return thunkAPI.rejectWithValue("Network Error");
-    }
-  }
-);
-
-// --------------------------------------------------
-// CART SLICE
-// --------------------------------------------------
+/* -----------------------------------------
+   CART SLICE
+------------------------------------------ */
 const cartSlice = createSlice({
   name: "cart",
   initialState: {
     items: [],
-    summary: null,
+    summary: {},
     loading: false,
     error: null,
   },
-  reducers: {},
+
+  reducers: {
+    /* 🔥 Optimistic quantity update */
+    updateQuantityLocal: (state, action) => {
+      const { product_variant_id, quantity } = action.payload;
+      const item = state.items.find(
+        (i) => i.product_variant_id === product_variant_id
+      );
+      if (item) item.quantity = quantity;
+    },
+
+    /* 🔥 Optimistic remove */
+    removeItemLocal: (state, action) => {
+      state.items = state.items.filter(
+        (i) => i.product_variant_id !== action.payload
+      );
+    },
+  },
+
   extraReducers: (builder) => {
     builder
+      /* ---------------- FETCH CART ---------------- */
       .addCase(fetchCartAPI.pending, (state) => {
         state.loading = true;
       })
@@ -152,17 +170,42 @@ const cartSlice = createSlice({
         state.items = action.payload.items;
         state.summary = action.payload.summary;
       })
-
       .addCase(fetchCartAPI.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
 
         if (action.payload === "TOKEN_EXPIRED") {
           state.items = [];
-          state.summary = null;
+          state.summary = {};
         }
+      })
+
+      /* ---------------- UPDATE QUANTITY ---------------- */
+      .addCase(updateQuantityAPI.rejected, (state, action) => {
+        const { product_variant_id, allowed_quantity } = action.payload || {};
+
+        if (product_variant_id && allowed_quantity) {
+          const item = state.items.find(
+            (i) => i.product_variant_id === product_variant_id
+          );
+
+          if (item) {
+            item.quantity = allowed_quantity;
+          }
+        }
+
+        state.error = action.payload?.message || "Quantity update failed";
+      })
+
+      /* ---------------- REMOVE ITEM ---------------- */
+      .addCase(removeFromCartAPI.fulfilled, (state, action) => {
+        state.items = state.items.filter(
+          (i) => i.product_variant_id !== action.payload
+        );
       });
   },
 });
+
+export const { updateQuantityLocal, removeItemLocal } = cartSlice.actions;
 
 export default cartSlice.reducer;

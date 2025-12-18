@@ -10,7 +10,7 @@ const RecommendedProduct = () => {
   const recommended =
     dashboard?.data?.recommended_products?.map((item) => ({
       id: item.id,
-      name: item.name,
+      name: item.product_name,
       image: item.image,
       price: item.price,
       old_price: item.old_price,
@@ -20,16 +20,15 @@ const RecommendedProduct = () => {
     })) || [];
 
   return (
-    <div className="container mx-auto px-4 lg:px-8 py-8">
+    <div className="container mx-auto px-6 lg:px-8 py-8">
       {/* Heading with accent */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <TrendingUp className="w-7 h-7 " />
-          <h2 className="text-2xl lg:text-4xl font-medium   ">
+          <h2 className="text-xl lg:text-3xl font-semibold font-montserrat">
             Recommended For You
           </h2>
         </div>
-        <div className="h-1 w-24  rounded-full"></div>
+        {/* <div className="h-1 w-24  rounded-full"></div> */}
       </div>
 
       {/* Product Cards */}
@@ -51,12 +50,7 @@ const RecommendedProduct = () => {
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   alt={product.name}
                 />
-                {/* Discount Badge */}
-                {product.discount && (
-                  <div className="absolute top-3 right-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg">
-                    -{product.discount}
-                  </div>
-                )}
+
                 {/* Overlay on hover */}
                 <div className="absolute inset-0  bg-opacity-0 group-hover:bg-opacity-5 transition-all duration-300"></div>
               </div>
@@ -65,19 +59,23 @@ const RecommendedProduct = () => {
             {/* Content Section */}
             <div className="p-4">
               {/* Product Name */}
-              <h3 className="font-montserrat text-sm lg:text-base font-medium text-gray-800 mb-3 line-clamp-2 min-h-[2.5rem] leading-tight">
+              <h3 className="font-montserrat text-sm font-medium text-gray-800 mb-3 line-clamp-2 min-h-[2.5rem] leading-tight">
                 {product.name}
               </h3>
 
               {/* Price Section */}
               <div className="flex items-baseline gap-2 mb-3">
-                <span className="text-lg lg:text-xl font-bold text-gray-900">
+                <span className="text-lg lg:text-xl font-medium text-gray-900">
                   {product.price}
                 </span>
                 {product.old_price && (
-                  <span className="text-xs lg:text-sm text-gray-400 line-through">
+                  <span className="text-xs lg:text-sm text-gray-400 font-medium line-through">
                     {product.old_price}
                   </span>
+                )}
+                {/* Discount Badge */}
+                {product.discount && (
+                  <div className="text-xs ">({product.discount} off)</div>
                 )}
               </div>
 

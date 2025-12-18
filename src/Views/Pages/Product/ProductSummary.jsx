@@ -1,7 +1,6 @@
 import React from "react";
 import Product from "../../../components/Product/ProductImages";
 import ProductDetails from "../../../components/Product/ProductDetails";
-import ProductDescription from "../../../components/Product/ProductDescription";
 
 const ProductSummary = () => {
   return (
@@ -14,7 +13,6 @@ const ProductSummary = () => {
           <ProductDetails />
         </div>
       </div>
-      {/* <ProductDescription /> */}
     </div>
   );
 };

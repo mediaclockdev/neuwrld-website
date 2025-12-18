@@ -23,6 +23,7 @@ import ViewProfile from "../../../components/ViewProfile";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [openMenu, setOpenMenu] = useState(null); // "men" or "women"
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -36,15 +37,14 @@ const Header = () => {
     0
   );
   const dispatch = useDispatch();
-  const { list, loading } = useSelector((state) => state.categories);
-
-  const [openMenu, setOpenMenu] = useState(null); // "men" or "women"
+  const { list = [], loading } = useSelector((state) => state.categories || {});
+  const selectedCategory = list.find((cat) => cat.slug === openMenu);
 
   const handleMouseEnter = (type) => {
     setOpenMenu(type);
 
     // Fetch once if not already loaded
-    if (list.length === 0) {
+    if (!list || list.length === 0) {
       dispatch(fetchCategoriesAPI());
     }
   };
@@ -55,7 +55,7 @@ const Header = () => {
   const { isLoggedIn } = useSelector((state) => state.auth);
 
   return (
-    <div className="max-w-screen-2xl mx-auto px-5 lg:px-8  sticky top-0 bg-white z-50 shadow-sm">
+    <div className="max-w-screen-2xl mx-auto px-5 lg:px-8  sticky top-0 bg-gray-50 z-50 shadow-sm ">
       <header>
         <nav>
           <div className="flex justify-between items-center lg:gap-4">
@@ -196,7 +196,7 @@ const Header = () => {
             {/* destop logo */}
             <div className="hidden lg:block">
               <Link to={"/"}>
-                <img src={logo2} alt="logo" className="size-16" />
+                <img src={logo2} alt="logo" className="size-20" />
               </Link>
             </div>
 
@@ -221,7 +221,7 @@ const Header = () => {
                   </NavLink>
                 </li>
                 <li onMouseEnter={() => handleMouseEnter("men")}>
-                  <NavLink to="/classic" className="relative group">
+                  <NavLink to="/category/men" className="relative group">
                     {({ isActive }) => (
                       <p className="font-open-sans text-base transition-all duration-500">
                         Men
@@ -235,7 +235,7 @@ const Header = () => {
                   </NavLink>
                 </li>
                 <li onMouseEnter={() => handleMouseEnter("women")}>
-                  <NavLink to="/women" className="relative group">
+                  <NavLink to="/category/women" className="relative group">
                     {({ isActive }) => (
                       <p className="font-open-sans text-base transition-all duration-500">
                         Women
@@ -278,10 +278,10 @@ const Header = () => {
                 </li>
               </ul>
               {/* HOVER DIALOG BOX */}
-              {openMenu && list.length > 0 && (
+              {openMenu && selectedCategory?.children?.length > 0 && (
                 <MegaMenuDialog
                   type={openMenu}
-                  categories={list}
+                  categories={selectedCategory.children}
                   onClose={() => setOpenMenu(null)}
                 />
               )}

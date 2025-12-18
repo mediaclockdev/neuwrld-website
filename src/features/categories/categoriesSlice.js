@@ -1,28 +1,48 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { BASE_URL, ALL_APi_LIST } from "../../api/apiList";
 
+/* -----------------------------------------
+   FETCH CATEGORIES
+------------------------------------------ */
 export const fetchCategoriesAPI = createAsyncThunk(
-  "categories/fetch",
+  "category/fetchCategoriesAPI",
   async (_, thunkAPI) => {
     try {
       const res = await fetch(`${BASE_URL}${ALL_APi_LIST.allCategories}`);
-      const response = await res.json();
+      const data = await res.json();
 
-      if (!res.ok) return thunkAPI.rejectWithValue(response);
+      if (!res.ok) {
+        throw new Error(data?.message || "Failed to fetch categories");
+      }
 
-      return response.data?.categories_nested || [];
+      return data?.data?.categories_nested || [];
     } catch (err) {
-      return thunkAPI.rejectWithValue("Network Error");
+      return thunkAPI.rejectWithValue(err.message);
     }
   }
 );
 
-const categoriesSlice = createSlice({
-  name: "allCategories",
+const categorySlice = createSlice({
+  name: "category",
   initialState: {
     list: [],
+    categories: [],
+    breadcrumb: [], // 👈 breadcrumb path
     loading: false,
     error: null,
+  },
+
+  reducers: {
+    /* -----------------------------------------
+       SET BREADCRUMB PATH
+    ------------------------------------------ */
+    setBreadcrumb: (state, action) => {
+      state.breadcrumb = action.payload;
+    },
+
+    clearBreadcrumb: (state) => {
+      state.breadcrumb = [];
+    },
   },
 
   extraReducers: (builder) => {
@@ -32,6 +52,7 @@ const categoriesSlice = createSlice({
       })
       .addCase(fetchCategoriesAPI.fulfilled, (state, action) => {
         state.loading = false;
+        state.categories = action.payload;
         state.list = action.payload;
       })
       .addCase(fetchCategoriesAPI.rejected, (state, action) => {
@@ -41,4 +62,6 @@ const categoriesSlice = createSlice({
   },
 });
 
-export default categoriesSlice.reducer;
+export const { setBreadcrumb, clearBreadcrumb } = categorySlice.actions;
+
+export default categorySlice.reducer;
