@@ -1,9 +1,11 @@
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Breadcrumb from "../../../components/Breadcrumb";
 
 const CategoryPage = () => {
   const { slug } = useParams();
+  const navigate = useNavigate();
 
   const categories = useSelector((state) => state.categories?.categories || []);
 
@@ -57,7 +59,15 @@ const CategoryPage = () => {
                   <div className="p-4 sm:p-5">
                     <div className="grid grid-cols-2 gap-3 sm:gap-4">
                       {child.children.map((sub) => (
-                        <div key={sub.id} className="group cursor-pointer">
+                        <div
+                          key={sub.id}
+                          className="group cursor-pointer"
+                          onClick={() =>
+                            navigate(
+                              `/products/${slug}/${child.slug}/${sub.slug}`
+                            )
+                          }
+                        >
                           {/* Image Container */}
                           <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 mb-2">
                             {sub.image ? (
@@ -89,7 +99,10 @@ const CategoryPage = () => {
 
                 {/* View All Button */}
                 <div className="px-5 pb-4">
-                  <button className="w-full py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                  <button
+                    onClick={() => navigate(`/products/${slug}/${child.slug}`)}
+                    className="w-full py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                  >
                     View All {child.title || child.name}
                   </button>
                 </div>

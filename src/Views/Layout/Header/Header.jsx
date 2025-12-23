@@ -55,7 +55,7 @@ const Header = () => {
   const { isLoggedIn } = useSelector((state) => state.auth);
 
   return (
-    <div className="max-w-screen-2xl mx-auto px-5 lg:px-8  sticky top-0 bg-gray-50 z-50 shadow-sm ">
+    <div className="max-w-screen-2xl mx-auto px-5 lg:px-8  sticky top-0 bg-gray-50 z-50 shadow-sm">
       <header>
         <nav>
           <div className="flex justify-between items-center lg:gap-4">
@@ -196,7 +196,7 @@ const Header = () => {
             {/* destop logo */}
             <div className="hidden lg:block">
               <Link to={"/"}>
-                <img src={logo2} alt="logo" className="size-20" />
+                <img src={logo2} alt="logo" className="size-16" />
               </Link>
             </div>
 

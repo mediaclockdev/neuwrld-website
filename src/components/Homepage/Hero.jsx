@@ -32,7 +32,7 @@ const Hero = () => {
 
   return (
     <div className=" overflow-hidden">
-      <div className="relative w-full aspect-[4/5] sm:aspect-auto sm:h-[65vh] md:h-[75vh] lg:h-[80vh]">
+      <div className="relative w-full  lg:aspect-auto h-[35vh] md:h-[75vh] lg:h-[85vh]">
         <AnimatePresence mode="sync">
           {images.length > 0 && (
             <motion.div
@@ -46,7 +46,7 @@ const Hero = () => {
               <img
                 src={images[index]}
                 alt="hero"
-                className="w-full h-full object-cover"
+                className=" lg:size-full object-cover"
               />
               {/* <div className="absolute inset-0 bg-black/30 "></div> */}
             </motion.div>

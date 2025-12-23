@@ -47,7 +47,7 @@ const RecommendedProduct = () => {
               <div className="relative w-full h-52 overflow-hidden ">
                 <img
                   src={product.image}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
                   alt={product.name}
                 />
 

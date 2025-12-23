@@ -11,6 +11,7 @@ import Forgetpass from "../components/Login/Forgetpass";
 import Cart from "../components/Cart/Cart";
 import AllCategory from "../components/Category/AllCategory";
 import CategoryPage from "../Views/Pages/Category/CategoryPage";
+import ProductList from "../Views/Pages/ProductList/ProductList";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -56,6 +57,22 @@ const Router = () => {
           element: (
             <Suspense fallback={<Loader />}>
               <Cart />
+            </Suspense>
+          ),
+        },
+        {
+          path: "/products/:gender/:category/:subCategory",
+          element: (
+            <Suspense fallback={<Loader />}>
+              <ProductList />
+            </Suspense>
+          ),
+        },
+        {
+          path: "/products/:gender/:category",
+          element: (
+            <Suspense fallback={<Loader />}>
+              <ProductList />
             </Suspense>
           ),
         },
