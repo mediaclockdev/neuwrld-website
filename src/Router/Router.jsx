@@ -12,6 +12,8 @@ import Cart from "../components/Cart/Cart";
 import AllCategory from "../components/Category/AllCategory";
 import CategoryPage from "../Views/Pages/Category/CategoryPage";
 import ProductList from "../Views/Pages/ProductList/ProductList";
+import Wishlist from "../Views/Pages/Wishlist/Wishlist";
+import Checkout from "../Views/Pages/Checkout/Checkout";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -25,6 +27,14 @@ const Router = () => {
           element: (
             <Suspense fallback={<Loader />}>
               <Home />
+            </Suspense>
+          ),
+        },
+        {
+          path: "/wishlist",
+          element: (
+            <Suspense fallback={<Loader />}>
+              <Wishlist />
             </Suspense>
           ),
         },
@@ -57,6 +67,14 @@ const Router = () => {
           element: (
             <Suspense fallback={<Loader />}>
               <Cart />
+            </Suspense>
+          ),
+        },
+        {
+          path: "/checkout",
+          element: (
+            <Suspense fallback={<Loader />}>
+              <Checkout />
             </Suspense>
           ),
         },

@@ -63,9 +63,7 @@ const CategoryPage = () => {
                           key={sub.id}
                           className="group cursor-pointer"
                           onClick={() =>
-                            navigate(
-                              `/products/${slug}/${child.slug}/${sub.slug}`
-                            )
+                            navigate(`/products/${sub.gender}/${sub.slug}`)
                           }
                         >
                           {/* Image Container */}
@@ -98,14 +96,14 @@ const CategoryPage = () => {
                 )}
 
                 {/* View All Button */}
-                <div className="px-5 pb-4">
+                {/* <div className="px-5 pb-4">
                   <button
-                    onClick={() => navigate(`/products/${slug}/${child.slug}`)}
+                    onClick={() => navigate(`/products/${child.name}`)}
                     className="w-full py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"
                   >
                     View All {child.title || child.name}
                   </button>
-                </div>
+                </div> */}
               </div>
             ))}
           </div>

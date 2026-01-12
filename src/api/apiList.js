@@ -9,6 +9,7 @@ export const ALL_APi_LIST = {
   allCategories: "categories",
   productList: "product-listing",
   product_details: "product",
+  advance_search: "products-autocomplete",
 
   dashboard: "home-landing",
   user: "getProfile",
@@ -20,6 +21,16 @@ export const ALL_APi_LIST = {
   getCart: "my-cart",
   updateQuantity: "update-quantity",
   applyCoupon: "apply-coupon",
+
+  // wishlist //
+  addtoWishlist: "move-to-wishlist",
+  getWishlist: "my-wishlist",
+  removeFromWishlist: "move-or-remove-wishlist",
+
+  // checkout //
+  userAddress: "user-address",
+  userAddressSave: "user-address",
+  removeAdd: "remove-address",
 };
 
 export const BASE_URL =

@@ -35,21 +35,15 @@ const Hero = () => {
       <div className="relative w-full  lg:aspect-auto h-[35vh] md:h-[75vh] lg:h-[85vh]">
         <AnimatePresence mode="sync">
           {images.length > 0 && (
-            <motion.div
+            <motion.img
               key={index}
-              className="absolute inset-0"
+              className="absolute inset-0 w-full h-full object-cover"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ duration: 1, ease: "easeInOut" }}
-            >
-              <img
-                src={images[index]}
-                alt="hero"
-                className=" lg:size-full object-cover"
-              />
-              {/* <div className="absolute inset-0 bg-black/30 "></div> */}
-            </motion.div>
+              src={images[index]}
+            />
           )}
         </AnimatePresence>
 

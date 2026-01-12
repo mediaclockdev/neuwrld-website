@@ -4,6 +4,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCartAPI } from "../../features/cart/cartSlice";
 import { fetchProductDetails } from "../../features/products/productSlice";
+import CheckoutMoreProducts from "./CheckoutMoreProducts";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -57,19 +58,14 @@ const ProductDetails = () => {
 
   const MATERIAL_ID = attributeOptions.find((a) => a.name === "Material")?.id;
 
-  // console.log("ATTRIBUTE IDS:", { COLOR_ID, SIZE_ID, MATERIAL_ID });
+  console.log("ATTRIBUTE IDS:", { COLOR_ID, SIZE_ID, MATERIAL_ID });
 
   // Options
   const colorOptions =
     attributeOptions.find((a) => a.name === "Color")?.options || [];
   const sizeOptions = SIZE_ATTR?.options || [];
 
-  const materialOptions =
-    attributeOptions.find((a) => a.name === "Material")?.options || [];
-  // console.log(
-  //   "ATTRIBUTES:",
-  //   attributeOptions.map((a) => a.name)
-  // );
+
 
   // Defaults from API
   const defaultColor = data?.current_attributes?.[COLOR_ID] ?? null;
@@ -136,8 +132,8 @@ const ProductDetails = () => {
         return eq(attrs, data.current_attributes);
       }) || null;
 
-    // console.log("🔍 SELECTED VARIANT:", found);
-    // console.log("ONE COMBINATION:", combinations[0]);
+    console.log("🔍 SELECTED VARIANT:", found);
+    console.log("ONE COMBINATION:", combinations[0]);
 
     return found;
   }, [selectedColor, selectedSize, selectedMaterial, combinations]);
@@ -167,7 +163,7 @@ const ProductDetails = () => {
       quantity: Number(quantity),
     };
 
-    // console.log("FINAL JSON PAYLOAD:", payload);
+    console.log("FINAL JSON PAYLOAD:", payload);
     try {
       await dispatch(addToCartAPI(payload)).unwrap();
       alert("Added to cart!");
@@ -288,18 +284,15 @@ const ProductDetails = () => {
                     const available = isColorAvailable(opt.attribute_value_id);
 
                     return (
-                      <Link
-                        to={`/products/${opt.sku}`}
+                      <button
                         key={opt.attribute_value_id}
-                        disabled={!available}
+                        onClick={() => navigate(`/products/${opt.matched_sku}`)}
                         className={`px-5 py-2 rounded-md ${
-                          eq(selectedColor, opt.attribute_value_id)
-                            ? "bg-black text-white"
-                            : "bg-gray-200"
-                        } ${!available && "opacity-40 cursor-not-allowed"}`}
+                          opt.is_current ? "bg-black text-white" : "bg-gray-200"
+                        }`}
                       >
                         {opt.value}
-                      </Link>
+                      </button>
                     );
                   })}
                 </div>
@@ -320,18 +313,15 @@ const ProductDetails = () => {
                     const available = isSizeAvailable(opt.attribute_value_id);
                     console.log("[size]", opt);
                     return (
-                      <Link
-                        to={`/products/${opt.sku}`}
+                      <button
                         key={opt.attribute_value_id}
-                        disabled={!available}
+                        onClick={() => navigate(`/products/${opt.matched_sku}`)}
                         className={`px-5 py-2 rounded-md ${
-                          eq(selectedSize, opt.attribute_value_id)
-                            ? "bg-black text-white"
-                            : "bg-gray-200"
-                        } ${!available && "opacity-40 cursor-not-allowed"}`}
+                          opt.is_current ? "bg-black text-white" : "bg-gray-200"
+                        }`}
                       >
                         {opt.value}
-                      </Link>
+                      </button>
                     );
                   })}
                 </div>
@@ -388,129 +378,8 @@ const ProductDetails = () => {
           </div>
         </div>
 
-        <div>
-          {checkoutMoreProducts.length > 0 && (
-            <div className="space-y-8 pt-16">
-              {/* Section Header */}
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold text-gray-900">
-                  You May Also Like
-                </h2>
-                <p className="text-gray-600">
-                  Handpicked recommendations based on your selection
-                </p>
-              </div>
-
-              {/* Product Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {checkoutMoreProducts.map((item) => (
-                  <div
-                    key={item.id}
-                    className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100 hover:border-gray-200"
-                    onClick={() => navigate(`/products/${item.product_sku}`)}
-                  >
-                    {/* Image Container */}
-                    <div className="relative aspect-square w-full overflow-hidden bg-gray-100">
-                      <img
-                        src={item.image}
-                        alt={item.product_name}
-                        className="w-full h-full object-top object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
-
-                      {/* Overlay */}
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
-
-                      {/* Badges */}
-                      <div className="absolute top-3 left-3 flex flex-col gap-2">
-                        {item.is_discount && (
-                          <div className="bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg">
-                            {item.discount} OFF
-                          </div>
-                        )}
-                        {item.out_of_stock && (
-                          <div className="bg-gray-900 text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow-lg">
-                            Out of Stock
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Action Buttons */}
-                      <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </div>
-
-                    {/* Product Info */}
-                    <div className="p-5 space-y-3">
-                      {/* Category */}
-                      <p className="text-xs font-semibold text-blue-600 uppercase tracking-wider">
-                        {item.category}
-                      </p>
-
-                      {/* Product Name */}
-                      <h3 className="font-semibold text-lg text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
-                        {item.product_name}
-                      </h3>
-
-                      {/* Attributes */}
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm text-gray-500">
-                          {item.attributes.Color}
-                        </p>
-                        <div className="w-1 h-1 bg-gray-300 rounded-full" />
-                        <p className="text-sm text-gray-500">
-                          {item.attributes.Size}
-                        </p>
-                      </div>
-
-                      {/* Price Section */}
-                      <div className="flex items-center gap-2">
-                        <p className="font-bold text-xl text-gray-900">
-                          {item.price}
-                        </p>
-
-                        {item.is_discount && (
-                          <p className="line-through text-sm text-gray-400">
-                            {item.old_price}
-                          </p>
-                        )}
-                      </div>
-
-                      {/* Stock Status */}
-                      <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                        {!item.out_of_stock ? (
-                          <div className="flex items-center gap-1.5">
-                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                            <p className="text-sm font-medium text-green-600">
-                              In Stock
-                            </p>
-                          </div>
-                        ) : (
-                          <div className="flex items-center gap-1.5">
-                            <div className="w-2 h-2 bg-red-500 rounded-full" />
-                            <p className="text-sm font-medium text-red-500">
-                              Out of Stock
-                            </p>
-                          </div>
-                        )}
-
-                        <p className="text-xs text-gray-400">View Details →</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          {loading && (
-            <div className="grid grid-cols-3 gap-6">
-              {[1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="h-80 bg-gray-200 animate-pulse rounded"
-                />
-              ))}
-            </div>
-          )}
-        </div>
+        {/* 🔥 CHECKOUT MORE PRODUCTS */}
+        <CheckoutMoreProducts products={checkoutMoreProducts} />
       </div>
     </div>
   );

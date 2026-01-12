@@ -127,9 +127,23 @@ const Cart = () => {
 
                 <div className="flex-1">
                   <div className="flex justify-between">
-                    <h3 className="font-medium font-montserrat tracking-tighter text-lg">
-                      {item.name}
-                    </h3>
+                    <div>
+                      <h3 className="font-medium font-montserrat tracking-tighter text-lg">
+                        {item.product_name}
+                      </h3>
+                      {item.attributes && (
+                        <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-sm text-gray-500 font-montserrat">
+                          {Object.entries(item.attributes).map(
+                            ([key, value]) => (
+                              <span key={key}>
+                                {key}:{" "}
+                                <span className="text-gray-700">{value}</span>
+                              </span>
+                            )
+                          )}
+                        </div>
+                      )}
+                    </div>
 
                     <button onClick={() => handleRemove(item)}>
                       <img src={close} className="w-4 h-4" />

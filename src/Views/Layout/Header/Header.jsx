@@ -303,11 +303,13 @@ const Header = () => {
                   </div>
                 </li>
                 <li>
-                  <img
-                    src={heart}
-                    alt="heart icon"
-                    className="size-4 lg:size-5 cursor-pointer"
-                  />
+                  <Link to="/wishlist">
+                    <img
+                      src={heart}
+                      alt="heart icon"
+                      className="size-4 lg:size-5 cursor-pointer"
+                    />
+                  </Link>
                 </li>
                 <li onMouseEnter={() => setShowProfile(true)}>
                   <img src={user} className="size-5 cursor-pointer" />
