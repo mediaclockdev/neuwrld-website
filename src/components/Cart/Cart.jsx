@@ -10,6 +10,7 @@ import {
 } from "../../features/cart/cartSlice";
 
 import close from "../../assets/svg/icons/close.svg";
+import CheckoutMoreProducts from "../Product/CheckoutMoreProducts";
 
 const parsePrice = (value) => Number(String(value).replace(/[^0-9.]/g, ""));
 
@@ -184,23 +185,23 @@ const Cart = () => {
             <div className="space-y-2">
               <div className="flex justify-between font-montserrat s">
                 <span>Subtotal</span>
-                <span>$ {calculatedSubtotal.toFixed(2)}</span>
+                <span>{summary.subtotal}</span>
               </div>
 
               <div className="flex justify-between font-montserrat">
                 <span>Tax</span>
-                <span>+ {calculatedTax.toFixed(2)}</span>
+                <span>+{summary.total_tax}</span>
               </div>
 
               <div className="flex justify-between font-montserrat">
                 <span>Discount</span>
-                <span>- ${calculatedDiscount.toFixed(2)}</span>
+                <span>-{summary.discount}</span>
               </div>
 
               <div className="flex justify-between mt-4 border-t pt-3 font-montserrat">
                 <span>Total</span>
                 <span className="font-semibold text-xl">
-                  $ {calculatedTotal.toFixed(2)}
+                  {summary.final_amount}
                 </span>
               </div>
             </div>

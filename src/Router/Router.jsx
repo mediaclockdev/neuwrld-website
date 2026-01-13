@@ -14,6 +14,7 @@ import CategoryPage from "../Views/Pages/Category/CategoryPage";
 import ProductList from "../Views/Pages/ProductList/ProductList";
 import Wishlist from "../Views/Pages/Wishlist/Wishlist";
 import Checkout from "../Views/Pages/Checkout/Checkout";
+import CheckoutAddress from "../components/CheckoutAddress";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -78,6 +79,7 @@ const Router = () => {
             </Suspense>
           ),
         },
+
         {
           path: "/products/:gender/:category/:subCategory",
           element: (

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { BASE_URL, ALL_APi_LIST } from "../../../api/apiList";

@@ -81,10 +81,10 @@ const Checkout = () => {
   const handleCheckout = () => {
     if (!defaultAddress) {
       alert("Please select a shipping address");
-      navigate("/address");
+      // navigate("/address");
       return;
     }
-    navigate("/payment");
+    // navigate("/payment");
   };
   const handleAddressChange = (e) => {
     setAddressForm({

@@ -31,11 +31,11 @@ const Header = () => {
       document.body.style.overflow = "auto";
     }
   }, [isMenuOpen]);
-  const cartItems = useSelector((state) => state.cart.cartItems || []);
-  const totalItems = cartItems.reduce(
-    (sum, item) => sum + (item.quantity || 1),
-    0
-  );
+  const { items = [] } = useSelector((state) => state.cart);
+  const totalItems = items.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  const { items: wishlistItems = [] } = useSelector((state) => state.wishlist);
+  const wishlistCount = Array.isArray(wishlistItems) ? wishlistItems.length : 0;
+
   const dispatch = useDispatch();
   const { list = [], loading } = useSelector((state) => state.categories || {});
   const selectedCategory = list.find((cat) => cat.slug === openMenu);
@@ -304,13 +304,24 @@ const Header = () => {
                 </li>
                 <li>
                   <Link to="/wishlist">
-                    <img
-                      src={heart}
-                      alt="heart icon"
-                      className="size-4 lg:size-5 cursor-pointer"
-                    />
+                    <div className="lg:flex items-center gap-3 relative z-[100]">
+                      <div className="relative">
+                        {wishlistCount > 0 && (
+                          <div className="absolute -right-3 -top-2 bg-black/50 text-white rounded-full flex justify-center text-xs size-4 items-center">
+                            {wishlistCount}
+                          </div>
+                        )}
+
+                        <img
+                          src={heart}
+                          alt="wishlist"
+                          className="size-4 lg:size-5 cursor-pointer"
+                        />
+                      </div>
+                    </div>
                   </Link>
                 </li>
+
                 <li onMouseEnter={() => setShowProfile(true)}>
                   <img src={user} className="size-5 cursor-pointer" />
 
@@ -325,7 +336,7 @@ const Header = () => {
                     <div className="lg:flex items-center gap-3 relative z-[100]">
                       <div className="relative">
                         {totalItems > 0 && (
-                          <div className="absolute -right-3 -top-2 bg-black/50 text-white rounded-full flex justify-center text-xs size-4 items-center">
+                          <div className="absolute -right-3 -top-2 bg-black/50 text-white rounded-full flex justify-center text-xs size-4 items-center ">
                             {totalItems}
                           </div>
                         )}

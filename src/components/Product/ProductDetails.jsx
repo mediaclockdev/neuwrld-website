@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useState, useMemo, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { addToCartAPI } from "../../features/cart/cartSlice";
+import { addToCartAPI, fetchCartAPI } from "../../features/cart/cartSlice";
 import { fetchProductDetails } from "../../features/products/productSlice";
 import CheckoutMoreProducts from "./CheckoutMoreProducts";
 
@@ -10,8 +11,10 @@ const ProductDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [quantity, setQuantity] = useState(1);
 
   const { product, loading, error } = useSelector((state) => state.product);
+  const cartItems = useSelector((state) => state.cart.items || []);
 
   // Fetch product details
   useEffect(() => {
@@ -46,97 +49,49 @@ const ProductDetails = () => {
     }
   }, [data?.product?.image]);
 
-  // --------------------------------------------------------
-  // DYNAMIC ATTRIBUTE ID MAPPING
-  // --------------------------------------------------------
-  const COLOR_ID = attributeOptions.find((a) => a.name === "Color")?.id;
-  const SIZE_ATTR = attributeOptions.find((a) =>
-    a.name.toLowerCase().includes("size")
-  );
-
-  const SIZE_ID = SIZE_ATTR?.id;
-
-  const MATERIAL_ID = attributeOptions.find((a) => a.name === "Material")?.id;
-
-  console.log("ATTRIBUTE IDS:", { COLOR_ID, SIZE_ID, MATERIAL_ID });
-
-  // Options
-  const colorOptions =
-    attributeOptions.find((a) => a.name === "Color")?.options || [];
-  const sizeOptions = SIZE_ATTR?.options || [];
-
-
-
-  // Defaults from API
-  const defaultColor = data?.current_attributes?.[COLOR_ID] ?? null;
-  const defaultSize = data?.current_attributes?.[SIZE_ID] ?? null;
-  const defaultMaterial = data?.current_attributes?.[MATERIAL_ID] ?? null;
-
-  const [selectedColor, setSelectedColor] = useState(defaultColor);
-  const [selectedSize, setSelectedSize] = useState(defaultSize);
-  const [selectedMaterial, setSelectedMaterial] = useState(defaultMaterial);
-  const [quantity, setQuantity] = useState(1);
-
-  // Sync defaults when product loads
-  useEffect(() => {
-    setSelectedColor(defaultColor);
-    setSelectedSize(defaultSize);
-    setSelectedMaterial(defaultMaterial);
-  }, [defaultColor, defaultSize, defaultMaterial]);
-
   // Safe compare
   const eq = (a, b) => String(a) === String(b);
 
   // --------------------------------------------------------
   // AVAILABILITY CHECKS (based on real attribute ID mapping)
   // --------------------------------------------------------
-  const isColorAvailable = (colorId) => {
-    return combinations.some((c) => {
-      const attrs = c.attributes;
-      if (!eq(attrs[COLOR_ID], colorId)) return false;
-      if (selectedSize && !eq(attrs[SIZE_ID], selectedSize)) return false;
-      if (selectedMaterial && !eq(attrs[MATERIAL_ID], selectedMaterial))
-        return false;
-      return true;
-    });
-  };
-
-  const isSizeAvailable = (sizeId) => {
-    return combinations.some((c) => {
-      const attrs = c.attributes;
-      if (!eq(attrs[SIZE_ID], sizeId)) return false;
-      if (selectedColor && !eq(attrs[COLOR_ID], selectedColor)) return false;
-      if (selectedMaterial && !eq(attrs[MATERIAL_ID], selectedMaterial))
-        return false;
-      return true;
-    });
-  };
-
-  const isMaterialAvailable = (materialId) => {
-    return combinations.some((c) => {
-      const attrs = c.attributes;
-      if (!eq(attrs[MATERIAL_ID], materialId)) return false;
-      if (selectedColor && !eq(attrs[COLOR_ID], selectedColor)) return false;
-      if (selectedSize && !eq(attrs[SIZE_ID], selectedSize)) return false;
-      return true;
-    });
-  };
 
   // --------------------------------------------------------
   // FIND MATCHING VARIANT ID
   // --------------------------------------------------------
-  const selectedVariant = useMemo(() => {
-    const found =
-      combinations.find((c) => {
-        const attrs = c.attributes;
-        return eq(attrs, data.current_attributes);
-      }) || null;
+  // const selectedVariant = useMemo(() => {
+  //   const found =
+  //     combinations.find((c) => {
+  //       const attrs = c.attributes;
+  //       return eq(attrs, data.current_attributes);
+  //     }) || null;
 
-    console.log("🔍 SELECTED VARIANT:", found);
-    console.log("ONE COMBINATION:", combinations[0]);
+  //   console.log("🔍 SELECTED VARIANT:", found);
+  //   console.log("ONE COMBINATION:", combinations[0]);
 
-    return found;
-  }, [selectedColor, selectedSize, selectedMaterial, combinations]);
+  //   return found;
+  // }, [combinations, data.current_attributes]);
+  const selectedVariantId = useMemo(() => {
+    return productInfo?.id ?? null;
+  }, [productInfo]);
+
+  const selectedSku = useMemo(() => {
+    for (const attr of attributeOptions) {
+      const currentOption = attr.options?.find((o) => o.is_current);
+      if (currentOption?.sku) {
+        return currentOption.sku;
+      }
+    }
+    return null;
+  }, [attributeOptions]);
+
+  const isInCart = useMemo(() => {
+    if (!selectedVariantId) return false;
+
+    return cartItems.some(
+      (item) => String(item.product_variant_id) === String(selectedVariantId)
+    );
+  }, [cartItems, selectedVariantId]);
 
   // --------------------------------------------------------
   // SAFE LOAD STATES
@@ -148,31 +103,68 @@ const ProductDetails = () => {
   // --------------------------------------------------------
   // ADD TO CART
   // --------------------------------------------------------
-  const handleAddToCart = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return alert("Login required");
+  // const handleAddToCart = async () => {
+  //   const token = localStorage.getItem("token");
+  //   if (!token) return alert("Login required");
 
-    if (!selectedVariant?.variant_id) {
-      alert("No variant selected");
+  //   if (!selectedVariant?.variant_id) {
+  //     alert("No variant selected");
+  //     return;
+  //   }
+
+  //   const payload = {
+  //     product_variant_id: productInfo.id,
+  //     is_saved_for_later: 0,
+  //     quantity: Number(quantity),
+  //   };
+
+  //   console.log("FINAL JSON PAYLOAD:", payload);
+  //   try {
+  //     await dispatch(addToCartAPI(payload)).unwrap();
+  //     alert("Added to cart!");
+  //   } catch (err) {
+  //     console.error("Add To Cart Error:", err);
+  //   }
+  // };
+  const handleCartButtonClick = async () => {
+    // If already in cart → go to cart
+    if (isInCart) {
+      navigate("/cart");
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Login required");
+      return;
+    }
+
+    if (!productInfo?.id) {
+      alert("Product not ready");
       return;
     }
 
     const payload = {
-      product_variant_id: productInfo.id,
+      product_variant_id: productInfo.id, // ✅ FIXED
       is_saved_for_later: 0,
       quantity: Number(quantity),
     };
 
-    console.log("FINAL JSON PAYLOAD:", payload);
     try {
       await dispatch(addToCartAPI(payload)).unwrap();
-      alert("Added to cart!");
+      dispatch(fetchCartAPI());
+      // No alert needed — UI will update automatically
     } catch (err) {
       console.error("Add To Cart Error:", err);
     }
   };
+  console.log("PRODUCT SKU:", productInfo.sku);
+  console.log(
+    "CART SKUS:",
+    cartItems.map((i) => i.sku)
+  );
+
   const checkoutMoreProducts = data?.checkout_more_products ?? [];
-  console.log("CHECKOUT MORE PRODUCTS 👉", checkoutMoreProducts);
 
   return (
     <div className="bg-white min-h-screen">
@@ -275,105 +267,38 @@ const ProductDetails = () => {
               )}
             </div>
 
-            {/* COLOR SELECTION */}
-            {colorOptions.length > 0 && (
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Select Color</h3>
-                <div className="flex gap-3 flex-wrap">
-                  {colorOptions.map((opt) => {
-                    const available = isColorAvailable(opt.attribute_value_id);
+            {attributeOptions.map((attr) => (
+              <div key={attr.id}>
+                <h3 className="text-lg font-semibold mb-2">
+                  Select {attr.name}
+                </h3>
 
-                    return (
-                      <button
-                        key={opt.attribute_value_id}
-                        onClick={() => navigate(`/products/${opt.matched_sku}`)}
-                        className={`px-5 py-2 rounded-md ${
-                          opt.is_current ? "bg-black text-white" : "bg-gray-200"
-                        }`}
-                      >
-                        {opt.value}
-                      </button>
-                    );
-                  })}
-                </div>
-                {!isColorAvailable(selectedColor) && selectedColor && (
-                  <p className="text-sm text-red-500 mt-1">
-                    This color is not available for selected size/material.
-                  </p>
-                )}
-              </div>
-            )}
-
-            {/* SIZE SELECTION */}
-            {sizeOptions.length > 0 && (
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Select Size</h3>
                 <div className="flex gap-3 flex-wrap">
-                  {sizeOptions.map((opt) => {
-                    const available = isSizeAvailable(opt.attribute_value_id);
-                    console.log("[size]", opt);
-                    return (
-                      <button
-                        key={opt.attribute_value_id}
-                        onClick={() => navigate(`/products/${opt.matched_sku}`)}
-                        className={`px-5 py-2 rounded-md ${
-                          opt.is_current ? "bg-black text-white" : "bg-gray-200"
-                        }`}
-                      >
-                        {opt.value}
-                      </button>
-                    );
-                  })}
+                  {attr.options.map((opt) => (
+                    <button
+                      key={opt.attribute_value_id}
+                      onClick={() => navigate(`/products/${opt.matched_sku}`)}
+                      className={`px-5 py-2 rounded-md ${
+                        opt.is_current
+                          ? "bg-black text-white"
+                          : "bg-gray-200 text-black"
+                      }`}
+                    >
+                      {opt.value}
+                    </button>
+                  ))}
                 </div>
-                {!isSizeAvailable(selectedSize) && selectedSize && (
-                  <p className="text-sm text-red-500 mt-1">
-                    This size is not available for selected color/material.
-                  </p>
-                )}
               </div>
-            )}
-
-            {/* MATERIAL SELECTION - Currently commented out, but kept for future use */}
-            {/* {materialOptions.length > 0 && (
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Select Material</h3>
-                <div className="flex gap-3 flex-wrap">
-                  {materialOptions.map((opt) => {
-                    const available = isMaterialAvailable(
-                      opt.attribute_value_id
-                    );
-                    return (
-                      <button
-                        key={opt.attribute_value_id}
-                        disabled={!available}
-                        onClick={() =>
-                          setSelectedMaterial(opt.attribute_value_id)
-                        }
-                        className={`px-5 py-2 rounded-md ${
-                          eq(selectedMaterial, opt.attribute_value_id)
-                            ? "bg-black text-white"
-                            : "bg-gray-200"
-                        } ${!available && "opacity-40 cursor-not-allowed"}`}
-                      >
-                        {opt.value}
-                      </button>
-                    );
-                  })}
-                </div>
-                {!isMaterialAvailable(selectedMaterial) && selectedMaterial && (
-                  <p className="text-sm text-red-500 mt-1">
-                    This material is not available for selected color/size.
-                  </p>
-                )}
-              </div>
-            )} */}
+            ))}
 
             {/* ADD TO CART BUTTON */}
             <button
-              onClick={handleAddToCart}
-              className="w-full bg-black text-white py-4 rounded-md text-lg"
+              onClick={handleCartButtonClick}
+              className={`w-full py-4 rounded-md text-lg transition ${
+                isInCart ? "bg-gray-800 text-white" : "bg-black text-white"
+              }`}
             >
-              Add to Cart – {productInfo.price}
+              {isInCart ? "View Cart" : `Add to Cart – ${productInfo.price}`}
             </button>
           </div>
         </div>
