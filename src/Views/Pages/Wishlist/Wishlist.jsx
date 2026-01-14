@@ -63,6 +63,7 @@ const Wishlist = () => {
             onRemoveWishlist={(variantId) =>
               dispatch(removeFromWishlistAPI(variantId))
             }
+            onClick={() => navigate(`/products/${item.product_sku}`)}
           />
         ))}
       </div>

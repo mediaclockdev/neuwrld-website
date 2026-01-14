@@ -82,7 +82,7 @@ const ProductCard = ({ item, showWishlist = false, onRemoveWishlist }) => {
             </div>
           )}
 
-          <p className="text-xs text-gray-400">View Details →</p>
+          <p className="text-sm text-gray-400">View Details →</p>
         </div>
       </div>
     </div>

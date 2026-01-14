@@ -1,7 +1,6 @@
 import React from "react";
 
 const CheckoutAddress = ({
-  defaultAddress,
   showAddressForm,
   setShowAddressForm,
   addressForm,
@@ -16,23 +15,21 @@ const CheckoutAddress = ({
   // ✅ auto-fill non-UI fields
 
   return (
-    <section className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
       {/* Header */}
-      <div className="bg-gray-50 px-5 sm:px-6 py-4 border-b border-gray-200">
-        <div className="flex justify-between items-center">
-          <h2 className="font-semibold text-lg text-gray-900">
-            Shipping Address
-          </h2>
+      <div className="bg-gray-50 px-5 sm:px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+        <h2 className="font-semibold text-lg text-gray-900">
+          Shipping Address
+        </h2>
 
-          {defaultAddress && (
-            <button
-              className="text-sm text-blue-600 underline"
-              onClick={() => setShowAddressForm(true)}
-            >
-              Change Address
-            </button>
-          )}
-        </div>
+        {!showAddressForm && addresses?.length > 0 && (
+          <button
+            className="text-sm text-blue-600 underline"
+            onClick={() => setShowAddressForm(true)}
+          >
+            Change Address
+          </button>
+        )}
       </div>
 
       {/* Content */}
@@ -108,7 +105,7 @@ const CheckoutAddress = ({
         )}
 
         {/*  No Address */}
-        {!defaultAddress && !showAddressForm && (
+        {!selectedAddress && addresses?.length === 0 && !showAddressForm && (
           <div className="text-center py-6">
             <p className="text-red-600 font-medium mb-4">
               No shipping address selected
@@ -217,7 +214,7 @@ const CheckoutAddress = ({
           </div>
         )}
       </div>
-    </section>
+    </div>
   );
 };
 

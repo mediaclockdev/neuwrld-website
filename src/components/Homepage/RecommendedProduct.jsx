@@ -6,9 +6,12 @@ import {
   removeFromWishlistAPI,
 } from "../../features/wishlist/wishlistSlice";
 import { Star, Heart } from "lucide-react";
+import RecommendedProductSkeleton from "./RecommendedProductSkeleton";
 
 const RecommendedProduct = () => {
   const dashboard = useSelector((s) => s.dashboard.data);
+  const dashboardState = useSelector((s) => s.dashboard);
+  const loading = dashboardState.loading;
 
   const recommended =
     dashboard?.data?.recommended_products?.map((item) => {
@@ -54,6 +57,7 @@ const RecommendedProduct = () => {
         }
       });
   };
+  if (loading) return <RecommendedProductSkeleton />;
 
   return (
     <div className="w-full  py-8 sm:py-12 lg:py-16">

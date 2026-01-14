@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDashboard } from "../../features/dashboard/dashboardSlice";
 import { motion, AnimatePresence } from "framer-motion";
+import HeroSkeleton from "./Heroskeleton";
 
 const Hero = () => {
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, [images]);
 
-  if (loading) return <p className="text-white">Loading...</p>;
+  if (loading) return <HeroSkeleton />;
   if (error) return <p className="text-red-500">Error loading hero</p>;
 
   return (
