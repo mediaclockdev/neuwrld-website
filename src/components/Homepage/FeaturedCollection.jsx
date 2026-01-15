@@ -39,7 +39,7 @@ const FeaturedCategory = () => {
             className="flex flex-col items-center"
             onClick={() => navigate(`/products/${cat.gender}/${cat.slug}`)}
           >
-            <div className="w-32 lg:w-40 h-32 lg:h-40 rounded-full overflow-hidden shadow-md hover:scale-105 transition duration-300">
+            <div className="w-32 lg:w-40 h-32 lg:h-40 rounded-full overflow-hidden shadow-md hover:scale-105 transition duration-300 cursor-pointer">
               <img
                 src={cat.image}
                 alt={cat.name}

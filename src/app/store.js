@@ -6,6 +6,7 @@ import authReducer from "../features/auth/authSlice";
 import categoriesReducer from "../features/categories/categoriesSlice";
 import wishlistReducer from "../features/wishlist/wishlistSlice";
 import addressReducer from "../features/address/addressSlice";
+import couponReducer from "../features/coupon/CouponSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,5 +17,6 @@ export const store = configureStore({
     categories: categoriesReducer,
     wishlist: wishlistReducer,
     address: addressReducer,
+    coupon: couponReducer,
   },
 });

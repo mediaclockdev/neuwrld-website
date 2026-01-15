@@ -21,6 +21,7 @@ const Wishlist = () => {
         if (err === "NOT_LOGGED_IN") navigate("/login");
       });
   }, [dispatch, navigate]);
+  console.log("WISHLIST ITEM:", items);
 
   if (loading) {
     return (
@@ -63,7 +64,7 @@ const Wishlist = () => {
             onRemoveWishlist={(variantId) =>
               dispatch(removeFromWishlistAPI(variantId))
             }
-            onClick={() => navigate(`/products/${item.product_sku}`)}
+            onClick={() => navigate(`/products/${item.product_variant_id}`)}
           />
         ))}
       </div>

@@ -11,9 +11,39 @@ const CheckoutAddress = ({
   selectedAddress,
   setSelectedAddress,
   onDeleteAddress,
+  editingAddressId = null,
+  setEditingAddressId = () => {},
+  onEditAddress,
 }) => {
-  // ✅ auto-fill non-UI fields
+  const handleEditClick = (addr) => {
+    if (onEditAddress) {
+      onEditAddress(addr);
+    }
+    if (setEditingAddressId) {
+      setEditingAddressId(addr.id);
+    }
+    setShowAddressForm(true);
+  };
 
+  const handleAddNewClick = () => {
+    if (onEditAddress) {
+      onEditAddress(null);
+    }
+    if (setEditingAddressId) {
+      setEditingAddressId(null);
+    }
+    setShowAddressForm(true);
+  };
+
+  const handleCancelClick = () => {
+    setShowAddressForm(false);
+    if (setEditingAddressId) {
+      setEditingAddressId(null);
+    }
+    if (onEditAddress) {
+      onEditAddress(null);
+    }
+  };
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
       {/* Header */}
@@ -24,10 +54,19 @@ const CheckoutAddress = ({
 
         {!showAddressForm && addresses?.length > 0 && (
           <button
-            className="text-sm text-blue-600 underline"
-            onClick={() => setShowAddressForm(true)}
+            className="px-4 py-2 bg-black text-white rounded-lg font-medium text-sm"
+            onClick={handleAddNewClick}
           >
-            Change Address
+            + Add New Address
+          </button>
+        )}
+
+        {!selectedAddress && addresses?.length === 0 && !showAddressForm && (
+          <button
+            onClick={handleAddNewClick}
+            className="px-6 py-3 bg-black text-white rounded-lg font-medium"
+          >
+            + Add Shipping Address
           </button>
         )}
       </div>
@@ -53,7 +92,7 @@ const CheckoutAddress = ({
                     name="selectedAddress"
                     checked={selectedAddress?.id === addr.id}
                     onChange={() => setSelectedAddress(addr)}
-                    className="mt-1 w-4 h-4 text-blue-600 "
+                    className="mt-1 w-4 h-4 text-blue-600"
                   />
 
                   {/* Address Details */}
@@ -74,44 +113,68 @@ const CheckoutAddress = ({
                     )}
                   </div>
 
-                  {/* Delete Icon Button */}
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      onDeleteAddress(addr.id);
-                    }}
-                    className="text-gray-400 hover:text-red-600 transition-colors p-1"
-                    aria-label="Remove address"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
+                  {/* Action Buttons */}
+                  <div className="flex gap-2">
+                    {/* Edit Button */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        handleEditClick(addr);
+                      }}
+                      className="text-gray-400 hover:text-blue-600 transition-colors p-1"
+                      aria-label="Edit address"
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                      </svg>
+                    </button>
+
+                    {/* Delete Button */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        onDeleteAddress(addr.id);
+                      }}
+                      className="text-gray-400 hover:text-red-600 transition-colors p-1"
+                      aria-label="Remove address"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </label>
             ))}
           </div>
         )}
 
-        {/*  No Address */}
+        {/* No Address */}
         {!selectedAddress && addresses?.length === 0 && !showAddressForm && (
           <div className="text-center py-6">
             <p className="text-red-600 font-medium mb-4">
               No shipping address selected
             </p>
             <button
-              onClick={() => setShowAddressForm(true)}
+              onClick={handleAddNewClick}
               className="px-6 py-3 bg-black text-white rounded-lg font-medium"
             >
               + Add Shipping Address
@@ -119,9 +182,15 @@ const CheckoutAddress = ({
           </div>
         )}
 
-        {/*  Add Address Form */}
+        {/* Add/Edit Address Form */}
         {showAddressForm && (
           <div className="space-y-4">
+            <div className="mb-4">
+              <h3 className="font-semibold text-gray-900">
+                {editingAddressId ? "Edit Address" : "Add New Address"}
+              </h3>
+            </div>
+
             <input
               name="name"
               placeholder="Full Name *"
@@ -179,15 +248,13 @@ const CheckoutAddress = ({
                 className="w-full border px-4 py-3 rounded-lg"
               />
 
-              {/* TEMP: state_id input (replace with dropdown later) */}
               <select
                 name="state_id"
                 value={addressForm.state_id}
                 onChange={handleAddressChange}
                 className="w-full border px-4 py-3 rounded-lg bg-white"
               >
-                <option value="">Select State </option>
-
+                <option value="">Select State *</option>
                 {states.map((state) => (
                   <option key={state.id} value={state.id}>
                     {state.name}
@@ -201,11 +268,11 @@ const CheckoutAddress = ({
                 onClick={handleSaveAddress}
                 className="flex-1 bg-black text-white py-3 rounded-lg font-medium"
               >
-                Save Address
+                {editingAddressId ? "Update Address" : "Save Address"}
               </button>
 
               <button
-                onClick={() => setShowAddressForm(false)}
+                onClick={handleCancelClick}
                 className="flex-1 border py-3 rounded-lg font-medium"
               >
                 Cancel

@@ -8,7 +8,7 @@ const ProductCard = ({ item, showWishlist = false, onRemoveWishlist }) => {
   return (
     <div
       className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100 hover:border-gray-200"
-      onClick={() => navigate(`/products/${item.product_sku}`)}
+      onClick={() => navigate(`/products/${item.sku}`)}
     >
       {/* Image Container */}
       <div className="relative aspect-square w-full overflow-hidden bg-gray-100">

@@ -21,6 +21,7 @@ export const ALL_APi_LIST = {
   getCart: "my-cart",
   updateQuantity: "update-quantity",
   applyCoupon: "apply-coupon",
+  couponlist: "coupon-list",
 
   // wishlist //
   addtoWishlist: "move-to-wishlist",
