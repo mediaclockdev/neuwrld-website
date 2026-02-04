@@ -32,6 +32,9 @@ export const ALL_APi_LIST = {
   userAddress: "user-address",
   userAddressSave: "user-address",
   removeAdd: "remove-address",
+
+  // orders
+  myOrders: "my-orders",
 };
 
 export const BASE_URL =

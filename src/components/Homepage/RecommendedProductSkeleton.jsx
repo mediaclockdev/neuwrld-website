@@ -2,7 +2,7 @@ import React from "react";
 
 const RecommendedProductSkeleton = () => {
   return (
-    <div className="w-full py-8 sm:py-12 lg:py-16">
+    <div className="w-full py-6 sm:py-4 lg:py-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         {/* Heading Skeleton */}
         <div className="mb-6 sm:mb-8 lg:mb-12">

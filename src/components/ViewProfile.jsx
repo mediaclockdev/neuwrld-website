@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const ViewProfile = () => {
   const dispatch = useDispatch();
@@ -66,36 +67,36 @@ const ViewProfile = () => {
       <div className="border-t border-gray-200 py-4 sm:py-6"></div>
 
       <nav className="flex flex-col gap-3 sm:gap-4">
-        <a
-          href="/orders"
+        <Link
+          to="/orders"
           className="text-gray-700 hover:text-pink-500 transition-colors"
         >
           My Orders
-        </a>
-        <a
-          href="/wishlist"
+        </Link>
+        <Link
+          to="/wishlist"
           className="text-gray-700 hover:text-pink-500 transition-colors"
         >
           Wishlist
-        </a>
-        <a
-          href="/addresses"
+        </Link>
+        <Link
+          to="/addresses"
           className="text-gray-700 hover:text-pink-500 transition-colors"
         >
           Addresses
-        </a>
-        <a
-          href="/profile"
+        </Link>
+        <Link
+          to="/profile"
           className="text-gray-700 hover:text-pink-500 transition-colors"
         >
           Profile
-        </a>
-        <a
-          href="/settings"
+        </Link>
+        <Link
+          to="/settings"
           className="text-gray-700 hover:text-pink-500 transition-colors"
         >
           Settings
-        </a>
+        </Link>
       </nav>
 
       <div className="border-t border-gray-200 py-4 sm:py-6"></div>

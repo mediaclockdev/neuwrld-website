@@ -15,6 +15,7 @@ import ProductList from "../Views/Pages/ProductList/ProductList";
 import Wishlist from "../Views/Pages/Wishlist/Wishlist";
 import Checkout from "../Views/Pages/Checkout/Checkout";
 import CheckoutAddress from "../components/CheckoutAddress";
+import Order from "../components/Order";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -76,6 +77,14 @@ const Router = () => {
           element: (
             <Suspense fallback={<Loader />}>
               <Checkout />
+            </Suspense>
+          ),
+        },
+        {
+          path: "/orders",
+          element: (
+            <Suspense fallback={<Loader />}>
+              <Order />
             </Suspense>
           ),
         },

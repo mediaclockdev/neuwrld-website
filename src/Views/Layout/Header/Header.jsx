@@ -248,7 +248,7 @@ const Header = () => {
                     )}
                   </NavLink>
                 </li>
-                <li>
+                {/* <li>
                   <NavLink to="/New Arrivals" className="relative group">
                     {({ isActive }) => (
                       <p className="font-open-sans text-base transition-all duration-500">
@@ -261,8 +261,8 @@ const Header = () => {
                       </p>
                     )}
                   </NavLink>
-                </li>
-                <li>
+                </li> */}
+                {/* <li>
                   <NavLink to="/sale" className="relative group">
                     {({ isActive }) => (
                       <p className=" font-open-sans text-base transition-all duration-500">
@@ -275,7 +275,7 @@ const Header = () => {
                       </p>
                     )}
                   </NavLink>
-                </li>
+                </li> */}
               </ul>
               {/* HOVER DIALOG BOX */}
               {openMenu && selectedCategory?.children?.length > 0 && (
