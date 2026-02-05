@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import search from "../../../assets/svg/icons/search.svg";
+import searchicon from "../../../assets/svg/icons/search.svg";
 import heart from "../../../assets/svg/icons/heart.svg";
 import user from "../../../assets/svg/icons/user.svg";
 import bag from "../../../assets/svg/icons/bag.svg";
@@ -24,6 +24,11 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [openMenu, setOpenMenu] = useState(null); // "men" or "women"
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [products, setProducts] = useState([]);
+  const [searchloading, setSearchLoading] = useState(false);
+
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -31,6 +36,47 @@ const Header = () => {
       document.body.style.overflow = "auto";
     }
   }, [isMenuOpen]);
+  useEffect(() => {
+    if (!debouncedSearch) {
+      setProducts([]);
+      setSearchLoading(false);
+      return;
+    }
+
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(
+          `https://maroon-crane-692077.hostingersite.com/nuworld_v3/api/v1/products-search?q=${debouncedSearch}`,
+        );
+
+        const data = await res.json();
+
+        if (data?.success) {
+          setProducts(data?.payload?.data || []);
+        } else {
+          setProducts([]);
+        }
+      } catch (err) {
+        console.log(err);
+        setProducts([]);
+      } finally {
+        setSearchLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [debouncedSearch]);
+
+  useEffect(() => {
+    if (search) setSearchLoading(true);
+
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search.trim());
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
   const { items = [] } = useSelector((state) => state.cart);
   const totalItems = items.reduce((sum, item) => sum + (item.quantity || 1), 0);
   const { items: wishlistItems = [] } = useSelector((state) => state.wishlist);
@@ -292,16 +338,131 @@ const Header = () => {
               onMouseLeave={() => setShowProfile(false)}
             >
               <ul className="flex items-center gap-4">
-                <li>
-                  <div className="flex items-center xl:w-80 lg:bg-gray-100 px-0 lg:px-3 py-0 lg:py-2 rounded-sm  focus-within:bg-white focus-within:border border-gray-100">
-                    <img src={search} alt="search icon" className="size-4 " />
-                    <input
-                      type="text"
-                      placeholder="Search for products"
-                      className=" w-full outline-none text-sm placeholder-gray-500 px-2 py-1 rounded placeholder:font-light placeholder:text-sm focus:outline-none hidden lg:block "
-                    />
+                <li className="relative">
+                  {/* SEARCH BOX */}
+                  <div className="relative">
+                    <div className="flex items-center xl:w-80 lg:bg-gray-100 px-3 py-2 rounded-sm focus-within:bg-white focus-within:border border-gray-200">
+                      {/* icon */}
+                      <img
+                        src={searchicon}
+                        alt="search icon"
+                        className="size-4"
+                      />
+
+                      {/* input */}
+                      <input
+                        type="text"
+                        placeholder="Search for products"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="w-full outline-none text-sm placeholder-gray-500 px-2 py-1 rounded bg-transparent"
+                      />
+                    </div>
+
+                    {/* DROPDOWN */}
+                    {search && (
+                      <div className="absolute top-12 left-0 w-full bg-white shadow-2xl rounded-lg max-h-96 overflow-hidden z-[999] border border-gray-200 animate-in fade-in slide-in-from-top-2 duration-200">
+                        {/* Loading state */}
+                        {loading ? (
+                          <div className="p-6 flex flex-col items-center justify-center gap-3">
+                            <div className="w-8 h-8 border-3 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+                            <p className="text-sm text-gray-600 font-medium">
+                              Searching products...
+                            </p>
+                          </div>
+                        ) : products.length > 0 ? (
+                          <div className="overflow-y-auto max-h-96 divide-y divide-gray-100">
+                            {/* Results header */}
+                            <div className="px-4 py-2 bg-gray-50 sticky top-0 z-10">
+                              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                                {products.length}{" "}
+                                {products.length === 1 ? "Result" : "Results"}{" "}
+                                Found
+                              </p>
+                            </div>
+
+                            {/* Product list */}
+                            {products.map((item) => (
+                              <Link
+                                to={`/products/${item.product_sku}`}
+                                key={item.id}
+                                className="flex items-center gap-4 p-4 hover:bg-blue-50 transition-colors duration-150 cursor-pointer group"
+                                onClick={() => setSearch("")}
+                              >
+                                {/* Product image */}
+                                <div className="relative flex-shrink-0">
+                                  <img
+                                    src={item.image}
+                                    alt={item.product_name}
+                                    className="w-16 h-16 object-cover rounded-lg border border-gray-200 group-hover:border-blue-300 transition-colors"
+                                  />
+                                </div>
+
+                                {/* Product details */}
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-sm font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors">
+                                    {item.product_name}
+                                  </p>
+                                  <p className="text-sm font-bold text-blue-600 mt-1">
+                                    {item.price}
+                                  </p>
+                                  {item.category && (
+                                    <p className="text-xs text-gray-500 mt-1">
+                                      {item.category}
+                                    </p>
+                                  )}
+                                </div>
+
+                                {/* Arrow icon */}
+                                <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                                  <svg
+                                    className="w-5 h-5 text-gray-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M9 5l7 7-7 7"
+                                    />
+                                  </svg>
+                                </div>
+                              </Link>
+                            ))}
+                          </div>
+                        ) : (
+                          /* Empty state */
+                          <div className="p-8 flex flex-col items-center justify-center gap-3">
+                            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                              <svg
+                                className="w-8 h-8 text-gray-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                />
+                              </svg>
+                            </div>
+                            <p className="text-sm font-medium text-gray-600">
+                              No products found
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              Try searching with different keywords
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </li>
+
                 <li>
                   <Link to="/wishlist">
                     <div className="lg:flex items-center gap-3 relative z-[100]">

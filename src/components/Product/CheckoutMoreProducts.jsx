@@ -19,7 +19,7 @@ const CheckoutMoreProducts = ({ products = [] }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((item) => (
           <ProductCard
-            key={item.product_variant_id}
+            key={item?.product_variant_id}
             item={item}
             onClick={() => navigate(`/products/${item.product_sku}`)}
           />
