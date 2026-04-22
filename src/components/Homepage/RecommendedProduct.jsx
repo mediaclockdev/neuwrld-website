@@ -60,13 +60,13 @@ const RecommendedProduct = () => {
   if (loading) return <RecommendedProductSkeleton />;
 
   return (
-    <div className="w-full  py-6 sm:py-4 lg:py-8">
+    <div className="w-full py-6 sm:py-4 lg:py-8 bg-black">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         {/* Heading Section */}
         <div className="mb-6 sm:mb-8 lg:mb-12">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
             <div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-montserrat text-gray-900 mb-2">
+              <h2 className="text-xl lg:text-4xl font-semibold font-montserrat text-zinc-100 mb-2">
                 Recommended For You
               </h2>
             </div>
@@ -78,7 +78,7 @@ const RecommendedProduct = () => {
           {recommended.map((product) => (
             <div
               key={product.id}
-              className="relative group bg-white rounded-xl sm:rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-gray-200 flex flex-col h-full"
+              className="relative group bg-zinc-900 rounded-xl sm:rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-zinc-800 hover:border-zinc-700 flex flex-col h-full"
             >
               {/* Wishlist Button */}
               <button
@@ -93,14 +93,14 @@ const RecommendedProduct = () => {
                   );
                   handleWishlist(product.product_variant_id);
                 }}
-                className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 bg-white/90 backdrop-blur-sm rounded-full p-1.5 sm:p-2 shadow-md hover:shadow-lg hover:scale-110 active:scale-95 transition-all duration-200"
+                className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 bg-zinc-900/90 backdrop-blur-sm rounded-full p-1.5 sm:p-2 shadow-md hover:shadow-lg hover:scale-110 active:scale-95 transition-all duration-200"
                 aria-label="Add to wishlist"
               >
                 <Heart
                   className={`w-4 h-4 sm:w-5 sm:h-5 transition-all duration-200 ${
                     wishlistItems.includes(product.id)
                       ? "fill-red-500 text-red-500"
-                      : "text-gray-400 hover:text-red-400"
+                      : "text-zinc-400 hover:text-red-400"
                   }`}
                 />
               </button>
@@ -110,7 +110,7 @@ const RecommendedProduct = () => {
                 className="block flex-1  flex-col"
               >
                 {/* Image Container */}
-                <div className="relative w-full aspect-[3/4] sm:aspect-square overflow-hidden bg-gray-100">
+                <div className="relative w-full aspect-[3/4] sm:aspect-square overflow-hidden bg-zinc-800">
                   <img
                     src={product.image}
                     className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
@@ -132,24 +132,24 @@ const RecommendedProduct = () => {
                 {/* Content Section */}
                 <div className="p-2.5 sm:p-3 lg:p-4 flex flex-col flex-1">
                   {/* Product Name */}
-                  <h3 className="font-montserrat text-xs sm:text-sm lg:text-base font-medium text-gray-800 mb-2 sm:mb-3 line-clamp-2 min-h-[2rem] sm:min-h-[2.5rem] leading-snug flex-1">
+                  <h3 className="font-montserrat text-xs sm:text-sm lg:text-base font-medium text-zinc-200 mb-2 sm:mb-3 line-clamp-2 min-h-[2rem] sm:min-h-[2.5rem] leading-snug flex-1">
                     {product.name}
                   </h3>
 
                   {/* Price Section */}
                   <div className="flex flex-wrap items-baseline gap-1 sm:gap-2 mb-2 sm:mb-3">
-                    <span className="text-base sm:text-lg lg:text-xl font-bold text-gray-900">
+                    <span className="text-base sm:text-lg lg:text-xl font-bold text-zinc-100">
                       {product.price}
                     </span>
                     {product.old_price && (
-                      <span className="text-xs sm:text-sm text-gray-400 font-medium line-through">
+                      <span className="text-xs sm:text-sm text-zinc-500 font-medium line-through">
                         {product.old_price}
                       </span>
                     )}
                   </div>
 
                   {/* Rating */}
-                  <div className="flex items-center gap-1 text-xs text-gray-400">
+                  <div className="flex items-center gap-1 text-xs text-zinc-400">
                     {product.avg_rating > 0 ? (
                       <>
                         <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
@@ -170,13 +170,13 @@ const RecommendedProduct = () => {
         {/* Empty State */}
         {recommended.length === 0 && (
           <div className="text-center py-12 sm:py-16 lg:py-20">
-            <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full mb-4">
-              <Star className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />
+            <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-zinc-900 rounded-full mb-4">
+              <Star className="w-8 h-8 sm:w-10 sm:h-10 text-zinc-400" />
             </div>
-            <h3 className="text-lg sm:text-xl font-semibold text-gray-700 mb-2">
+            <h3 className="text-lg sm:text-xl font-semibold text-zinc-300 mb-2">
               No Recommendations Yet
             </h3>
-            <p className="text-sm sm:text-base text-gray-500">
+            <p className="text-sm sm:text-base text-zinc-400">
               Check back soon for personalized product suggestions
             </p>
           </div>

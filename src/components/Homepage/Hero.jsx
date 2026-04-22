@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchDashboard } from "../../features/dashboard/dashboardSlice";
 import { motion, AnimatePresence } from "framer-motion";
 import HeroSkeleton from "./Heroskeleton";
+import arrow from "../../assets/svg/icons/rightarrow.svg";
 
 const Hero = () => {
   const dispatch = useDispatch();
@@ -10,6 +11,7 @@ const Hero = () => {
   const { data, loading, error } = useSelector((state) => state.dashboard);
 
   const [index, setIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     dispatch(fetchDashboard());
@@ -32,51 +34,68 @@ const Hero = () => {
   if (error) return <p className="text-red-500">Error loading hero</p>;
 
   return (
-    <div className=" overflow-hidden">
-      <div className="relative w-full  lg:aspect-auto h-[35vh] md:h-[75vh] lg:h-[85vh]">
-        <AnimatePresence mode="sync">
-          {images.length > 0 && (
-            <motion.img
-              key={index}
-              className="absolute inset-0 w-full h-full object-cover"
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "-100%" }}
-              transition={{ duration: 1, ease: "easeInOut" }}
-              src={images[index]}
-            />
-          )}
-        </AnimatePresence>
+    <div className="relative w-full h-[50vh] md:h-[85vh] min-h-[500px] max-h-[600px] overflow-visible">
+      {images.map((src, i) => (
+        <img
+          key={i}
+          src={src}
+          alt="hero background"
+          className={`absolute inset-0 w-full h-full object-cover object-top md:object-center transition-opacity duration-1000 ${
+            i === index ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      ))}
+      {/* Content */}
+      <div className="absolute inset-0 bg-black/40 z-10" />
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 z-30 px-5">
+        <h1 className="text-white  uppercase space-y-4">
+          <span className="block text-3xl md:text-6xl lg:text-[80px] font-bold font-tektur">
+            We Are Not
+          </span>
+          <span className="block text-3xl md:text-6xl lg:text-[80px] font-bold font-tektur">
+            Just Fashion
+          </span>
+          {/* --- FIX 2: CULTURE highlighted with dark box --- */}
+          <p className="block text-3xl md:text-6xl lg:text-[90px] font-bold font-tektur">
+            We're{" "}
+            <span className="bg-black text-white  px-2 py-1 inline-block font-bold font-tektur"
+             style={{
+                color: "transparent",
+                WebkitTextStroke: "4px #CACFD2",
+              }}>{" "}
+              CULTURE.
+            </span>
+          </p>
+        </h1>
+        <div className="mt-8 bg-white rounded-tr-[100px] rounded-bl-[100px] px-10 lg:px-8 py-5 max-w-[395px] flex flex-col justify-center items-center ">
+          <p className="text-black text-xs lg:text-sm font-medium font-tektur">
+            From underground street wear to innovative eco friendly designs, our
+            brand reflects energy of streets and future of designs. Explore our
+            collections that shows drop &amp; underground culture and shows
+            confidence and creativity.
+          </p>
 
-        {/* dots */}
-        <div className="absolute bottom-3 sm:bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-30">
-          {images.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setIndex(i)}
-              className={`w-2 h-2 rounded-full ${
-                i === index ? "bg-white" : "bg-gray-400"
+          {/* --- FIX 4: Button with proper slide-in bg + arrow icon --- */}
+          <button
+            className="relative mt-5 bg-black text-white font-bold py-2.5 px-2.5 flex items-center gap-4 text-sm overflow-hidden group cursor-pointer rounded-tr-[5px] rounded-bl-[5px]"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <span
+              className={`absolute inset-0 bg-[#909497] transform transition-transform duration-500 ease-out ${
+                isHovered ? "translate-x-0" : "-translate-x-full"
               }`}
             />
-          ))}
+            <span
+              className={`relative z-10  font-tektur text-base lg:text-xl font-normal transition-colors duration-500`}
+            >
+              Explore our collection
+            </span>
+            <span className={`relative z-10 transition-colors duration-500 `}>
+              <img src={arrow} alt="right arrow" />
+            </span>
+          </button>
         </div>
-
-        {/* Content */}
-        {/* <div className="absolute inset-0 flex items-center justify-center z-30">
-          <div className="flex flex-col items-center gap-4 lg:gap-10">
-            <div className="flex flex-col items-center gap-2 lg:gap-4">
-              <h1 className="text-white heading-primary">New Collection</h1>
-              <p className="heading-secondary text-white">
-                Discover the latest trends in fashion
-              </p>
-            </div>
-            <div className="rounded-2xl bg-white px-4 lg:px-5 py-2 lg:py-3 cursor-pointer hover:scale-105 transition-transform duration-300">
-              <button className="text-base sm:text-lg lg:text-xl font-montserrat font-normal cursor-pointer">
-                Shop Now
-              </button>
-            </div>
-          </div>
-        </div> */}
       </div>
     </div>
   );

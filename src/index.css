@@ -1,11 +1,30 @@
 @import "tailwindcss";
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@400;700&family=Open+Sans:wght@400;700&display=swap");
 
-@theme {
+:root {
   --font-montserrat: "Montserrat", sans-serif;
   --font-lato: "Lato", sans-serif;
   --font-open-sans: "Open Sans", sans-serif;
+  --font-tektur: "Tektur", sans-serif;
+}
 
+/* Utilities */
+.font-montserrat {
+  font-family: var(--font-montserrat);
+}
+
+.font-lato {
+  font-family: var(--font-lato);
+}
+
+.font-open-sans {
+  font-family: var(--font-open-sans);
+}
+.font-tektur {
+  font-family: var(--font-tektur);
+}
+
+@theme {
   @keyframes slide-left {
     0% {
       transform: translateX(100%);
@@ -23,17 +42,4 @@
       transform: translateX(100%);
     }
   }
-}
-
-/* ✅ Tell Tailwind these are valid utilities */
-@utility font-montserrat {
-  font-family: var(--font-montserrat);
-}
-
-@utility font-lato {
-  font-family: var(--font-lato);
-}
-
-@utility font-open-sans {
-  font-family: var(--font-open-sans);
 }

@@ -17,16 +17,16 @@ const FeaturedCategory = () => {
   console.log("DASHBOARD DATA:", dashboard?.data);
 
   return (
-    <div className="container mx-auto px-4 lg:px-8 py-4 space-y-10">
+    <div className="container mx-auto px-4 lg:px-8 py-4 space-y-10 bg-black">
       {/* Header */}
       <div className="flex items-center justify-between mb-8 px-4 lg:px-0">
-        <h2 className="text-xl lg:text-3xl font-semibold font-montserrat">
+        <h2 className="text-xl lg:text-4xl font-semibold font-montserrat text-zinc-100">
           Featured Category
         </h2>
 
         <button
           onClick={() => navigate("/allcategory")}
-          className="text-gray-500 hover:text-gray-700 cursor-pointer text-sm lg:text-base"
+          className="text-zinc-400 hover:text-zinc-200 cursor-pointer text-sm lg:text-base"
         >
           Show All
         </button>
@@ -47,7 +47,7 @@ const FeaturedCategory = () => {
                 className="w-full h-full object-cover"
               />
             </div>
-            <p className="mt-3 text-base lg:text-xl font-medium text-gray-700 font-montserrat">
+            <p className="mt-3 text-base lg:text-xl font-medium text-zinc-300 font-montserrat">
               {cat.name}
             </p>
           </div>
@@ -74,7 +74,7 @@ const FeaturedCategory = () => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <p className="mt-3 text-sm font-medium text-gray-700 font-montserrat text-center max-w-[112px]">
+              <p className="mt-3 text-sm font-medium text-zinc-300 font-montserrat text-center max-w-[112px]">
                 {cat.name}
               </p>
             </div>

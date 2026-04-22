@@ -101,8 +101,8 @@ const Header = () => {
   const { isLoggedIn } = useSelector((state) => state.auth);
 
   return (
-    <div className="max-w-screen-2xl mx-auto px-5 lg:px-8  sticky top-0 bg-gray-50 z-50 shadow-sm">
-      <header>
+    <div className="bg-black text-zinc-100 border-b border-zinc-800">
+      <header className="max-w-screen-2xl mx-auto px-5 lg:px-8 sticky top-0 z-50">
         <nav>
           <div className="flex justify-between items-center lg:gap-4">
             <div className="flex justify-between items-center gap-4 lg:w-full lg:hidden">
@@ -129,7 +129,7 @@ const Header = () => {
                           onClick={() => setIsMenuOpen(false)} // closes menu on backdrop click
                         />
                         <motion.div
-                          className="fixed top-0 left-0 h-full w-3/4 bg-white z-50 shadow-lg"
+                          className="fixed top-0 left-0 h-full w-3/4 bg-zinc-900 z-50 shadow-lg text-zinc-100"
                           key="mobile-menu"
                           initial={{ x: "-100%" }}
                           animate={{ x: 0 }}
@@ -239,12 +239,6 @@ const Header = () => {
                 </div>
               </div>
             </div>
-            {/* destop logo */}
-            <div className="hidden lg:block">
-              <Link to={"/"}>
-                <img src={logo2} alt="logo" className="size-16" />
-              </Link>
-            </div>
 
             {/* desktop menu */}
             <div
@@ -255,10 +249,10 @@ const Header = () => {
                 <li>
                   <NavLink to="/" className="relative group">
                     {({ isActive }) => (
-                      <p className="font-open-sans text-base transition-all duration-500">
+                      <p className="font-open-sans text-base transition-all duration-500 text-zinc-100">
                         Home
                         <span
-                          className={`h-0.5 transition-all duration-500 bg-black absolute -bottom-1 left-0 ${
+                          className={`h-0.5 transition-all duration-500 bg-zinc-100 absolute -bottom-1 left-0 ${
                             isActive ? "w-full" : "w-0 group-hover:w-full"
                           }`}
                         ></span>
@@ -269,10 +263,10 @@ const Header = () => {
                 <li onMouseEnter={() => handleMouseEnter("men")}>
                   <NavLink to="/category/men" className="relative group">
                     {({ isActive }) => (
-                      <p className="font-open-sans text-base transition-all duration-500">
+                      <p className="font-open-sans text-base transition-all duration-500 text-zinc-100">
                         Men
                         <span
-                          className={`h-0.5 transition-all duration-500 bg-black absolute -bottom-1 left-0 ${
+                          className={`h-0.5 transition-all duration-500 bg-zinc-100 absolute -bottom-1 left-0 ${
                             isActive ? "w-full" : "w-0 group-hover:w-full"
                           }`}
                         ></span>
@@ -283,10 +277,10 @@ const Header = () => {
                 <li onMouseEnter={() => handleMouseEnter("women")}>
                   <NavLink to="/category/women" className="relative group">
                     {({ isActive }) => (
-                      <p className="font-open-sans text-base transition-all duration-500">
+                      <p className="font-open-sans text-base transition-all duration-500 text-zinc-100">
                         Women
                         <span
-                          className={`h-0.5 transition-all duration-500 bg-black absolute -bottom-1 left-0 ${
+                          className={`h-0.5 transition-all duration-500 bg-zinc-100 absolute -bottom-1 left-0 ${
                             isActive ? "w-full" : "w-0 group-hover:w-full"
                           }`}
                         ></span>
@@ -294,34 +288,20 @@ const Header = () => {
                     )}
                   </NavLink>
                 </li>
-                {/* <li>
+                <li>
                   <NavLink to="/New Arrivals" className="relative group">
                     {({ isActive }) => (
                       <p className="font-open-sans text-base transition-all duration-500">
-                        New Arrivals
-                        <span
-                          className={`h-0.5 transition-all duration-500 bg-black absolute -bottom-1 left-0 ${
+                        Accessories
+                      <span
+                          className={`h-0.5 transition-all duration-500 bg-zinc-100 absolute -bottom-1 left-0 ${
                             isActive ? "w-full" : "w-0 group-hover:w-full"
                           }`}
                         ></span>
                       </p>
                     )}
                   </NavLink>
-                </li> */}
-                {/* <li>
-                  <NavLink to="/sale" className="relative group">
-                    {({ isActive }) => (
-                      <p className=" font-open-sans text-base transition-all duration-500">
-                        Sale
-                        <span
-                          className={`h-0.5 transition-all duration-500 bg-black absolute -bottom-1 left-0 ${
-                            isActive ? "w-full" : "w-0 group-hover:w-full"
-                          }`}
-                        ></span>
-                      </p>
-                    )}
-                  </NavLink>
-                </li> */}
+                </li>
               </ul>
               {/* HOVER DIALOG BOX */}
               {openMenu && selectedCategory?.children?.length > 0 && (
@@ -332,6 +312,13 @@ const Header = () => {
                 />
               )}
             </div>
+
+            {/* destop logo */}
+            <div className="hidden lg:block">
+              <Link to={"/"}>
+                <img src={logo2} alt="logo" className="size-16" />
+              </Link>
+            </div>
             {/* desktop icons */}
             <div
               className="relative pb-6 -mb-8 flex items-end"
@@ -341,7 +328,7 @@ const Header = () => {
                 <li className="relative">
                   {/* SEARCH BOX */}
                   <div className="relative">
-                    <div className="flex items-center xl:w-80 lg:bg-gray-100 px-3 py-2 rounded-sm focus-within:bg-white focus-within:border border-gray-200">
+                    <div className="flex items-center xl:w-80 lg:bg-zinc-900 px-3 py-2 rounded-sm focus-within:bg-zinc-950 focus-within:border border-zinc-700">
                       {/* icon */}
                       <img
                         src={searchicon}
@@ -355,26 +342,26 @@ const Header = () => {
                         placeholder="Search for products"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full outline-none text-sm placeholder-gray-500 px-2 py-1 rounded bg-transparent"
+                        className="w-full outline-none text-sm placeholder-zinc-500 text-zinc-100 px-2 py-1 rounded bg-transparent"
                       />
                     </div>
 
                     {/* DROPDOWN */}
                     {search && (
-                      <div className="absolute top-12 left-0 w-full bg-white shadow-2xl rounded-lg max-h-96 overflow-hidden z-[999] border border-gray-200 animate-in fade-in slide-in-from-top-2 duration-200">
+                      <div className="absolute top-12 left-0 w-full bg-zinc-900 shadow-2xl rounded-lg max-h-96 overflow-hidden z-[999] border border-zinc-700 animate-in fade-in slide-in-from-top-2 duration-200">
                         {/* Loading state */}
                         {loading ? (
                           <div className="p-6 flex flex-col items-center justify-center gap-3">
-                            <div className="w-8 h-8 border-3 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
-                            <p className="text-sm text-gray-600 font-medium">
+                            <div className="w-8 h-8 border-3 border-zinc-600 border-t-blue-500 rounded-full animate-spin"></div>
+                            <p className="text-sm text-zinc-300 font-medium">
                               Searching products...
                             </p>
                           </div>
                         ) : products.length > 0 ? (
-                          <div className="overflow-y-auto max-h-96 divide-y divide-gray-100">
+                          <div className="overflow-y-auto max-h-96 divide-y divide-zinc-800">
                             {/* Results header */}
-                            <div className="px-4 py-2 bg-gray-50 sticky top-0 z-10">
-                              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                            <div className="px-4 py-2 bg-zinc-950 sticky top-0 z-10">
+                              <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wide">
                                 {products.length}{" "}
                                 {products.length === 1 ? "Result" : "Results"}{" "}
                                 Found
@@ -386,7 +373,7 @@ const Header = () => {
                               <Link
                                 to={`/products/${item.product_sku}`}
                                 key={item.id}
-                                className="flex items-center gap-4 p-4 hover:bg-blue-50 transition-colors duration-150 cursor-pointer group"
+                                className="flex items-center gap-4 p-4 hover:bg-zinc-800 transition-colors duration-150 cursor-pointer group"
                                 onClick={() => setSearch("")}
                               >
                                 {/* Product image */}
@@ -394,20 +381,20 @@ const Header = () => {
                                   <img
                                     src={item.image}
                                     alt={item.product_name}
-                                    className="w-16 h-16 object-cover rounded-lg border border-gray-200 group-hover:border-blue-300 transition-colors"
+                                    className="w-16 h-16 object-cover rounded-lg border border-zinc-700 group-hover:border-zinc-500 transition-colors"
                                   />
                                 </div>
 
                                 {/* Product details */}
                                 <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors">
+                                  <p className="text-sm font-semibold text-zinc-100 truncate group-hover:text-blue-400 transition-colors">
                                     {item.product_name}
                                   </p>
                                   <p className="text-sm font-bold text-blue-600 mt-1">
                                     {item.price}
                                   </p>
                                   {item.category && (
-                                    <p className="text-xs text-gray-500 mt-1">
+                                    <p className="text-xs text-zinc-400 mt-1">
                                       {item.category}
                                     </p>
                                   )}
@@ -416,7 +403,7 @@ const Header = () => {
                                 {/* Arrow icon */}
                                 <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
                                   <svg
-                                    className="w-5 h-5 text-gray-400"
+                                    className="w-5 h-5 text-zinc-400"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -435,9 +422,9 @@ const Header = () => {
                         ) : (
                           /* Empty state */
                           <div className="p-8 flex flex-col items-center justify-center gap-3">
-                            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                            <div className="w-16 h-16 bg-zinc-800 rounded-full flex items-center justify-center">
                               <svg
-                                className="w-8 h-8 text-gray-400"
+                                className="w-8 h-8 text-zinc-400"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -450,10 +437,10 @@ const Header = () => {
                                 />
                               </svg>
                             </div>
-                            <p className="text-sm font-medium text-gray-600">
+                            <p className="text-sm font-medium text-zinc-300">
                               No products found
                             </p>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-zinc-400">
                               Try searching with different keywords
                             </p>
                           </div>

@@ -8,21 +8,21 @@ import youtube from "../../../assets/svg/icons/youtube.svg";
 
 const Footer = () => {
   return (
-    <div className="max-w-screen-2xl mx-auto px-5 lg:px-8 py-4 bg-gray-50 shadow-2xl border-t border-gray-50">
-      <footer className="space-y-5">
+    <div className=" bg-black border-t border-zinc-800">
+      <footer className="space-y-5 max-w-screen-2xl mx-auto px-5 lg:px-8 py-4">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 py-2 ">
           <div className="space-y-1 lg:space-y-2">
             <img src={logo2} alt="logo" className="size-16" />
-            <p className="text-sm font-inter font-normal text-[#4B5563] ">
+            <p className="text-sm font-inter font-normal text-zinc-400 ">
               Your ultimate destination for contemporary fashion and timeless
               style.
             </p>
           </div>
           <div className="space-y-2 lg:space-y-3">
-            <p className="font-inter font-normal text-base lg:text-lg">
+            <p className="font-inter font-normal text-base lg:text-lg text-zinc-100">
               Company
             </p>
-            <ul className="space-y-1 lg:space-y-2 font-inter font-normal text-[#4B5563]">
+            <ul className="space-y-1 lg:space-y-2 font-inter font-normal text-zinc-400">
               <li className="cursor-pointer text-sm lg:text-base">About Us</li>
               <li className="cursor-pointer text-sm lg:text-base">
                 Contact Us
@@ -34,10 +34,10 @@ const Footer = () => {
             </ul>
           </div>
           <div className="space-y-2 lg:space-y-3">
-            <p className="font-inter font-normal text-base lg:text-lg">
+            <p className="font-inter font-normal text-base lg:text-lg text-zinc-100">
               Policies
             </p>
-            <ul className="space-y-1 lg:space-y-2 font-inter font-normal text-[#4B5563]">
+            <ul className="space-y-1 lg:space-y-2 font-inter font-normal text-zinc-400">
               <li className="cursor-pointer text-sm lg:text-base ">
                 Return Policy
               </li>
@@ -53,7 +53,7 @@ const Footer = () => {
             </ul>
           </div>
           <div className="space-y-3">
-            <p>Follows Us</p>
+            <p className="text-zinc-100">Follows Us</p>
             {/* social icons */}
             <ul className="flex gap-3 items-center ">
               <li>
@@ -94,8 +94,8 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        <div className="border-t border-[#E5E7EB] flex flex-col items-center py-3">
-          <p className="text-[#4B5563] font-inter font-normal text-sm lg:text-base">
+        <div className="border-t border-zinc-800 flex flex-col items-center py-3">
+          <p className="text-zinc-400 font-inter font-normal text-sm lg:text-base">
             © 2025 Fashion Brand. All rights reserved.
           </p>
         </div>
