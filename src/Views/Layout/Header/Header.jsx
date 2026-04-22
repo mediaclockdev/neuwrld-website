@@ -112,7 +112,7 @@ const Header = () => {
                   <img
                     src={ham}
                     alt="hamburger menu"
-                    className="size-6 cursor-pointer"
+                    className="size-6 cursor-pointer text-white"
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                   />
 

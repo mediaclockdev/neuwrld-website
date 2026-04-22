@@ -10,7 +10,7 @@ const About = () => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className="max-w-screen-2xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-center px-5 py-8 gap-2 lg:gap-10 overflow-hidden">
+    <div className="max-w-screen-2xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-center px-5 py-10 gap-2 lg:gap-10 overflow-hidden">
       {/* Left: Overlapping Images */}
           <div className="relative w-full h-[350px] sm:h-[380px] lg:h-[450px] mx-auto max-w-[480px] lg:max-w-[700px] overflow-visible">
               <img

@@ -3,7 +3,7 @@ import fashion from "../../assets/fashion.mp4";
 
 const Videosection = () => {
   return (
-    <div className="max-w-screen-2xl mx-auto py-6">
+    <div className="max-w-screen-2xl mx-auto py-8">
       <video
         className="object-cover  h-full w-full rounded-xl shadow-lg"
          autoPlay
