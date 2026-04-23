@@ -102,7 +102,7 @@ const Header = () => {
 
   return (
     <div className="bg-black text-zinc-100 border-b border-zinc-800">
-      <header className="max-w-screen-2xl mx-auto px-5 lg:px-8 sticky top-0 z-50 py-3">
+      <header className="max-w-screen-2xl mx-auto px-5 lg:px-8 sticky top-0 z-50 py-0 lg:py-3">
         <nav>
           <div className="flex justify-between items-center lg:gap-4">
             <div className="flex justify-between items-center gap-4 lg:w-full lg:hidden">
@@ -234,7 +234,7 @@ const Header = () => {
                 {/* mobile logo */}
                 <div>
                   <Link to={"/"}>
-                    <img src={logo2} alt="logo" className="size-18" />
+                    <img src={logo2} alt="logo" className="size-20" />
                   </Link>
                 </div>
               </div>
