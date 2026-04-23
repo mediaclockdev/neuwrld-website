@@ -6,8 +6,9 @@ const ProductCard = ({ item, showWishlist = false, onRemoveWishlist }) => {
   const navigate = useNavigate();
 
   return (
+  
     <div
-      className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100 hover:border-gray-200"
+      className="group bg-black rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100 hover:border-gray-200"
       onClick={() => navigate(`/products/${item.product_sku}`)}
     >
       {/* Image Container */}
@@ -24,12 +25,12 @@ const ProductCard = ({ item, showWishlist = false, onRemoveWishlist }) => {
         {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-2">
           {item.is_discount && (
-            <div className="bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg">
+            <div className="bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg font-tektur ">
               {item.discount} OFF
             </div>
           )}
           {item.out_of_stock && (
-            <div className="bg-gray-900 text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow-lg">
+            <div className="bg-gray-900 text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow-lg font-tektur ">
               Out of Stock
             </div>
           )}
@@ -51,19 +52,19 @@ const ProductCard = ({ item, showWishlist = false, onRemoveWishlist }) => {
 
       {/* Product Info */}
       <div className="p-5 space-y-3">
-        <p className="text-xs font-semibold text-blue-600 uppercase tracking-wider">
+        <p className="text-xs font-semibold text-gray-300 uppercase tracking-wider font-tektur ">
           {item.category}
         </p>
 
-        <h3 className="font-semibold text-lg text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
+        <h3 className="font-semibold font-tektur text-lg text-gray-300 line-clamp-2 group-hover:text-blue-600 transition-colors">
           {item.product_name}
         </h3>
 
         <div className="flex items-center gap-2">
-          <p className="font-bold text-xl text-gray-900">{item.price}</p>
+          <p className="font-bold text-xl text-gray-300 font-tektur ">{item.price}</p>
 
           {item.old_price && (
-            <p className="line-through text-sm text-gray-400">
+            <p className="line-through text-sm text-gray-400 font-tektur">
               {item.old_price}
             </p>
           )}
@@ -73,19 +74,20 @@ const ProductCard = ({ item, showWishlist = false, onRemoveWishlist }) => {
           {!item.out_of_stock ? (
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <p className="text-sm font-medium text-green-600">In Stock</p>
+              <p className="text-sm font-medium text-green-600 font-tektur">In Stock</p>
             </div>
           ) : (
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 bg-red-500 rounded-full" />
-              <p className="text-sm font-medium text-red-500">Out of Stock</p>
+              <p className="text-sm font-medium text-red-500 font-tektur">Out of Stock</p>
             </div>
           )}
 
-          <p className="text-sm text-gray-400">View Details →</p>
+          <p className="text-sm text-gray-400 font-tektur">View Details →</p>
         </div>
       </div>
-    </div>
+      </div>
+
   );
 };
 

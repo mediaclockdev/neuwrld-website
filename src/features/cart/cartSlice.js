@@ -18,7 +18,7 @@ const handleTokenError = (data, thunkAPI) => {
 ------------------------------------------ */
 export const fetchCartAPI = createAsyncThunk(
   "cart/fetchCartAPI",
-  async (_, thunkAPI) => {
+  async (_arg, thunkAPI) => {
     try {
       const res = await fetch(`${BASE_URL}${ALL_APi_LIST.getCart}`, {
         headers: {
@@ -162,8 +162,12 @@ const cartSlice = createSlice({
   extraReducers: (builder) => {
     builder
       /* ---------------- FETCH CART ---------------- */
-      .addCase(fetchCartAPI.pending, (state) => {
-        state.loading = true;
+      .addCase(fetchCartAPI.pending, (state, action) => {
+        state.error = null;
+
+        if (!action.meta.arg?.silent) {
+          state.loading = true;
+        }
       })
       .addCase(fetchCartAPI.fulfilled, (state, action) => {
         state.loading = false;

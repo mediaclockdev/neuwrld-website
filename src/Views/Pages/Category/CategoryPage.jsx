@@ -17,17 +17,17 @@ const CategoryPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+    <div className=" bg-black">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
         <Breadcrumb />
 
         {/* Header */}
         <div className="mb-8 sm:mb-10">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-tektur font-bold text-white">
             {currentCategory.name}
           </h1>
           {currentCategory.children && currentCategory.children.length > 0 && (
-            <p className="mt-2 text-sm sm:text-base text-gray-600">
+            <p className="mt-2 text-sm sm:text-base text-white font-tektur font-medium">
               Explore our collection of {currentCategory.children.length}{" "}
               categories
             </p>
@@ -44,11 +44,11 @@ const CategoryPage = () => {
               >
                 {/* Category Header */}
                 <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-5 py-4 border-b border-gray-200">
-                  <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
+                  <h2 className="text-lg sm:text-xl font-semibold text-gray-900 font-tektur">
                     {child.title || child.name}
                   </h2>
                   {child.children && child.children.length > 0 && (
-                    <p className="text-xs sm:text-sm text-gray-500 mt-1">
+                    <p className="text-xs sm:text-sm text-gray-500 font-tektur font-medium mt-1">
                       {child.children.length} items
                     </p>
                   )}
@@ -86,7 +86,7 @@ const CategoryPage = () => {
                           </div>
 
                           {/* Title */}
-                          <p className="text-xs sm:text-sm font-medium text-gray-700 group-hover:text-gray-900 text-center line-clamp-2">
+                          <p className="text-xs sm:text-sm font-tektur font-medium text-gray-700 group-hover:text-gray-900 text-center line-clamp-2">
                             {sub.title || sub.name}
                           </p>
                         </div>
@@ -108,14 +108,19 @@ const CategoryPage = () => {
             ))}
           </div>
         ) : (
-          /* Empty State */
-          <div className="text-center py-16">
-            <div className="text-gray-400 text-5xl mb-4">📦</div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            /* Empty State */
+            <div className="bg-black">
+              <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[80vh]" >
+                
+          <div className="text-center">
+            <div className="text-gray-300 text-5xl mb-4">📦</div>
+            <h3 className="text-lg font-tektur font-medium text-gray-900 mb-2">
               No categories found
             </h3>
-            <p className="text-gray-500">Check back later for new items</p>
+            <p className="text-gray-300 font-tektur font-medium">Check back later for new items</p>
           </div>
+</div>
+            </div>
         )}
       </div>
     </div>

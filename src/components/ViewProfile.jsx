@@ -35,15 +35,15 @@ const ViewProfile = () => {
   if (!isLoggedIn) {
     return (
       <div className="w-full max-w-sm bg-white shadow-lg rounded-lg p-4 sm:p-6 space-y-2">
-        <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 font-tektur">
           Welcome
         </h2>
-        <p className="text-gray-600 text-xs sm:text-sm">
+        <p className="text-gray-600 text-xs sm:text-sm font-tektur">
           To access account and manage orders
         </p>
         <button
           onClick={handleLoginClick}
-          className="w-full border-2  font-semibold py-2 sm:py-3 rounded hover:bg-gray-50 hover:text-black cursor-pointer transition-colors"
+          className="w-full border-2  font-semibold py-2 sm:py-3 rounded hover:bg-gray-50 font-tektur text-black cursor-pointer transition-colors"
         >
           LOGIN / SIGNUP
         </button>
@@ -56,10 +56,10 @@ const ViewProfile = () => {
     <div className="w-full max-w-sm bg-white shadow-lg rounded-lg p-4 sm:p-6">
       {/* User Info */}
       <div className="flex flex-col gap-2 sm:gap-3">
-        <h2 className="text-base lg:text-xl font-semibold text-gray-800">
+        <h2 className="text-base lg:text-xl font-semibold text-gray-800 font-tektur">
           Hello, {user?.name || user?.email || "User"}
         </h2>
-        <p className="text-gray-600 text-xs sm:text-sm">
+        <p className="text-gray-600 text-xs sm:text-sm font-tektur">
           Manage your account & orders
         </p>
       </div>
@@ -69,31 +69,31 @@ const ViewProfile = () => {
       <nav className="flex flex-col gap-3 sm:gap-4">
         <Link
           to="/orders"
-          className="text-gray-700 hover:text-pink-500 transition-colors"
+          className="text-gray-700 hover:text-pink-500 transition-colors font-tektur"
         >
           My Orders
         </Link>
         <Link
           to="/wishlist"
-          className="text-gray-700 hover:text-pink-500 transition-colors"
+          className="text-gray-700 hover:text-pink-500 transition-colors font-tektur"
         >
           Wishlist
         </Link>
         <Link
           to="/addresses"
-          className="text-gray-700 hover:text-pink-500 transition-colors"
+          className="text-gray-700 hover:text-pink-500 transition-colors font-tektur"
         >
           Addresses
         </Link>
         <Link
           to="/profile"
-          className="text-gray-700 hover:text-pink-500 transition-colors"
+          className="text-gray-700 hover:text-pink-500 transition-colors font-tektur"
         >
           Profile
         </Link>
         <Link
           to="/settings"
-          className="text-gray-700 hover:text-pink-500 transition-colors"
+          className="text-gray-700 hover:text-pink-500 transition-colors font-tektur"
         >
           Settings
         </Link>
@@ -103,7 +103,7 @@ const ViewProfile = () => {
 
       <button
         onClick={handleLogout}
-        className="w-full bg-gray-900 text-white font-semibold py-2 rounded hover:bg-gray-800"
+        className="w-full bg-gray-900 text-white font-semibold py-2 rounded hover:bg-gray-800 font-tektur"
       >
         LOGOUT
       </button>

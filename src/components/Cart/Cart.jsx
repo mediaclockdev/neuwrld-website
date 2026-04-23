@@ -21,22 +21,23 @@ const parsePrice = (value) => Number(String(value).replace(/[^0-9.]/g, ""));
    Skeletons
 ---------------------------------- */
 const CartItemSkeleton = () => (
-  <div className="flex gap-6 animate-pulse">
-    <div className="w-32 h-32 bg-gray-200 rounded" />
+  <div className="flex gap-6 p-4 rounded-2xl skeleton-panel border border-zinc-800">
+    <div className="w-32 h-32 rounded-xl skeleton-block-soft" />
     <div className="flex-1 space-y-3">
-      <div className="h-4 w-2/3 bg-gray-200 rounded" />
-      <div className="h-3 w-1/3 bg-gray-200 rounded" />
-      <div className="h-8 w-24 bg-gray-200 rounded" />
+      <div className="h-5 w-2/3 rounded skeleton-block" />
+      <div className="h-3 w-1/3 rounded skeleton-block" />
+      <div className="h-9 w-28 rounded-full skeleton-block-soft" />
+      <div className="h-5 w-20 rounded skeleton-block" />
     </div>
   </div>
 );
 
 const SummarySkeleton = () => (
-  <div className="space-y-3 animate-pulse">
-    <div className="h-4 bg-gray-200 rounded" />
-    <div className="h-4 bg-gray-200 rounded" />
-    <div className="h-4 bg-gray-200 rounded" />
-    <div className="h-6 bg-gray-300 rounded mt-4" />
+  <div className="space-y-3">
+    <div className="h-4 rounded skeleton-block" />
+    <div className="h-4 rounded skeleton-block" />
+    <div className="h-4 rounded skeleton-block" />
+    <div className="h-6 rounded skeleton-block-soft mt-4" />
   </div>
 );
 
@@ -91,8 +92,7 @@ const Cart = () => {
         })
       ).unwrap();
 
-      // FULL REFRESH
-      dispatch(fetchCartAPI());
+      dispatch(fetchCartAPI({ silent: true }));
     } catch (err) {
       console.error(err);
     } finally {
@@ -122,7 +122,7 @@ const Cart = () => {
         })
       ).unwrap();
 
-      dispatch(fetchCartAPI());
+      dispatch(fetchCartAPI({ silent: true }));
     } catch (err) {
       console.error(err);
     } finally {
@@ -137,7 +137,7 @@ const Cart = () => {
     try {
       await dispatch(removeFromCartAPI(item.product_variant_id)).unwrap();
 
-      dispatch(fetchCartAPI());
+      dispatch(fetchCartAPI({ silent: true }));
     } catch (err) {
       console.error(err);
     } finally {
@@ -148,6 +148,30 @@ const Cart = () => {
   /* ----------------------------------
      Empty cart
   ---------------------------------- */
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black skeleton-shell">
+        <div className="max-w-7xl mx-auto px-6 py-10">
+          <div className="h-10 w-32 rounded skeleton-block mb-3" />
+          <div className="h-4 w-20 rounded skeleton-block mb-10" />
+
+          <div className="grid lg:grid-cols-12 gap-10">
+            <div className="lg:col-span-7 space-y-6">
+              {Array.from({ length: 2 }).map((_, i) => (
+                <CartItemSkeleton key={i} />
+              ))}
+            </div>
+
+            <div className="lg:col-span-5 skeleton-panel p-6 rounded-2xl border border-zinc-800">
+              <div className="h-6 w-28 rounded skeleton-block mb-4" />
+              <SummarySkeleton />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (!loading && !items.length) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -160,121 +184,117 @@ const Cart = () => {
      Render
   ---------------------------------- */
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-black">
       <div className="max-w-7xl mx-auto px-6 py-10">
-        <h1 className="text-4xl font-semibold">Cart</h1>
-        <p className="text-gray-500">{totalItems} items</p>
+          <h1 className="text-4xl font-semibold text-white font-tektur">Cart</h1>
+          <p className="text-gray-300">{totalItems} items</p>
 
-        <div className="grid lg:grid-cols-12 gap-10 mt-10">
-          {/* LEFT */}
-          <div className="lg:col-span-7 space-y-6">
-            {loading
-              ? Array.from({ length: 2 }).map((_, i) => (
-                  <CartItemSkeleton key={i} />
-                ))
-              : items.map((item) => (
-                  <div key={item.id} className="flex gap-6">
-                    <img
-                      src={item.image}
-                      alt={item.product_name}
-                      className="w-32 h-32 object-cover rounded"
-                    />
+          <div className="grid lg:grid-cols-12 gap-10 mt-10">
+            {/* LEFT */}
+            <div className="lg:col-span-7 space-y-6">
+              {items.map((item) => (
+                    <div key={item.id} className="flex gap-6">
+                      <img
+                        src={item.image}
+                        alt={item.product_name}
+                        className="w-32 h-32 object-cover rounded"
+                      />
 
-                    <div className="flex-1">
-                      <div className="flex justify-between">
-                        <div>
-                          <h3 className="font-medium text-lg">
-                            {item.product_name}
-                          </h3>
+                      <div className="flex-1">
+                        <div className="flex justify-between">
+                          <div>
+                            <h3 className="font-medium text-lg text-white font-tektur">
+                              {item.product_name}
+                            </h3>
 
-                          {item.attributes && (
-                            <div className="text-sm text-gray-500 mt-1">
-                              {Object.entries(item.attributes).map(
-                                ([key, value]) => (
-                                  <span key={key} className="mr-3">
-                                    {key}: {value}
-                                  </span>
-                                )
-                              )}
-                            </div>
-                          )}
+                            {item.attributes && (
+                              <div className="text-sm text-gray-200 mt-1 font-tektur ">
+                                {Object.entries(item.attributes).map(
+                                  ([key, value]) => (
+                                    <span key={key} className="mr-3">
+                                      {key}: {value}
+                                    </span>
+                                  )
+                                )}
+                              </div>
+                            )}
+                          </div>
+
+                          <button onClick={() => handleRemove(item)}>
+                            <img src={close} className="w-4 h-4" />
+                          </button>
                         </div>
 
-                        <button onClick={() => handleRemove(item)}>
-                          <img src={close} className="w-4 h-4" />
-                        </button>
+                        <div className="flex items-center gap-4 mt-3 bg-gray-100 px-3 py-1 w-max rounded">
+                          <button
+                            onClick={() => handleDecrease(item)}
+                            disabled={updating}
+                          >
+                            -
+                          </button>
+
+                          <span>{item.quantity}</span>
+
+                          <button
+                            onClick={() => handleIncrease(item)}
+                            disabled={updating}
+                          >
+                            +
+                          </button>
+                        </div>
+
+                        <p className="text-lg font-semibold mt-3">
+                          $
+                          {(
+                            parsePrice(item.unit_price) * Number(item.quantity)
+                          ).toFixed(2)}
+                        </p>
                       </div>
-
-                      <div className="flex items-center gap-4 mt-3 bg-gray-100 px-3 py-1 w-max rounded">
-                        <button
-                          onClick={() => handleDecrease(item)}
-                          disabled={updating}
-                        >
-                          -
-                        </button>
-
-                        <span>{item.quantity}</span>
-
-                        <button
-                          onClick={() => handleIncrease(item)}
-                          disabled={updating}
-                        >
-                          +
-                        </button>
-                      </div>
-
-                      <p className="text-lg font-semibold mt-3">
-                        $
-                        {(
-                          parsePrice(item.unit_price) * Number(item.quantity)
-                        ).toFixed(2)}
-                      </p>
                     </div>
+                  ))}
+            </div>
+
+            {/* RIGHT */}
+            <div className="lg:col-span-5 bg-gray-50 p-6 rounded-lg">
+              <h2 className="font-semibold text-lg mb-4 font-tektur">Summary</h2>
+
+              {loading || updating ? (
+                <SummarySkeleton />
+              ) : (
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className=" font-tektur">Subtotal</span>
+                    <span className=" font-tektur">{summary.subtotal}</span>
                   </div>
-                ))}
+
+                  <div className="flex justify-between">
+                    <span className=" font-tektur">Tax</span>
+                    <span className=" font-tektur">+{summary.total_tax}</span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span className=" font-tektur">Discount</span>
+                    <span className=" font-tektur">-{summary.discount}</span>
+                  </div>
+
+                  <div className="flex justify-between mt-4 border-t pt-3">
+                    <span className=" font-tektur">Total</span>
+                    <span className="font-semibold text-xl font-tektur">
+                      {summary.final_amount}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              <button
+                onClick={() => navigate("/checkout")}
+                disabled={updating}
+                className="w-full mt-6 font-tektur bg-black text-white py-3 rounded disabled:opacity-60"
+              >
+                Checkout
+              </button>
+            </div>
           </div>
-
-          {/* RIGHT */}
-          <div className="lg:col-span-5 bg-gray-50 p-6 rounded-lg">
-            <h2 className="font-semibold text-lg mb-4">Summary</h2>
-
-            {loading || updating ? (
-              <SummarySkeleton />
-            ) : (
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span>Subtotal</span>
-                  <span>{summary.subtotal}</span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span>Tax</span>
-                  <span>+{summary.total_tax}</span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span>Discount</span>
-                  <span>-{summary.discount}</span>
-                </div>
-
-                <div className="flex justify-between mt-4 border-t pt-3">
-                  <span>Total</span>
-                  <span className="font-semibold text-xl">
-                    {summary.final_amount}
-                  </span>
-                </div>
-              </div>
-            )}
-
-            <button
-              onClick={() => navigate("/checkout")}
-              disabled={updating}
-              className="w-full mt-6 bg-black text-white py-3 rounded disabled:opacity-60"
-            >
-              Checkout
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );

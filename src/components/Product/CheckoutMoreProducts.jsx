@@ -10,8 +10,8 @@ const CheckoutMoreProducts = ({ products = [] }) => {
   return (
     <div className="space-y-8 pt-16">
       <div>
-        <h2 className="text-3xl font-bold text-gray-900">You May Also Like</h2>
-        <p className="text-gray-600">
+        <h2 className="text-3xl font-semibold text-gray-50 font-tektur ">You May Also Like</h2>
+        <p className="text-gray-300 font-tektur ">
           Handpicked recommendations based on your selection
         </p>
       </div>

@@ -87,6 +87,8 @@ const addressSlice = createSlice({
   name: "address",
   initialState: {
     addresses: [],
+    states: [],
+    country: null,
     loading: false,
     error: null,
   },
@@ -118,6 +120,8 @@ const addressSlice = createSlice({
       })
       .addCase(addAddressAPI.fulfilled, (state, action) => {
         state.loading = false;
+
+        if (!action.payload?.id) return;
 
         // make others non-primary
         state.addresses = state.addresses.map((addr) => ({

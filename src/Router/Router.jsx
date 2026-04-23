@@ -1,21 +1,21 @@
-import React, { Suspense } from "react";
+import React, { Suspense, lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "../Views/Layout/Layout";
 import Loader from "../Views/Layout/Loader/Loader";
 import Error from "../Views/Layout/Loader/Error";
-import Home from "../Views/Pages/Home/Home";
-import ProductSummary from "../Views/Pages/Product/ProductSummary";
-import Login from "../components/Login/Login";
-import Signup from "../components/Login/Signup";
-import Forgetpass from "../components/Login/Forgetpass";
-import Cart from "../components/Cart/Cart";
-import AllCategory from "../components/Category/AllCategory";
-import CategoryPage from "../Views/Pages/Category/CategoryPage";
-import ProductList from "../Views/Pages/ProductList/ProductList";
-import Wishlist from "../Views/Pages/Wishlist/Wishlist";
-import Checkout from "../Views/Pages/Checkout/Checkout";
-import CheckoutAddress from "../components/CheckoutAddress";
-import Order from "../components/Order";
+
+const Home = lazy(() => import("../Views/Pages/Home/Home"));
+const ProductSummary = lazy(() => import("../Views/Pages/Product/ProductSummary"));
+const Login = lazy(() => import("../components/Login/Login"));
+const Signup = lazy(() => import("../components/Login/Signup"));
+const Forgetpass = lazy(() => import("../components/Login/Forgetpass"));
+const Cart = lazy(() => import("../components/Cart/Cart"));
+const AllCategory = lazy(() => import("../components/Category/AllCategory"));
+const CategoryPage = lazy(() => import("../Views/Pages/Category/CategoryPage"));
+const ProductList = lazy(() => import("../Views/Pages/ProductList/ProductList"));
+const Wishlist = lazy(() => import("../Views/Pages/Wishlist/Wishlist"));
+const Checkout = lazy(() => import("../Views/Pages/Checkout/Checkout"));
+const Order = lazy(() => import("../components/Order"));
 
 const Router = () => {
   const router = createBrowserRouter([

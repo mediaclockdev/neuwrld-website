@@ -65,18 +65,18 @@ const ProductList = () => {
   }, [category, subCategory]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <div className="min-h-screen bg-black">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Header Section */}
         <div className="mb-6 sm:mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 capitalize">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-tektur font-bold text-white capitalize">
                 {subCategory
                   ? subCategory.replace(/-/g, " ")
                   : category?.replace(/-/g, " ")}
               </h1>
-              <p className="text-sm sm:text-base text-gray-600 mt-1">
+              <p className="text-sm sm:text-base font-tektur text-gray-100 mt-1">
                 {loading
                   ? "Loading..."
                   : `${products.length} ${
@@ -144,17 +144,17 @@ const ProductList = () => {
 
         {/* Loading State */}
         {loading && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 skeleton-shell">
             {[...Array(8)].map((_, i) => (
               <div
                 key={i}
-                className="animate-pulse bg-white rounded-xl overflow-hidden border border-gray-100"
+                className="rounded-xl overflow-hidden border border-zinc-800 skeleton-panel"
               >
-                <div className="aspect-[3/4] bg-gray-200"></div>
+                <div className="aspect-[3/4] skeleton-block-soft"></div>
                 <div className="p-4 space-y-3">
-                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                  <div className="h-10 bg-gray-200 rounded"></div>
+                  <div className="h-4 rounded w-3/4 skeleton-block"></div>
+                  <div className="h-4 rounded w-1/2 skeleton-block"></div>
+                  <div className="h-10 rounded skeleton-block-soft"></div>
                 </div>
               </div>
             ))}
@@ -193,11 +193,11 @@ const ProductList = () => {
                 /* Grid View */
                 <div
                   key={product.id}
-                  className="group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100"
+                  className="group bg-black rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100"
                   onClick={() => navigate(`/products/${product.product_sku}`)}
                 >
                   {/* Image Container */}
-                  <div className="relative aspect-[3/4] bg-gray-100 overflow-hidden">
+                  <div className="relative aspect-[3/4] bg-black overflow-hidden">
                     <img
                       src={product.image}
                       alt={product.product_name}
@@ -246,16 +246,16 @@ const ProductList = () => {
                   </div>
                   {/* Product Info */}
                   <div className="p-3 sm:p-4">
-                    <h3 className="text-sm sm:text-base font-medium text-gray-900 line-clamp-2 mb-2 group-hover:text-gray-700 transition-colors">
+                    <h3 className="text-sm sm:text-base font-tektur font-medium text-white line-clamp-2 mb-2 group-hover:text-gray-100 transition-colors">
                       {product.product_name}
                     </h3>
 
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-base sm:text-lg font-bold text-gray-900">
+                      <span className="text-base sm:text-lg font-bold font-tektur text-white">
                         {product.price}
                       </span>
                       {product.old_price && (
-                        <span className="text-xs sm:text-sm text-gray-400 line-through">
+                        <span className="text-xs sm:text-sm font-tektur text-gray-400 line-through">
                           {product.old_price}
                         </span>
                       )}

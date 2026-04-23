@@ -58,23 +58,23 @@ const Order = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="max-w-6xl mx-auto px-4 py-10">
-        {/* HEADER */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">My Orders</h1>
-          <p className="text-gray-600">
-            Track and manage all your orders in one place
-          </p>
-        </div>
+          {/* HEADER */}
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">My Orders</h1>
+            <p className="text-gray-600">
+              Track and manage all your orders in one place
+            </p>
+          </div>
 
-        {orders.length === 0 ? (
-          <EmptyState />
-        ) : (
-          <div className="space-y-5">
-            {orders.map((order) => (
-              <div
-                key={order.id}
-                className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden"
-              >
+          {orders.length === 0 ? (
+            <EmptyState />
+          ) : (
+            <div className="space-y-5">
+              {orders.map((order) => (
+                <div
+                  key={order.id}
+                  className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden"
+                >
                 {/* ORDER HEADER */}
                 <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-200">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -202,7 +202,7 @@ const Order = () => {
                         </div>
                       </div>
                     ))}
-                  </div>₹
+                  </div>
                 </div>
 
                 {/* FOOTER */}
@@ -237,10 +237,10 @@ const Order = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+                </div>
+              ))}
+            </div>
+          )}
       </div>
     </div>
   );

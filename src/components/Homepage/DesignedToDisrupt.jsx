@@ -9,27 +9,27 @@ const DesignedToDisrupt = () => {
     const product = [
         {
             name: "Unisex Hoodie Blue",
-            price: "AUD 15 $",
+            price: "AUD 15",
             image: img1,
             secondaryimg: img2,
         },
         {
             name: "Unisex Hoodie Dark",
-            price: "AUD 15 $",
+            price: "AUD 15",
             image: img3,
             secondaryimg: img4,
 
         },
         {
             name: "Unisex Hoodie Blue",
-            price: "AUD 15 $",
+            price: "AUD 15",
             image: img1,
             secondaryimg: img2,
 
         },
         {
             name: "Unisex Hoodie Dark",
-            price: "AUD 15 $",
+            price: "AUD 15",
             image: img3,
             secondaryimg: img4,
 
@@ -39,7 +39,7 @@ const DesignedToDisrupt = () => {
   return (
     <div className="max-w-screen-2xl mx-auto py-10 px-5 overflow-visible">
       {/* Heading */}
-      <div className="flex flex-col items-center justify-center mb-5">
+      <div className="flex flex-col items-center justify-center mb-5 space-y-3">
         <h2 className="font-tektur text-3xl sm:text-4xl lg:text-5xl xl:text-[70px]">
           <span className="text-white font-medium">Designed To </span>
           <span

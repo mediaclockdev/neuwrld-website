@@ -4,19 +4,22 @@ import ProductDetails from "../../../components/Product/ProductDetails";
 
 const ProductSummary = () => {
   return (
-    <div className="container mx-auto ">
+    <div className="bg-black">
+
+    <div className="max-w-screen-2xl mx-auto ">
       {/* <div className="flex flex-col lg:flex-row w-full gap-10">
         <div className="w-auto lg:w-1/2">
-          <Product />
+        <Product />
         </div>
         <div className="w-auto lg:w-1/2">
-          <ProductDetails />
+        <ProductDetails />
         </div>
-      </div> */}
+        </div> */}
       <div>
         <ProductDetails />
       </div>
-      <div></div>
+
+        </div>
     </div>
   );
 };

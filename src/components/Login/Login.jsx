@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginAPI, verifyOtpAPI } from "../../features/auth/authSlice";
 import logo2 from "../../assets/svg/icons/logo2.svg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { fetchUserProfile } from "../../features/auth/authSlice";
 
 const Login = () => {
@@ -17,6 +17,8 @@ const Login = () => {
   const inputRefs = useRef([]);
 
   const navigate = useNavigate();
+ const location = useLocation();
+  const from = location.state?.from || "/";
   const isValidEmail = (email) => {
     return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
   };
@@ -55,7 +57,7 @@ const Login = () => {
         return dispatch(fetchUserProfile()).unwrap();
       })
       .then(() => {
-        navigate("/", { replace: true });
+        navigate(from, { replace: true });
       })
       .catch(() => alert("Invalid OTP"));
   };
@@ -101,19 +103,21 @@ const Login = () => {
   }, [step]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 px-4 py-8 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-black px-4 py-8 sm:px-6 lg:px-8">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <img
-            src={logo2}
-            alt="Logo"
-            className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-4 drop-shadow-lg"
-          />
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
+          <Link to="/">
+            <img
+              src={logo2}
+              alt="Logo"
+              className="w-32 h-32 sm:w-40 sm:h-40 mx-auto mb-4 drop-shadow-lg"
+            />
+          </Link>
+          <h1 className="text-2xl sm:text-4xl font-bold text-gray-50 font-tektur">
             Welcome Back
           </h1>
-          <p className="text-sm sm:text-base text-gray-600 mt-2">
+          <p className="text-sm sm:text-base text-gray-400 font-tektur mt-2">
             {step === "enterEmail"
               ? "Sign in to continue to your account"
               : "Verify your identity"}
@@ -128,7 +132,7 @@ const Login = () => {
               <div>
                 <label
                   htmlFor="email-input"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-lg font-medium text-gray-800 font-tektur mb-2"
                 >
                   Email or Mobile Number
                 </label>
@@ -142,7 +146,7 @@ const Login = () => {
                     setEmailError("");
                   }}
                   onKeyDown={(e) => e.key === "Enter" && handleContinue()}
-                  className={`w-full px-4 py-3 rounded-lg text-sm sm:text-base 
+                  className={`w-full px-4 py-3 rounded-lg text-sm sm:text-base  font-tektur
     focus:ring-2 transition-all outline-none
     ${
       emailError
@@ -159,10 +163,10 @@ const Login = () => {
                 type="button"
                 onClick={handleContinue}
                 disabled={loading}
-                className="w-full bg-black text-white py-3 rounded-lg text-sm sm:text-base font-medium hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform active:scale-95"
+                className="w-full bg-black text-white py-3 rounded-lg text-sm sm:text-base font-medium font-tektur cursor-pointer hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform active:scale-95"
               >
                 {loading ? (
-                  <span className="flex items-center justify-center gap-2">
+                  <span className="flex items-center justify-center gap-2 ">
                     <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
                       <circle
                         className="opacity-25"
@@ -192,22 +196,22 @@ const Login = () => {
           {step === "enterOtp" && (
             <div className="space-y-6">
               <div className="text-center">
-                <p className="text-sm text-gray-600 mb-1">
+                <p className="text-sm text-gray-600 mb-1 font-tektur">
                   We've sent a verification code to
                 </p>
-                <p className="text-sm font-semibold text-gray-800 break-all px-2">
+                <p className="text-sm font-semibold text-gray-800 break-all px-2 font-tektur">
                   {emailaddress}
                 </p>
                 <button
                   onClick={handleBackToEmail}
-                  className="text-xs text-blue-600 hover:text-blue-700 mt-2 font-medium"
+                  className="text-xs text-blue-600 hover:text-blue-700 mt-2 font-medium font-tektur cursor-pointer"
                 >
                   Change email
                 </button>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3 text-center">
+                <label className="block text-sm font-medium text-gray-700 mb-3 text-center font-tektur">
                   Enter 6-digit OTP
                 </label>
                 <div className="flex justify-center gap-2 sm:gap-3">
@@ -220,7 +224,7 @@ const Login = () => {
                       onChange={(e) => handleOtpChange(e.target.value, i)}
                       onKeyDown={(e) => handleKeyDown(e, i)}
                       onPaste={handlePaste}
-                      className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gray-300 rounded-lg text-center text-lg sm:text-xl font-semibold focus:border-black focus:ring-2 focus:ring-black focus:outline-none transition-all"
+                      className="w-10 h-12 sm:w-12 sm:h-14 border-2 text-black font-tektur border-gray-300 rounded-lg text-center text-lg sm:text-xl font-semibold font-tektur focus:border-black focus:ring-2 focus:ring-black focus:outline-none transition-all"
                     />
                   ))}
                 </div>
@@ -230,7 +234,7 @@ const Login = () => {
                 type="button"
                 onClick={handleVerify}
                 disabled={loading}
-                className="w-full bg-black text-white py-3 rounded-lg text-sm sm:text-base font-medium hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform active:scale-95"
+                className="w-full bg-black text-white py-3 rounded-lg text-sm sm:text-base font-medium font-tektur cursor-pointer hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform active:scale-95"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -258,12 +262,12 @@ const Login = () => {
               </button>
 
               <div className="text-center">
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-500 font-tektur">
                   Didn't receive code?{" "}
                   <button
                     onClick={handleContinue}
                     disabled={loading}
-                    className="text-blue-600 hover:text-blue-700 font-medium disabled:opacity-50"
+                    className="text-blue-600 hover:text-blue-700 font-medium disabled:opacity-50 cursor-pointer"
                   >
                     Resend
                   </button>
@@ -294,7 +298,7 @@ const Login = () => {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-xs text-gray-500 mt-6 px-4">
+        <p className="text-center text-xs text-gray-400 mt-6 px-4 font-tektur">
           By continuing, you agree to our Terms of Service and Privacy Policy
         </p>
       </div>

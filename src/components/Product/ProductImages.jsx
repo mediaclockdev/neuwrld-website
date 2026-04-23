@@ -7,6 +7,7 @@ const ProductImages = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { product, loading, error } = useSelector((s) => s.product);
+  const isInitialLoad = !product && !error;
 
   // Always dispatch inside useEffect
   useEffect(() => {
@@ -34,9 +35,30 @@ const ProductImages = () => {
   }, [product]);
 
   // SAFE RETURNS (AFTER HOOKS)
-  if (loading) return <p className="p-4">Loading...</p>;
+  if (loading || isInitialLoad) {
+    return (
+      <div className="container mx-auto px-4 py-6 max-w-2xl space-y-6 skeleton-shell">
+        <div className="flex flex-row lg:flex-col gap-4">
+          <div className="w-full order-2 lg:order-1">
+            <div className="w-80 lg:w-full aspect-square rounded-2xl skeleton-block-soft border border-zinc-800" />
+          </div>
+
+          <div className="flex flex-col lg:flex-row gap-4 overflow-x-auto justify-center order-1 lg:order-2">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div
+                key={index}
+                className="w-10 lg:w-20 h-10 lg:h-20 rounded-lg skeleton-block"
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
   if (error) return <p className="p-4">Error: {String(error)}</p>;
-  if (!product) return <p className="p-4">Product not found.</p>;
+  if (!isInitialLoad && !loading && !product) {
+    return <p className="p-4">Product not found.</p>;
+  }
 
   return (
     <div className="container mx-auto px-4 py-6 max-w-2xl space-y-6">

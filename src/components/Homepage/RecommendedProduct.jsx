@@ -15,13 +15,6 @@ const RecommendedProduct = () => {
 
   const recommended =
     dashboard?.data?.recommended_products?.map((item) => {
-      console.log(
-        "🟡 Mapping product:",
-        item.product_name,
-        "→ variant_id:",
-        item.id,
-      );
-
       return {
         id: item.id,
         name: item.product_name,
@@ -41,8 +34,6 @@ const RecommendedProduct = () => {
   const wishlistItems = useSelector((s) => s.wishlist.items);
 
   const handleWishlist = (product_variant_id) => {
-    console.log("❤️ Wishlist clicked → variant_id:", product_variant_id);
-
     const isWishlisted = wishlistItems.includes(product_variant_id);
 
     const action = isWishlisted
@@ -81,21 +72,15 @@ const RecommendedProduct = () => {
               className="relative group bg-zinc-900 rounded-xl sm:rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-zinc-800 hover:border-zinc-700 flex flex-col h-full"
             >
               {/* Wishlist Button */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                  console.log(
-                    "🖱️ Heart clicked for:",
-                    product.name,
-                    "variant_id:",
-                    product.id,
-                  );
-                  handleWishlist(product.product_variant_id);
-                }}
-                className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 bg-zinc-900/90 backdrop-blur-sm rounded-full p-1.5 sm:p-2 shadow-md hover:shadow-lg hover:scale-110 active:scale-95 transition-all duration-200"
-                aria-label="Add to wishlist"
-              >
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    handleWishlist(product.product_variant_id);
+                  }}
+                  className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 bg-zinc-900/90 backdrop-blur-sm rounded-full p-1.5 sm:p-2 shadow-md hover:shadow-lg hover:scale-110 active:scale-95 transition-all duration-200"
+                  aria-label="Add to wishlist"
+                >
                 <Heart
                   className={`w-4 h-4 sm:w-5 sm:h-5 transition-all duration-200 ${
                     wishlistItems.includes(product.id)
@@ -150,11 +135,11 @@ const RecommendedProduct = () => {
 
                   {/* Rating */}
                   <div className="flex items-center gap-1 text-xs text-zinc-400">
-                    {product.avg_rating > 0 ? (
+                    {product.rating > 0 ? (
                       <>
                         <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
                         <span>
-                          {product.avg_rating} ({product.total_rating})
+                          {product.rating}
                         </span>
                       </>
                     ) : (

@@ -43,3 +43,44 @@
     }
   }
 }
+
+html,
+body,
+#root {
+  min-height: 100%;
+  background-color: #000;
+}
+
+body {
+  color: #fff;
+}
+
+@keyframes skeletonPulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(0.995);
+  }
+}
+
+.skeleton-shell {
+  background-color: #000;
+}
+
+.skeleton-panel {
+  background: linear-gradient(180deg, rgba(24, 24, 27, 0.98), rgba(9, 9, 11, 0.96));
+}
+
+.skeleton-block {
+  background: linear-gradient(90deg, rgba(39, 39, 42, 0.92), rgba(63, 63, 70, 0.78));
+  animation: skeletonPulse 1.8s ease-in-out infinite;
+}
+
+.skeleton-block-soft {
+  background: linear-gradient(90deg, rgba(24, 24, 27, 0.96), rgba(39, 39, 42, 0.8));
+  animation: skeletonPulse 1.8s ease-in-out infinite;
+}

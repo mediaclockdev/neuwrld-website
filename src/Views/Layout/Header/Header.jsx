@@ -102,11 +102,11 @@ const Header = () => {
 
   return (
     <div className="bg-black text-zinc-100 border-b border-zinc-800">
-      <header className="max-w-screen-2xl mx-auto px-5 lg:px-8 sticky top-0 z-50">
+      <header className="max-w-screen-2xl mx-auto px-5 lg:px-8 sticky top-0 z-50 py-3">
         <nav>
           <div className="flex justify-between items-center lg:gap-4">
             <div className="flex justify-between items-center gap-4 lg:w-full lg:hidden">
-              <div className="flex items-center  gap-4 ">
+              <div className="flex items-center gap-4">
                 <div>
                   {/* hamburger menu */}
                   <img
@@ -234,7 +234,7 @@ const Header = () => {
                 {/* mobile logo */}
                 <div>
                   <Link to={"/"}>
-                    <img src={logo2} alt="logo" className="size-14" />
+                    <img src={logo2} alt="logo" className="size-18" />
                   </Link>
                 </div>
               </div>
@@ -316,7 +316,7 @@ const Header = () => {
             {/* destop logo */}
             <div className="hidden lg:block">
               <Link to={"/"}>
-                <img src={logo2} alt="logo" className="size-16" />
+                <img src={logo2} alt="logo" className="size-24" />
               </Link>
             </div>
             {/* desktop icons */}
@@ -471,7 +471,7 @@ const Header = () => {
                 </li>
 
                 <li onMouseEnter={() => setShowProfile(true)}>
-                  <img src={user} className="size-5 cursor-pointer" />
+                  <img src={user} alt="user" className="size-5 cursor-pointer" />
 
                   {showProfile && (
                     <div className="absolute right-0 top-12.5">
