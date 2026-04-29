@@ -72,7 +72,7 @@ const DesignedToDisrupt = () => {
             }}
           >
             {/* Image with hover swap */}
-            <div className="relative rounded-lg overflow-hidden mb-3">
+            <div className="relative rounded-lg overflow-hidden mb-3 ">
               <img
                 src={item.image}
                 alt={item.name}
@@ -81,7 +81,7 @@ const DesignedToDisrupt = () => {
               <img
                 src={item.secondaryimg}
                 alt={`${item.name} hover`}
-                className="absolute inset-0 w-full h-[280px] sm:h-[340px] lg:h-[380px] object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                className="absolute inset-0 w-full h-[280px] sm:h-[340px] lg:h-[380px] object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100 border border-gray-300"
               />
             </div>
             <p className="font-tektur text-white text-sm sm:text-base font-medium">

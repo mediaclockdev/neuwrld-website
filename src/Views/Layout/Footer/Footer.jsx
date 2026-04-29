@@ -13,47 +13,51 @@ const Footer = () => {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 py-2 ">
           <div className="space-y-1 lg:space-y-2">
             <img src={logo2} alt="logo" className="size-16" />
-            <p className="text-sm font-inter font-normal text-zinc-400 ">
+            <p className="text-sm font-inter font-normal text-zinc-400 font-tektur">
               Your ultimate destination for contemporary fashion and timeless
               style.
             </p>
           </div>
           <div className="space-y-2 lg:space-y-3">
-            <p className="font-inter font-normal text-base lg:text-lg text-zinc-100">
+            <p className="font-inter font-normal text-base lg:text-lg text-zinc-100  font-tektur">
               Company
             </p>
-            <ul className="space-y-1 lg:space-y-2 font-inter font-normal text-zinc-400">
-              <li className="cursor-pointer text-sm lg:text-base">About Us</li>
-              <li className="cursor-pointer text-sm lg:text-base">
+            <ul className="space-y-1 lg:space-y-2 font-inter font-normal text-zinc-400  font-tektur">
+              <li className="cursor-pointer text-sm lg:text-base font-tektur hover:text-white transition-colors duration-300">
+                About Us
+              </li>
+              <li className="cursor-pointer text-sm lg:text-base font-tektur hover:text-white transition-colors duration-300">
                 Contact Us
               </li>
-              <li className="cursor-pointer text-sm lg:text-base">FAQs</li>
-              <li className="cursor-pointer text-sm lg:text-base">
+              <li className="cursor-pointer text-sm lg:text-base font-tektur hover:text-white transition-colors duration-300">
+                FAQs
+              </li>
+              <li className="cursor-pointer text-sm lg:text-base font-tektur hover:text-white transition-colors duration-300">
                 Size Guide
               </li>
             </ul>
           </div>
           <div className="space-y-2 lg:space-y-3">
-            <p className="font-inter font-normal text-base lg:text-lg text-zinc-100">
+            <p className="font-inter font-normal text-base lg:text-lg text-zinc-100 font-tektur">
               Policies
             </p>
-            <ul className="space-y-1 lg:space-y-2 font-inter font-normal text-zinc-400">
-              <li className="cursor-pointer text-sm lg:text-base ">
+            <ul className="space-y-1 lg:space-y-2 font-inter font-normal text-zinc-400 font-tektur">
+              <li className="cursor-pointer text-sm lg:text-base font-tektur hover:text-white transition-colors duration-300">
                 Return Policy
               </li>
-              <li className="cursor-pointer text-sm lg:text-base">
+              <li className="cursor-pointer text-sm lg:text-base font-tektur hover:text-white transition-colors duration-300">
                 Private Policy
               </li>
-              <li className="cursor-pointer text-sm lg:text-base">
+              <li className="cursor-pointer text-sm lg:text-base font-tektur hover:text-white transition-colors duration-300">
                 Terms of Service
               </li>
-              <li className="cursor-pointer text-sm lg:text-base">
+              <li className="cursor-pointer text-sm lg:text-base font-tektur hover:text-white transition-colors duration-300">
                 Shipping Info
               </li>
             </ul>
           </div>
           <div className="space-y-3">
-            <p className="text-zinc-100">Follows Us</p>
+            <p className="text-zinc-100 font-tektur ">Follows Us</p>
             {/* social icons */}
             <ul className="flex gap-3 items-center ">
               <li>
@@ -95,7 +99,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="border-t border-zinc-800 flex flex-col items-center py-3">
-          <p className="text-zinc-400 font-inter font-normal text-sm lg:text-base">
+          <p className="text-zinc-400 font-inter font-normal text-sm lg:text-base font-tektur">
             © 2025 Fashion Brand. All rights reserved.
           </p>
         </div>

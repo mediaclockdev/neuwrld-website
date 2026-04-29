@@ -35,7 +35,7 @@ const MegaMenuDialog = ({ type, categories, onClose }) => {
       >
         {/* Mobile Header */}
         <div className="sticky top-0 bg-white border-b p-4 flex items-center justify-between lg:hidden">
-          <h3 className="font-semibold text-lg">{data.name}</h3>
+          <h3 className="font-semibold text-lg font-tektur">{data.name}</h3>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-full"
@@ -54,7 +54,7 @@ const MegaMenuDialog = ({ type, categories, onClose }) => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {data.children.map((category) => (
               <div key={category.id}>
-                <h4 className="font-semibold text-gray-900 mb-3 text-sm border-b pb-2">
+                <h4 className="font-semibold font-tektur text-gray-900 mb-3 text-sm border-b pb-2">
                   {category.title}
                 </h4>
 
@@ -62,7 +62,7 @@ const MegaMenuDialog = ({ type, categories, onClose }) => {
                   {category.children?.map((child) => (
                     <li
                       key={child.id}
-                      className="cursor-pointer text-sm hover:text-blue-600 hover:bg-blue-50 px-2 py-1.5 rounded"
+                      className="cursor-pointer text-sm font-tektur hover:text-blue-600 hover:bg-blue-50 px-2 py-1.5 rounded"
                     >
                       {child.title}
                     </li>

@@ -43,10 +43,10 @@ const Order = () => {
               d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <p className="text-red-700 font-medium">{error}</p>
+          <p className="text-red-700 font-medium font-tektur">{error}</p>
           <button
             onClick={fetchOrders}
-            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-tektur"
           >
             Try Again
           </button>
@@ -56,25 +56,27 @@ const Order = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="max-w-6xl mx-auto px-4 py-10">
-          {/* HEADER */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">My Orders</h1>
-            <p className="text-gray-600">
-              Track and manage all your orders in one place
-            </p>
-          </div>
+    <div className="min-h-screen bg-black">
+      <div className="max-w-screen-2xl mx-auto px-4 py-10">
+        {/* HEADER */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold font-tektur text-gray-900 mb-2">
+            My Orders
+          </h1>
+          <p className="text-gray-600 font-tektur">
+            Track and manage all your orders in one place
+          </p>
+        </div>
 
-          {orders.length === 0 ? (
-            <EmptyState />
-          ) : (
-            <div className="space-y-5">
-              {orders.map((order) => (
-                <div
-                  key={order.id}
-                  className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden"
-                >
+        {orders.length === 0 ? (
+          <EmptyState />
+        ) : (
+          <div className="space-y-5">
+            {orders.map((order) => (
+              <div
+                key={order.id}
+                className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden font-tektur"
+              >
                 {/* ORDER HEADER */}
                 <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-200">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -95,7 +97,7 @@ const Order = () => {
                         </svg>
                       </div>
                       <div>
-                        <p className="font-bold text-gray-900 text-lg">
+                        <p className="font-bold text-gray-900 text-lg font-tektur">
                           Order #{order.order_number}
                         </p>
                         <p className="text-sm text-gray-600 flex items-center gap-1">
@@ -118,10 +120,10 @@ const Order = () => {
                     </div>
 
                     <div className="flex flex-col items-end">
-                      <p className="font-bold text-2xl text-gray-900">
+                      <p className="font-bold text-2xl text-gray-900 font-tektur">
                         {order.order_total}
                       </p>
-                      <p className="text-sm text-gray-500 flex items-center gap-1">
+                      <p className="text-sm text-gray-500 flex items-center gap-1 font-tektur">
                         <svg
                           className="w-4 h-4"
                           fill="none"
@@ -142,7 +144,7 @@ const Order = () => {
                 </div>
 
                 {/* STATUS SECTION */}
-                <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                <div className="px-6 py-4 bg-gray-50 border-b border-gray-200 font-tektur">
                   <div className="flex flex-wrap gap-3">
                     <StatusBadge label={order.order_status_label} />
                     <PaymentBadge label={order.payment_status} />
@@ -150,7 +152,7 @@ const Order = () => {
                 </div>
 
                 {/* PRODUCTS */}
-                <div className="px-6 py-5">
+                <div className="px-6 py-5 font-tektur">
                   <div className="space-y-4">
                     {order.order_products.map((item, index) => (
                       <div
@@ -168,24 +170,24 @@ const Order = () => {
                             alt={item.product_name}
                             className="w-20 h-24 object-cover rounded-xl border-2 border-gray-200 group-hover:border-blue-400 transition-colors"
                           />
-                          <div className="absolute -top-2 -right-2 w-6 h-6 bg-blue-600 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-lg">
+                          <div className="absolute -top-2 -right-2 w-6 h-6 bg-blue-600 text-white text-xs font-bold font-tektur rounded-full flex items-center justify-center shadow-lg">
                             {item.quantity}
                           </div>
                         </div>
 
                         {/* INFO */}
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-bold text-gray-900 mb-1 truncate">
+                          <h3 className="font-bold text-gray-900 mb-1 truncate font-tektur">
                             {item.product_name}
                           </h3>
                           <p className="text-sm text-gray-600 mb-1">
                             {item.name}
                           </p>
                           <div className="flex flex-wrap gap-2 text-xs">
-                            <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded-md font-medium">
+                            <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded-md  font-tektur font-medium">
                               SKU: {item.sku}
                             </span>
-                            <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded-md font-medium">
+                            <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded-md font-tektur font-medium">
                               Qty: {item.quantity}
                             </span>
                           </div>
@@ -193,10 +195,10 @@ const Order = () => {
 
                         {/* PRICE */}
                         <div className="text-right flex-shrink-0">
-                          <p className="font-bold text-lg text-gray-900">
+                          <p className="font-bold text-lg text-gray-900 font-tektur">
                             {item.sell_price}
                           </p>
-                          <p className="text-xs text-gray-500 mt-1">
+                          <p className="text-xs text-gray-500 mt-1 font-tektur">
                             Tax: {item.tax_amount}
                           </p>
                         </div>
@@ -206,7 +208,7 @@ const Order = () => {
                 </div>
 
                 {/* FOOTER */}
-                <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                <div className="bg-gray-50 px-6 py-4 border-t border-gray-200 font-tektur">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <svg
@@ -222,25 +224,25 @@ const Order = () => {
                           d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
                         />
                       </svg>
-                      <span className="font-medium">Shipping:</span>
-                      <span className="font-semibold text-gray-900">
+                      <span className="font-medium font-tektur">Shipping:</span>
+                      <span className="font-semibold text-gray-900 font-tektur">
                         {order.shipping_charge}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <span className="text-gray-600 font-medium">
+                      <span className="text-gray-600 font-medium font-tektur">
                         Net Total:
                       </span>
-                      <span className="font-bold text-lg text-blue-600">
+                      <span className="font-bold text-lg text-blue-600 font-tektur">
                         {order.net_total}
                       </span>
                     </div>
                   </div>
                 </div>
-                </div>
-              ))}
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -335,7 +337,7 @@ const PaymentBadge = ({ label }) => {
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border ${
+      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold font-tektur border ${
         isSuccess
           ? "bg-green-100 text-green-700 border-green-200"
           : "bg-yellow-100 text-yellow-700 border-yellow-200"
@@ -380,11 +382,11 @@ const EmptyState = () => {
         </svg>
       </div>
       <h3 className="text-xl font-bold text-gray-900 mb-2">No Orders Yet</h3>
-      <p className="text-gray-600 mb-6">
+      <p className="text-gray-600 mb-6 font-tektur">
         You haven't placed any orders yet. Start shopping to see your orders
         here!
       </p>
-      <button className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg">
+      <button className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg font-tektur">
         Start Shopping
       </button>
     </div>

@@ -17,7 +17,7 @@ const Login = () => {
   const inputRefs = useRef([]);
 
   const navigate = useNavigate();
- const location = useLocation();
+  const location = useLocation();
   const from = location.state?.from || "/";
   const isValidEmail = (email) => {
     return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);

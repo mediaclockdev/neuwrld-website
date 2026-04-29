@@ -48,13 +48,13 @@ const CheckoutAddress = ({
     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
       {/* Header */}
       <div className="bg-gray-50 px-5 sm:px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-        <h2 className="font-semibold text-lg text-gray-900">
+        <h2 className="font-semibold font-tektur text-lg text-gray-900">
           Shipping Address
         </h2>
 
         {!showAddressForm && addresses?.length > 0 && (
           <button
-            className="px-4 py-2 bg-black text-white rounded-lg font-medium text-sm"
+            className="px-4 py-2 bg-black text-white rounded-lg font-medium  font-tektur text-sm"
             onClick={handleAddNewClick}
           >
             + Add New Address
@@ -64,7 +64,7 @@ const CheckoutAddress = ({
         {!selectedAddress && addresses?.length === 0 && !showAddressForm && (
           <button
             onClick={handleAddNewClick}
-            className="px-6 py-3 bg-black text-white rounded-lg font-medium"
+            className="px-6 py-3 bg-black text-white rounded-lg font-medium font-tektur"
           >
             + Add Shipping Address
           </button>
@@ -97,17 +97,17 @@ const CheckoutAddress = ({
 
                   {/* Address Details */}
                   <div className="flex-1">
-                    <p className="font-semibold">{addr.name}</p>
-                    <p className="text-sm text-gray-700">
+                    <p className="font-semibold font-tektur">{addr.name}</p>
+                    <p className="text-sm text-gray-700 font-tektur">
                       {addr.address_line_1}
                       {addr.address_line_2 && `, ${addr.address_line_2}`}
                     </p>
-                    <p className="text-sm text-gray-700">
+                    <p className="text-sm text-gray-700 font-tektur">
                       {addr.city_name} – {addr.pincode}
                     </p>
 
                     {addr.primary && (
-                      <span className="inline-block mt-2 text-xs text-green-700 font-medium">
+                      <span className="inline-block mt-2 text-xs text-green-700 font-medium font-tektur">
                         Default address
                       </span>
                     )}
@@ -170,12 +170,12 @@ const CheckoutAddress = ({
         {/* No Address */}
         {!selectedAddress && addresses?.length === 0 && !showAddressForm && (
           <div className="text-center py-6">
-            <p className="text-red-600 font-medium mb-4">
+            <p className="text-red-600 font-medium mb-4 font-tektur">
               No shipping address selected
             </p>
             <button
               onClick={handleAddNewClick}
-              className="px-6 py-3 bg-black text-white rounded-lg font-medium"
+              className="px-6 py-3 bg-black text-white rounded-lg font-medium font-tektur"
             >
               + Add Shipping Address
             </button>
@@ -186,7 +186,7 @@ const CheckoutAddress = ({
         {showAddressForm && (
           <div className="space-y-4">
             <div className="mb-4">
-              <h3 className="font-semibold text-gray-900">
+              <h3 className="font-semibold text-gray-900 font-tektur ">
                 {editingAddressId ? "Edit Address" : "Add New Address"}
               </h3>
             </div>
@@ -196,7 +196,7 @@ const CheckoutAddress = ({
               placeholder="Full Name *"
               value={addressForm.name}
               onChange={handleAddressChange}
-              className="w-full border px-4 py-3 rounded-lg"
+              className="w-full border px-4 py-3 rounded-lg font-tektur"
             />
 
             <input
@@ -204,7 +204,7 @@ const CheckoutAddress = ({
               placeholder="Phone Number *"
               value={addressForm.phone}
               onChange={handleAddressChange}
-              className="w-full border px-4 py-3 rounded-lg"
+              className="w-full border px-4 py-3 rounded-lg font-tektur"
             />
 
             <input
@@ -212,7 +212,7 @@ const CheckoutAddress = ({
               placeholder="Pincode *"
               value={addressForm.pincode}
               onChange={handleAddressChange}
-              className="w-full border px-4 py-3 rounded-lg"
+              className="w-full border px-4 py-3 rounded-lg font-tektur"
             />
 
             <input
@@ -220,7 +220,7 @@ const CheckoutAddress = ({
               placeholder="Address Line 1 *"
               value={addressForm.address_line_1}
               onChange={handleAddressChange}
-              className="w-full border px-4 py-3 rounded-lg"
+              className="w-full border px-4 py-3 rounded-lg font-tektur"
             />
 
             <input
@@ -228,7 +228,7 @@ const CheckoutAddress = ({
               placeholder="Address Line 2 (Optional)"
               value={addressForm.address_line_2}
               onChange={handleAddressChange}
-              className="w-full border px-4 py-3 rounded-lg"
+              className="w-full border px-4 py-3 rounded-lg font-tektur"
             />
 
             <input
@@ -236,7 +236,7 @@ const CheckoutAddress = ({
               placeholder="Landmark (Optional)"
               value={addressForm.landmark}
               onChange={handleAddressChange}
-              className="w-full border px-4 py-3 rounded-lg"
+              className="w-full border px-4 py-3 rounded-lg font-tektur"
             />
 
             <div className="grid sm:grid-cols-2 gap-3">
@@ -245,18 +245,22 @@ const CheckoutAddress = ({
                 placeholder="City *"
                 value={addressForm.city_name}
                 onChange={handleAddressChange}
-                className="w-full border px-4 py-3 rounded-lg"
+                className="w-full border px-4 py-3 rounded-lg font-tektur"
               />
 
               <select
                 name="state_id"
                 value={addressForm.state_id}
                 onChange={handleAddressChange}
-                className="w-full border px-4 py-3 rounded-lg bg-white"
+                className="w-full border px-4 py-3 rounded-lg bg-white font-tektur"
               >
                 <option value="">Select State *</option>
                 {states.map((state) => (
-                  <option key={state.id} value={state.id}>
+                  <option
+                    key={state.id}
+                    value={state.id}
+                    className="font-tektur"
+                  >
                     {state.name}
                   </option>
                 ))}
@@ -266,14 +270,14 @@ const CheckoutAddress = ({
             <div className="flex gap-3 pt-3">
               <button
                 onClick={handleSaveAddress}
-                className="flex-1 bg-black text-white py-3 rounded-lg font-medium"
+                className="flex-1 bg-black text-white py-3 rounded-lg font-medium font-tektur"
               >
                 {editingAddressId ? "Update Address" : "Save Address"}
               </button>
 
               <button
                 onClick={handleCancelClick}
-                className="flex-1 border py-3 rounded-lg font-medium"
+                className="flex-1 border py-3 rounded-lg font-medium font-tektur"
               >
                 Cancel
               </button>

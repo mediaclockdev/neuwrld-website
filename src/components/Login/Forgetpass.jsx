@@ -12,15 +12,15 @@ const Forgetpass = () => {
       </div>
       <div className="max-w-md mx-auto flex flex-col items-center justify-center px-8 py-7 bg-white shadow-md rounded-lg   ">
         <div className="flex flex-col items-center space-y-2 ">
-          <p className="font-inter text-sm">YOUR ACCOUNT</p>
-          <h1 className="font-inter text-3xl font-normal">
+          <p className="font-tektur text-sm">YOUR ACCOUNT</p>
+          <h1 className="font-tektur text-3xl font-normal">
             Forget your password
           </h1>
         </div>
         <div className="w-full max-w-sm py-5">
           <form className="flex flex-col space-y-5  ">
             {/* Email */}
-            <label className="flex flex-col  font-inter text-base">
+            <label className="flex flex-col  font-tektur text-base">
               Email
               <input
                 type="email"
@@ -31,7 +31,7 @@ const Forgetpass = () => {
               type="submit"
               className="cursor-pointer w-full bg-black text-white py-3 flex items-center justify-center  tracking-wider "
             >
-              <p className="font-inter text-base">LOG IN</p>
+              <p className="font-tektur text-base">LOG IN</p>
             </button>
           </form>
         </div>

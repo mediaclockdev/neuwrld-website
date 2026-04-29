@@ -5,19 +5,18 @@ import about3 from "../../assets/Images/about3.png";
 import arrow from "../../assets/svg/icons/rightarrow.svg";
 import background from "../../assets/svg/background.svg";
 
-
 const About = () => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <div className="max-w-screen-2xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-center px-5 py-10 gap-2 lg:gap-10 overflow-hidden">
       {/* Left: Overlapping Images */}
-          <div className="relative w-full h-[350px] sm:h-[380px] lg:h-[450px] mx-auto max-w-[480px] lg:max-w-[700px] overflow-visible">
-              <img
-  src={background}
-  alt="background"
-  className="absolute -top-10 left-0 lg:left-8 w-[100%] lg:w-[120%] h-[100%] lg:h-[120%] object-cover z-0"
-/>
+      <div className="relative w-full h-[350px] sm:h-[380px] lg:h-[450px] mx-auto max-w-[480px] lg:max-w-[700px] overflow-visible">
+        <img
+          src={background}
+          alt="background"
+          className="absolute -top-10 left-0 lg:left-8 w-[100%] lg:w-[120%] h-[100%] lg:h-[120%] object-cover z-0 rounded-full"
+        />
         {/* Image 1 – bottom left */}
         <div
           className="absolute top-[60px] left-[5%] sm:left-[10%] lg:top-[80px] lg:left-0 xl:left-28 w-[140px] h-[200px] sm:w-[180px] sm:h-[260px] lg:w-[220px] lg:h-[320px] rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.5)] z-[1] transition-transform duration-400 ease-out hover:scale-105 hover:z-10"
@@ -26,7 +25,7 @@ const About = () => {
           <img
             src={about1}
             alt="Street style fashion 1"
-            className="w-full h-full object-cover block"
+            className="w-full h-full object-cover block border-[3px] border-[#979797] shadow-lg"
           />
         </div>
 
@@ -38,7 +37,7 @@ const About = () => {
           <img
             src={about2}
             alt="Street style fashion 2"
-            className="w-full h-full object-cover block"
+            className="w-full h-full object-cover block  border-[3px] border-[#979797] shadow-lg"
           />
         </div>
 
@@ -50,7 +49,7 @@ const About = () => {
           <img
             src={about3}
             alt="Street style fashion 3"
-            className="w-full h-full object-cover block"
+            className="w-full h-full object-cover block  border-[3px] border-[#979797] shadow-lg"
           />
         </div>
       </div>

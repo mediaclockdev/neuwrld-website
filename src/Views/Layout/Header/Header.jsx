@@ -103,6 +103,9 @@ const Header = () => {
   return (
     <div className="bg-black text-zinc-100 border-b border-zinc-800">
       <header className="max-w-screen-2xl mx-auto px-5 lg:px-8 sticky top-0 z-50 py-0 lg:py-3">
+        <p className="font-medium font-tektur text-xs lg:text-base text-center text-gray-50 my-2">
+          LIMITED RELEASES. EXCLUSIVE DROPS. ELEGANCE IS NOW LIVE
+        </p>
         <nav>
           <div className="flex justify-between items-center lg:gap-4">
             <div className="flex justify-between items-center gap-4 lg:w-full lg:hidden">
@@ -169,7 +172,7 @@ const Header = () => {
                                         alt="home icon"
                                         className="size-5"
                                       />
-                                      <p className="text-base cursor-pointer">
+                                      <p className="text-base cursor-pointer font-tektur font-medium">
                                         Home
                                       </p>
                                     </div>
@@ -182,7 +185,7 @@ const Header = () => {
                                       alt="men icon"
                                       className="size-6"
                                     />
-                                    <p className="text-base cursor-pointer">
+                                    <p className="text-base cursor-pointer font-tektur font-medium">
                                       Men
                                     </p>
                                   </div>
@@ -194,7 +197,7 @@ const Header = () => {
                                       alt="women icon"
                                       className="size-6"
                                     />
-                                    <p className="text-base cursor-pointer">
+                                    <p className="text-base cursor-pointer font-tektur font-medium">
                                       Women
                                     </p>
                                   </div>
@@ -206,7 +209,7 @@ const Header = () => {
                                       alt="new icon"
                                       className="size-6"
                                     />
-                                    <p className="text-base cursor-pointer">
+                                    <p className="text-base cursor-pointer font-tektur font-medium">
                                       New Arrivals
                                     </p>
                                   </div>
@@ -218,7 +221,7 @@ const Header = () => {
                                       alt="sales icon"
                                       className="size-6"
                                     />
-                                    <p className="text-base cursor-pointer">
+                                    <p className="text-base cursor-pointer font-tektur font-medium">
                                       Sale
                                     </p>
                                   </div>
@@ -249,7 +252,7 @@ const Header = () => {
                 <li>
                   <NavLink to="/" className="relative group">
                     {({ isActive }) => (
-                      <p className="font-open-sans text-base transition-all duration-500 text-zinc-100">
+                      <p className=" text-base transition-all duration-500 text-zinc-100 font-medium font-tektur">
                         Home
                         <span
                           className={`h-0.5 transition-all duration-500 bg-zinc-100 absolute -bottom-1 left-0 ${
@@ -263,7 +266,7 @@ const Header = () => {
                 <li onMouseEnter={() => handleMouseEnter("men")}>
                   <NavLink to="/category/men" className="relative group">
                     {({ isActive }) => (
-                      <p className="font-open-sans text-base transition-all duration-500 text-zinc-100">
+                      <p className="font-medium font-tektur text-base transition-all duration-500 text-zinc-100">
                         Men
                         <span
                           className={`h-0.5 transition-all duration-500 bg-zinc-100 absolute -bottom-1 left-0 ${
@@ -277,7 +280,7 @@ const Header = () => {
                 <li onMouseEnter={() => handleMouseEnter("women")}>
                   <NavLink to="/category/women" className="relative group">
                     {({ isActive }) => (
-                      <p className="font-open-sans text-base transition-all duration-500 text-zinc-100">
+                      <p className="font-medium font-tektur text-base transition-all duration-500 text-zinc-100">
                         Women
                         <span
                           className={`h-0.5 transition-all duration-500 bg-zinc-100 absolute -bottom-1 left-0 ${
@@ -291,9 +294,9 @@ const Header = () => {
                 <li>
                   <NavLink to="/New Arrivals" className="relative group">
                     {({ isActive }) => (
-                      <p className="font-open-sans text-base transition-all duration-500">
+                      <p className="font-medium font-tektur text-base transition-all duration-500 text-zinc-100">
                         Accessories
-                      <span
+                        <span
                           className={`h-0.5 transition-all duration-500 bg-zinc-100 absolute -bottom-1 left-0 ${
                             isActive ? "w-full" : "w-0 group-hover:w-full"
                           }`}
@@ -342,7 +345,7 @@ const Header = () => {
                         placeholder="Search for products"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full outline-none text-sm placeholder-zinc-500 text-zinc-100 px-2 py-1 rounded bg-transparent"
+                        className="w-full outline-none text-sm placeholder-zinc-500 text-zinc-100 px-2 py-1 rounded bg-transparent font-medium font-tektur"
                       />
                     </div>
 
@@ -353,7 +356,7 @@ const Header = () => {
                         {loading ? (
                           <div className="p-6 flex flex-col items-center justify-center gap-3">
                             <div className="w-8 h-8 border-3 border-zinc-600 border-t-blue-500 rounded-full animate-spin"></div>
-                            <p className="text-sm text-zinc-300 font-medium">
+                            <p className="text-sm text-zinc-300 font-medium font-tektur">
                               Searching products...
                             </p>
                           </div>
@@ -387,14 +390,14 @@ const Header = () => {
 
                                 {/* Product details */}
                                 <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-semibold text-zinc-100 truncate group-hover:text-blue-400 transition-colors">
+                                  <p className="text-sm font-semibold font-tektur text-zinc-100 truncate group-hover:text-blue-400 transition-colors">
                                     {item.product_name}
                                   </p>
-                                  <p className="text-sm font-bold text-blue-600 mt-1">
+                                  <p className="text-sm font-bold text-blue-600 mt-1 font-tektur">
                                     {item.price}
                                   </p>
                                   {item.category && (
-                                    <p className="text-xs text-zinc-400 mt-1">
+                                    <p className="text-xs text-zinc-400 mt-1 font-tektur">
                                       {item.category}
                                     </p>
                                   )}
@@ -437,10 +440,10 @@ const Header = () => {
                                 />
                               </svg>
                             </div>
-                            <p className="text-sm font-medium text-zinc-300">
+                            <p className="text-sm font-medium text-zinc-300 font-tektur">
                               No products found
                             </p>
-                            <p className="text-xs text-zinc-400">
+                            <p className="text-xs text-zinc-400 font-tektur">
                               Try searching with different keywords
                             </p>
                           </div>
@@ -471,7 +474,11 @@ const Header = () => {
                 </li>
 
                 <li onMouseEnter={() => setShowProfile(true)}>
-                  <img src={user} alt="user" className="size-5 cursor-pointer" />
+                  <img
+                    src={user}
+                    alt="user"
+                    className="size-5 cursor-pointer"
+                  />
 
                   {showProfile && (
                     <div className="absolute right-0 top-12.5">

@@ -20,11 +20,13 @@ const Subscribe = () => {
           </span>
           {/* --- FIX 2: CULTURE highlighted with dark box --- */}
           <p className="block text-3xl md:text-6xl lg:text-[90px] font-bold font-tektur">
-            <span className="bg-black  px-2 py-1 inline-block font-bold"
-             style={{
+            <span
+              className="bg-black  px-2 py-1 inline-block font-bold"
+              style={{
                 color: "transparent",
                 WebkitTextStroke: "1px #BCC3C4",
-              }}>
+              }}
+            >
               EXCLUSIVE{" "}
             </span>{" "}
             DROPS.
@@ -42,7 +44,7 @@ const Subscribe = () => {
             </p>
             <input
               type="email"
-              className="bg-[#EFEDED] font-tektur text-[#979797] text-xs placeholder:text-white font-tektur py-2 px-2 rounded-lg"
+              className="bg-[#EFEDED] font-tektur text-[#343434] text-xs placeholder:text-[#343434] font-tektur py-2 px-2 rounded-lg"
               placeholder="Enter Email..."
             />
           </div>

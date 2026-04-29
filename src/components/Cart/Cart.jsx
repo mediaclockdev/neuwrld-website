@@ -243,7 +243,7 @@ const Cart = () => {
                           </button>
                         </div>
 
-                        <p className="text-lg font-semibold mt-3">
+                        <p className="text-lg font-semibold font-tektur mt-3">
                           $
                           {(
                             parsePrice(item.unit_price) * Number(item.quantity)
