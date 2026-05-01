@@ -6,17 +6,16 @@ const ProductCard = ({ item, showWishlist = false, onRemoveWishlist }) => {
   const navigate = useNavigate();
 
   return (
-  
     <div
       className="group bg-black rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100 hover:border-gray-200"
       onClick={() => navigate(`/products/${item.product_sku}`)}
     >
       {/* Image Container */}
-      <div className="relative aspect-square w-full overflow-hidden bg-gray-100">
+      <div className="relative aspect-square w-full overflow-hidden bg-white">
         <img
           src={item.image}
           alt={item.product_name}
-          className="w-full h-full object-top object-cover transition-transform duration-500 group-hover:scale-110"
+          className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110 p-3 mix-blend-multiply"
         />
 
         {/* Overlay */}
@@ -61,7 +60,9 @@ const ProductCard = ({ item, showWishlist = false, onRemoveWishlist }) => {
         </h3>
 
         <div className="flex items-center gap-2">
-          <p className="font-bold text-xl text-gray-300 font-tektur ">{item.price}</p>
+          <p className="font-bold text-xl text-gray-300 font-tektur ">
+            {item.price}
+          </p>
 
           {item.old_price && (
             <p className="line-through text-sm text-gray-400 font-tektur">
@@ -74,20 +75,23 @@ const ProductCard = ({ item, showWishlist = false, onRemoveWishlist }) => {
           {!item.out_of_stock ? (
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <p className="text-sm font-medium text-green-600 font-tektur">In Stock</p>
+              <p className="text-sm font-medium text-green-600 font-tektur">
+                In Stock
+              </p>
             </div>
           ) : (
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 bg-red-500 rounded-full" />
-              <p className="text-sm font-medium text-red-500 font-tektur">Out of Stock</p>
+              <p className="text-sm font-medium text-red-500 font-tektur">
+                Out of Stock
+              </p>
             </div>
           )}
 
           <p className="text-sm text-gray-400 font-tektur">View Details →</p>
         </div>
       </div>
-      </div>
-
+    </div>
   );
 };
 

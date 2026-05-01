@@ -36,7 +36,7 @@ const ProductList = () => {
 
         // ✅ Use product-listing endpoint with Title Case slugs
         let url = `${BASE_URL}${ALL_APi_LIST.productList}/${toTitleCase(
-          category
+          category,
         )}`;
         if (subCategory) {
           url += `/${toTitleCase(subCategory)}`;
@@ -186,7 +186,7 @@ const ProductList = () => {
             {products.map((product) => {
               const discount = calculateDiscount(
                 product.price,
-                product.old_price
+                product.old_price,
               );
 
               return viewMode === "grid" ? (

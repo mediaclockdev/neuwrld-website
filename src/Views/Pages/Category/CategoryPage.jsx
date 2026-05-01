@@ -67,13 +67,13 @@ const CategoryPage = () => {
                           }
                         >
                           {/* Image Container */}
-                          <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 mb-2">
+                          <div className="relative w-full h-[180px] rounded-lg overflow-hidden  mb-2">
                             {sub.image ? (
                               <>
                                 <img
                                   src={sub.image}
                                   alt={sub.title || sub.name}
-                                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                                   loading="lazy"
                                 />
                                 <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
@@ -108,19 +108,20 @@ const CategoryPage = () => {
             ))}
           </div>
         ) : (
-            /* Empty State */
-            <div className="bg-black">
-              <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[80vh]" >
-                
-          <div className="text-center">
-            <div className="text-gray-300 text-5xl mb-4">📦</div>
-            <h3 className="text-lg font-tektur font-medium text-gray-900 mb-2">
-              No categories found
-            </h3>
-            <p className="text-gray-300 font-tektur font-medium">Check back later for new items</p>
-          </div>
-</div>
+          /* Empty State */
+          <div className="bg-black">
+            <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[80vh]">
+              <div className="text-center">
+                <div className="text-gray-300 text-5xl mb-4">📦</div>
+                <h3 className="text-lg font-tektur font-medium text-gray-900 mb-2">
+                  No categories found
+                </h3>
+                <p className="text-gray-300 font-tektur font-medium">
+                  Check back later for new items
+                </p>
+              </div>
             </div>
+          </div>
         )}
       </div>
     </div>

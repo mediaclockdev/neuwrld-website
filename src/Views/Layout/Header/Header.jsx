@@ -202,7 +202,7 @@ const Header = () => {
                                     </p>
                                   </div>
                                 </li>
-                                <li>
+                                {/* <li>
                                   <div className="flex items-center gap-2">
                                     <img
                                       src={newicon}
@@ -213,7 +213,7 @@ const Header = () => {
                                       New Arrivals
                                     </p>
                                   </div>
-                                </li>
+                                </li> */}
                                 <li>
                                   <div className="flex items-center gap-2">
                                     <img
@@ -292,7 +292,11 @@ const Header = () => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/New Arrivals" className="relative group">
+                  <NavLink
+                    to="/accessories"
+                    className="relative group"
+                    onClick={(e) => e.preventDefault()}
+                  >
                     {({ isActive }) => (
                       <p className="font-medium font-tektur text-base transition-all duration-500 text-zinc-100">
                         Accessories
