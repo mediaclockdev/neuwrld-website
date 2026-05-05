@@ -147,7 +147,7 @@ const Login = () => {
                   }}
                   onKeyDown={(e) => e.key === "Enter" && handleContinue()}
                   className={`w-full px-4 py-3 rounded-lg text-sm sm:text-base  font-tektur
-    focus:ring-2 transition-all outline-none
+    focus:ring-2 transition-all outline-none text-black
     ${
       emailError
         ? "border border-red-500 focus:ring-red-500"

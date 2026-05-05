@@ -60,10 +60,10 @@ const Order = () => {
       <div className="max-w-screen-2xl mx-auto px-4 py-10">
         {/* HEADER */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold font-tektur text-gray-900 mb-2">
+          <h1 className="text-4xl font-bold font-tektur text-gray-50 mb-2">
             My Orders
           </h1>
-          <p className="text-gray-600 font-tektur">
+          <p className="text-gray-100 font-tektur">
             Track and manage all your orders in one place
           </p>
         </div>

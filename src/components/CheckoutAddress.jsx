@@ -97,12 +97,12 @@ const CheckoutAddress = ({
 
                   {/* Address Details */}
                   <div className="flex-1">
-                    <p className="font-semibold font-tektur">{addr.name}</p>
-                    <p className="text-sm text-gray-700 font-tektur">
+                    <p className="font-semibold font-tektur text-black">{addr.name}</p>
+                    <p className="text-sm text-gray-700 font-tektur text-black">
                       {addr.address_line_1}
                       {addr.address_line_2 && `, ${addr.address_line_2}`}
                     </p>
-                    <p className="text-sm text-gray-700 font-tektur">
+                    <p className="text-sm text-gray-700 font-tektur text-black">
                       {addr.city_name} – {addr.pincode}
                     </p>
 

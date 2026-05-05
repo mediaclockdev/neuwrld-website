@@ -225,7 +225,7 @@ const Cart = () => {
                           </button>
                         </div>
 
-                        <div className="flex items-center gap-4 mt-3 bg-gray-100 px-3 py-1 w-max rounded">
+                        <div className="flex items-center gap-4 mt-3 px-3 py-1 w-max rounded">
                           <button
                             onClick={() => handleDecrease(item)}
                             disabled={updating}
@@ -256,30 +256,30 @@ const Cart = () => {
 
             {/* RIGHT */}
             <div className="lg:col-span-5 bg-gray-50 p-6 rounded-lg">
-              <h2 className="font-semibold text-lg mb-4 font-tektur">Summary</h2>
+              <h2 className="font-semibold text-lg mb-4 font-tektur text-black">Summary</h2>
 
               {loading || updating ? (
                 <SummarySkeleton />
               ) : (
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className=" font-tektur">Subtotal</span>
-                    <span className=" font-tektur">{summary.subtotal}</span>
+                    <span className=" font-tektur text-black">Subtotal</span>
+                    <span className=" font-tektur text-black">{summary.subtotal}</span>
                   </div>
 
                   <div className="flex justify-between">
-                    <span className=" font-tektur">Tax</span>
-                    <span className=" font-tektur">+{summary.total_tax}</span>
+                    <span className=" font-tektur text-black">Tax</span>
+                    <span className=" font-tektur text-black">+{summary.total_tax}</span>
                   </div>
 
                   <div className="flex justify-between">
-                    <span className=" font-tektur">Discount</span>
-                    <span className=" font-tektur">-{summary.discount}</span>
+                    <span className=" font-tektur text-black">Discount</span>
+                    <span className=" font-tektur text-black">-{summary.discount}</span>
                   </div>
 
                   <div className="flex justify-between mt-4 border-t pt-3">
-                    <span className=" font-tektur">Total</span>
-                    <span className="font-semibold text-xl font-tektur">
+                    <span className=" font-tektur text-black">Total</span>
+                    <span className="font-semibold text-xl font-tektur text-black">
                       {summary.final_amount}
                     </span>
                   </div>

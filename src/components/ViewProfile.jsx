@@ -51,7 +51,7 @@ const ViewProfile = () => {
     );
   }
 
-  /** ✅ LOGGED IN **/
+  
   return (
     <div className="w-full max-w-sm bg-white shadow-lg rounded-lg p-4 sm:p-6">
       {/* User Info */}
@@ -69,31 +69,31 @@ const ViewProfile = () => {
       <nav className="flex flex-col gap-3 sm:gap-4">
         <Link
           to="/orders"
-          className="text-gray-700 hover:text-pink-500 transition-colors font-tektur"
+          className="text-zinc-700 hover:text-gray-900 transition-colors duration-500 font-tektur hover:underline"
         >
           My Orders
         </Link>
         <Link
           to="/wishlist"
-          className="text-gray-700 hover:text-pink-500 transition-colors font-tektur"
+          className="text-zinc-700 hover:text-gray-900 transition-colors duration-500 font-tektur hover:underline"
         >
           Wishlist
         </Link>
         <Link
-          to="/addresses"
-          className="text-gray-700 hover:text-pink-500 transition-colors font-tektur"
+          // to="/addresses"
+          className="text-zinc-700 hover:text-gray-900 transition-colors duration-500 font-tektur hover:underline"
         >
           Addresses
         </Link>
         <Link
-          to="/profile"
-          className="text-gray-700 hover:text-pink-500 transition-colors font-tektur"
+          // to="/profile"
+          className="text-zinc-700 hover:text-gray-900 transition-colors duration-500 font-tektur hover:underline"
         >
           Profile
         </Link>
         <Link
-          to="/settings"
-          className="text-gray-700 hover:text-pink-500 transition-colors font-tektur"
+          // to="/settings"
+          className="text-zinc-700 hover:text-gray-900 transition-colors duration-500 font-tektur hover:underline"
         >
           Settings
         </Link>
