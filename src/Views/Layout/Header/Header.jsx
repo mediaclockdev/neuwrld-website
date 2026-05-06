@@ -179,28 +179,32 @@ const Header = () => {
                                   </Link>
                                 </li>
                                 <li>
-                                  <div className="flex items-center gap-2 ">
-                                    <img
-                                      src={man}
-                                      alt="men icon"
-                                      className="size-6"
-                                    />
-                                    <p className="text-base cursor-pointer font-tektur font-medium">
-                                      Men
-                                    </p>
-                                  </div>
+                                  <Link to="/category/men" onClick={() => setIsMenuOpen(false)}>
+                                    <div className="flex items-center gap-2 ">
+                                      <img
+                                        src={man}
+                                        alt="men icon"
+                                        className="size-6"
+                                      />
+                                      <p className="text-base cursor-pointer font-tektur font-medium">
+                                        Men
+                                      </p>
+                                    </div>
+                                  </Link>
                                 </li>
                                 <li>
-                                  <div className="flex items-center gap-2">
-                                    <img
-                                      src={women}
-                                      alt="women icon"
-                                      className="size-6"
-                                    />
-                                    <p className="text-base cursor-pointer font-tektur font-medium">
-                                      Women
-                                    </p>
-                                  </div>
+                                  <Link to="/category/women" onClick={() => setIsMenuOpen(false)}>
+                                    <div className="flex items-center gap-2">
+                                      <img
+                                        src={women}
+                                        alt="women icon"
+                                        className="size-6"
+                                      />
+                                      <p className="text-base cursor-pointer font-tektur font-medium">
+                                        Women
+                                      </p>
+                                    </div>
+                                  </Link>
                                 </li>
                                 {/* <li>
                                   <div className="flex items-center gap-2">

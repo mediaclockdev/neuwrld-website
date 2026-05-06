@@ -1,7 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { BASE_URL, ALL_APi_LIST } from "../../../api/apiList";
+import {
+  addToWishlistAPI,
+  removeFromWishlistAPI,
+} from "../../../features/wishlist/wishlistSlice";
 
 const ProductList = () => {
   const { category, subCategory } = useParams();
@@ -11,23 +16,46 @@ const ProductList = () => {
 
   const [viewMode, setViewMode] = useState("grid");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const wishlistItems = useSelector((s) => s.wishlist.items);
+
+  const isInWishlist = (variantId) =>
+    wishlistItems.some(
+      (item) => String(item.product_variant_id) === String(variantId)
+    );
+
+  const handleWishlist = (e, product_variant_id) => {
+    e.stopPropagation();
+    const action = isInWishlist(product_variant_id)
+      ? removeFromWishlistAPI(product_variant_id)
+      : addToWishlistAPI(product_variant_id);
+
+    dispatch(action)
+      .unwrap()
+      .catch((err) => {
+        if (err === "NOT_LOGGED_IN") {
+          navigate("/login");
+        }
+      });
+  };
 
   // Helper function to convert slug to Title Case for API
-  const toTitleCase = (slug) => {
+  const toTitleCase = useCallback((slug) => {
     if (!slug) return "";
     return slug
       .split("-")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join("-");
-  };
+  }, []);
 
   // Calculate discount percentage
-  const calculateDiscount = (price, oldPrice) => {
+  const calculateDiscount = useCallback((price, oldPrice) => {
     if (!oldPrice) return null;
     const priceNum = parseFloat(price.replace(/[^0-9.]/g, ""));
     const oldPriceNum = parseFloat(oldPrice.replace(/[^0-9.]/g, ""));
     return Math.round(((oldPriceNum - priceNum) / oldPriceNum) * 100);
-  };
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -203,6 +231,7 @@ const ProductList = () => {
                       alt={product.product_name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       loading="lazy"
+                      decoding="async"
                     />
 
                     {/* Badges */}
@@ -220,14 +249,21 @@ const ProductList = () => {
                     </div>
 
                     {/* Quick Actions */}
-                    <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
                       <button
                         className="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100 transition-colors"
                         aria-label="Add to wishlist"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleWishlist(e, product.id);
+                        }}
                       >
                         <svg
-                          className="w-5 h-5 text-gray-700"
-                          fill="none"
+                          className={`w-5 h-5 transition-colors duration-200 ${
+                            isInWishlist(product.id)
+                              ? "text-red-500 fill-red-500"
+                              : "text-gray-700 fill-none"
+                          }`}
                           stroke="currentColor"
                           viewBox="0 0 24 24"
                         >

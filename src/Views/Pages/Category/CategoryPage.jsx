@@ -1,6 +1,6 @@
-import { useParams } from "react-router-dom";
+import { useMemo } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import Breadcrumb from "../../../components/Breadcrumb";
 
 const CategoryPage = () => {
@@ -10,7 +10,9 @@ const CategoryPage = () => {
   const categories = useSelector((state) => state.categories?.categories || []);
 
   // 🔎 Find current category (Men / Women)
-  const currentCategory = categories.find((cat) => cat.slug === slug);
+  const currentCategory = useMemo(() => {
+    return categories.find((cat) => cat.slug === slug);
+  }, [categories, slug]);
 
   if (!currentCategory) {
     return <p className="p-6">Category not found</p>;
@@ -63,7 +65,7 @@ const CategoryPage = () => {
                           key={sub.id}
                           className="group cursor-pointer"
                           onClick={() =>
-                            navigate(`/products/${sub.gender}/${sub.slug}`)
+                            navigate(`/products/${sub.gender || slug}/${sub.slug}`)
                           }
                         >
                           {/* Image Container */}
@@ -75,6 +77,7 @@ const CategoryPage = () => {
                                   alt={sub.title || sub.name}
                                   className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                                   loading="lazy"
+                                  decoding="async"
                                 />
                                 <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
                               </>

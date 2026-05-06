@@ -4,7 +4,12 @@ import React, { useState, useMemo, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCartAPI, fetchCartAPI } from "../../features/cart/cartSlice";
+import {
+  addToWishlistAPI,
+  removeFromWishlistAPI,
+} from "../../features/wishlist/wishlistSlice";
 import { fetchProductDetails } from "../../features/products/productSlice";
+import { Heart } from "lucide-react";
 import CheckoutMoreProducts from "./CheckoutMoreProducts";
 
 const ProductDetails = () => {
@@ -16,6 +21,7 @@ const ProductDetails = () => {
 
   const { product, loading, error } = useSelector((state) => state.product);
   const cartItems = useSelector((state) => state.cart.items || []);
+  const wishlistItems = useSelector((state) => state.wishlist.items || []);
   const isInitialLoad = !product && !error;
 
   // Fetch product details
@@ -86,6 +92,28 @@ const ProductDetails = () => {
     }
     return null;
   }, [attributeOptions]);
+
+  const isInWishlist = useMemo(() => {
+    if (!selectedVariantId) return false;
+    return wishlistItems.some(
+      (item) => String(item.product_variant_id) === String(selectedVariantId)
+    );
+  }, [wishlistItems, selectedVariantId]);
+
+  const handleWishlist = () => {
+    if (!selectedVariantId) return;
+    const action = isInWishlist
+      ? removeFromWishlistAPI(selectedVariantId)
+      : addToWishlistAPI(selectedVariantId);
+
+    dispatch(action)
+      .unwrap()
+      .catch((err) => {
+        if (err === "NOT_LOGGED_IN") {
+          navigate("/login", { state: { from: location.pathname } });
+        }
+      });
+  };
 
   const isInCart = useMemo(() => {
     if (!selectedVariantId) return false;
@@ -343,15 +371,29 @@ const ProductDetails = () => {
                 </div>
               ))}
 
-              {/* ADD TO CART BUTTON */}
-              <button
-                onClick={handleCartButtonClick}
-                className={`w-full py-4 rounded-md text-lg transition font-tektur cursor-pointer hover:bg-gray-500 hover:text-gray-50  ${
-                  isInCart ? "bg-gray-50 text-black" : "bg-gray-50 text-black"
-                }`}
-              >
-                {isInCart ? "View Cart" : `Add to Cart – ${productInfo.price}`}
-              </button>
+              {/* ACTION BUTTONS */}
+              <div className="flex gap-4">
+                <button
+                  onClick={handleCartButtonClick}
+                  className={`flex-1 py-4 rounded-md text-lg transition font-tektur cursor-pointer hover:bg-gray-500 hover:text-gray-50 ${
+                    isInCart ? "bg-gray-50 text-black" : "bg-gray-50 text-black"
+                  }`}
+                >
+                  {isInCart ? "View Cart" : `Add to Cart – ${productInfo.price}`}
+                </button>
+
+                <button
+                  onClick={handleWishlist}
+                  className="px-6 py-4 rounded-md border border-gray-50 flex items-center justify-center transition hover:bg-zinc-900 group"
+                  aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+                >
+                  <Heart
+                    className={`w-6 h-6 transition-colors duration-300 ${
+                      isInWishlist ? "fill-red-500 text-red-500" : "text-gray-50 group-hover:text-red-400"
+                    }`}
+                  />
+                </button>
+              </div>
             </div>
           </div>
 

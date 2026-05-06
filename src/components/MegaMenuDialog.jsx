@@ -1,6 +1,8 @@
 import React, { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 const MegaMenuDialog = ({ type, categories, onClose }) => {
+  const navigate = useNavigate();
   const data = categories?.find(
     (c) => c.slug?.toLowerCase() === type.toLowerCase()
   );
@@ -63,6 +65,10 @@ const MegaMenuDialog = ({ type, categories, onClose }) => {
                     <li
                       key={child.id}
                       className="cursor-pointer text-sm font-tektur hover:text-blue-600 hover:bg-blue-50 px-2 py-1.5 rounded"
+                      onClick={() => {
+                        navigate(`/products/${type}/${child.slug}`);
+                        onClose();
+                      }}
                     >
                       {child.title}
                     </li>

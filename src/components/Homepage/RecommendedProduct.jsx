@@ -13,30 +13,36 @@ const RecommendedProduct = () => {
   const dashboardState = useSelector((s) => s.dashboard);
   const loading = dashboardState.loading;
 
-  const recommended =
-    dashboard?.data?.recommended_products?.map((item) => {
-      return {
-        id: item.id,
-        name: item.product_name,
-        image: item.image,
-        price: item.price,
-        old_price: item.old_price,
-        discount: item.discount,
-        rating: item.avg_rating,
-        product_sku: item.product_sku,
-        product_variant_id: item.id,
-      };
-    }) || [];
+  const recommended = useMemo(() => {
+    return (
+      dashboard?.data?.recommended_products?.map((item) => {
+        return {
+          id: item.id,
+          name: item.product_name,
+          image: item.image,
+          price: item.price,
+          old_price: item.old_price,
+          discount: item.discount,
+          rating: item.avg_rating,
+          product_sku: item.product_sku,
+          product_variant_id: item.id,
+        };
+      }) || []
+    );
+  }, [dashboard]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const wishlistItems = useSelector((s) => s.wishlist.items);
 
-  const handleWishlist = (product_variant_id) => {
-    const isWishlisted = wishlistItems.includes(product_variant_id);
+  const isInWishlist = (variantId) =>
+    wishlistItems.some(
+      (item) => String(item.product_variant_id) === String(variantId)
+    );
 
-    const action = isWishlisted
+  const handleWishlist = (product_variant_id) => {
+    const action = isInWishlist(product_variant_id)
       ? removeFromWishlistAPI(product_variant_id)
       : addToWishlistAPI(product_variant_id);
 
@@ -78,12 +84,13 @@ const RecommendedProduct = () => {
                     e.preventDefault();
                     handleWishlist(product.product_variant_id);
                   }}
-                  className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 bg-zinc-900/90 backdrop-blur-sm rounded-full p-1.5 sm:p-2 shadow-md hover:shadow-lg hover:scale-110 active:scale-95 transition-all duration-200"
+                  className="absolute top-2 right-2 sm:top-3 sm:right-3 z-20 bg-zinc-900/90 backdrop-blur-sm rounded-full p-1.5 sm:p-2 shadow-md hover:shadow-lg hover:scale-110 active:scale-95 transition-all duration-200"
+                  style={{ pointerEvents: "auto" }}
                   aria-label="Add to wishlist"
                 >
                 <Heart
                   className={`w-4 h-4 sm:w-5 sm:h-5 transition-all duration-200 ${
-                    wishlistItems.includes(product.id)
+                    isInWishlist(product.product_variant_id)
                       ? "fill-red-500 text-red-500"
                       : "text-zinc-400 hover:text-red-400"
                   }`}
@@ -92,16 +99,17 @@ const RecommendedProduct = () => {
 
               <Link
                 to={`/products/${product.product_sku}`}
-                className="block flex-1  flex-col"
+                className="block flex-1 flex-col relative z-0"
               >
                 {/* Image Container */}
                 <div className="relative w-full aspect-[3/4] sm:aspect-square overflow-hidden bg-zinc-800">
-                  <img
-                    src={product.image}
-                    className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
-                    alt={product.name}
-                    loading="lazy"
-                  />
+                    <img
+                      src={product.image}
+                      className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
+                      alt={product.name}
+                      loading="lazy"
+                      decoding="async"
+                    />
 
                   {/* Discount Badge */}
                   {product.discount && (

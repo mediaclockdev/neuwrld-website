@@ -1,9 +1,36 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addToWishlistAPI,
+  removeFromWishlistAPI,
+} from "../../features/wishlist/wishlistSlice";
 import ProductCard from "./ProductCard";
 
 const CheckoutMoreProducts = ({ products = [] }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const wishlistItems = useSelector((s) => s.wishlist.items || []);
+
+  const isInWishlist = (variantId) =>
+    wishlistItems.some(
+      (item) => String(item.product_variant_id) === String(variantId)
+    );
+
+  const handleWishlist = (variantId) => {
+    const action = isInWishlist(variantId)
+      ? removeFromWishlistAPI(variantId)
+      : addToWishlistAPI(variantId);
+
+    dispatch(action)
+      .unwrap()
+      .catch((err) => {
+        if (err === "NOT_LOGGED_IN") {
+          navigate("/login");
+        }
+      });
+  };
 
   if (!products.length) return null;
 
@@ -21,6 +48,8 @@ const CheckoutMoreProducts = ({ products = [] }) => {
           <ProductCard
             key={item?.product_variant_id}
             item={item}
+            isWishlisted={isInWishlist(item?.product_variant_id || item?.id)}
+            onWishlistClick={handleWishlist}
             onClick={() => navigate(`/products/${item.product_sku}`)}
           />
         ))}

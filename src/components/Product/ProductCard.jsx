@@ -1,14 +1,19 @@
-import React from "react";
+import React, { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Heart } from "lucide-react";
 
-const ProductCard = ({ item, showWishlist = false, onRemoveWishlist }) => {
+const ProductCard = memo(({
+  item,
+  isWishlisted = false,
+  onWishlistClick,
+  onClick,
+}) => {
   const navigate = useNavigate();
 
   return (
     <div
       className="group bg-black rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100 hover:border-gray-200"
-      onClick={() => navigate(`/products/${item.product_sku}`)}
+      onClick={onClick || (() => navigate(`/products/${item.product_sku}`))}
     >
       {/* Image Container */}
       <div className="relative aspect-square w-full overflow-hidden bg-white">
@@ -16,6 +21,8 @@ const ProductCard = ({ item, showWishlist = false, onRemoveWishlist }) => {
           src={item.image}
           alt={item.product_name}
           className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110 p-3 mix-blend-multiply"
+          loading="lazy"
+          decoding="async"
         />
 
         {/* Overlay */}
@@ -35,16 +42,22 @@ const ProductCard = ({ item, showWishlist = false, onRemoveWishlist }) => {
           )}
         </div>
 
-        {/* Wishlist remove icon */}
-        {showWishlist && (
+        {/* Wishlist Button */}
+        {onWishlistClick && (
           <button
             onClick={(e) => {
               e.stopPropagation();
-              onRemoveWishlist(item.product_variant_id);
+              e.preventDefault();
+              onWishlistClick(item.product_variant_id || item.id);
             }}
-            className="absolute top-3 right-3 bg-white rounded-full p-2 shadow"
+            className="absolute top-3 right-3 bg-white rounded-full p-2 shadow z-20 hover:scale-110 transition-transform"
+            aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
           >
-            <Heart className="w-5 h-5 fill-red-500 text-red-500" />
+            <Heart
+              className={`w-5 h-5 transition-colors ${
+                isWishlisted ? "fill-red-500 text-red-500" : "text-gray-400"
+              }`}
+            />
           </button>
         )}
       </div>
@@ -93,6 +106,6 @@ const ProductCard = ({ item, showWishlist = false, onRemoveWishlist }) => {
       </div>
     </div>
   );
-};
+});
 
 export default ProductCard;

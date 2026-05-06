@@ -51,8 +51,8 @@ export const addToWishlistAPI = createAsyncThunk(
 
       const payload = {
         product_variant_id,
-        quantity: 1, // ✅ REQUIRED
-        is_saved_for_later: 1, // ✅ SAFE (optional but recommended)
+        quantity: 1,
+        is_saved_for_later: 1,
       };
 
       console.log("🚀 Wishlist payload:", payload);
@@ -68,6 +68,9 @@ export const addToWishlistAPI = createAsyncThunk(
 
       const data = await res.json();
       if (!res.ok) return handleTokenError(data, thunkAPI);
+
+      // Re-fetch the full wishlist so items stay as full objects
+      thunkAPI.dispatch(fetchWishlistAPI());
 
       return product_variant_id;
     } catch (err) {
@@ -122,16 +125,21 @@ const wishlistSlice = createSlice({
   },
 
   reducers: {
-    /*  Optimistic add */
+    /*  Optimistic add (payload = product_variant_id) */
     addWishlistLocal: (state, action) => {
-      if (!state.items.includes(action.payload)) {
-        state.items.push(action.payload);
+      const exists = state.items.some(
+        (item) => String(item.product_variant_id) === String(action.payload)
+      );
+      if (!exists) {
+        state.items.push({ product_variant_id: action.payload });
       }
     },
 
-    /*  Optimistic remove */
+    /*  Optimistic remove (payload = product_variant_id) */
     removeWishlistLocal: (state, action) => {
-      state.items = state.items.filter((sku) => sku !== action.payload);
+      state.items = state.items.filter(
+        (item) => String(item.product_variant_id) !== String(action.payload)
+      );
     },
   },
 
@@ -156,9 +164,8 @@ const wishlistSlice = createSlice({
 
       /* ---------------- ADD TO WISHLIST ---------------- */
       .addCase(addToWishlistAPI.fulfilled, (state, action) => {
-        if (!state.items.includes(action.payload)) {
-          state.items.push(action.payload);
-        }
+        // Full wishlist re-fetch is dispatched in the thunk,
+        // so we don't need to manually push here.
       })
 
       /* ---------------- REMOVE FROM WISHLIST ---------------- */
