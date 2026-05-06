@@ -86,7 +86,7 @@ const TrendingNow = () => {
       <img
         src={collection2}
         alt="Trending product 2"
-        className="w-full h-full object-cover"
+        className="w-full h-full object-cover drop-shadow-[10px_20px_0_#D9D9D9]"
       />
     </div>
   </div>

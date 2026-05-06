@@ -74,15 +74,15 @@ const About = () => {
 
         {/* Description */}
         <p className="font-tektur text-white text-sm lg:text-lg max-w-[610px] mb-5 lg:mb-7">
-          To us fashion goes beyond style- it serves as a language of
-          expression.Neuworld was born with the purpose of representing those
+          To us fashion goes beyond style - it serves as a language of
+          expression. Neuworld was born with the purpose of representing those
           people who is willing to be more than real.
         </p>
 
         {/* White Info Card */}
         <div className="bg-white rounded-tr-[60px] sm:rounded-tr-[100px] rounded-bl-[60px] sm:rounded-bl-[100px] p-4 sm:p-5 max-w-full sm:max-w-[395px] flex flex-col justify-center items-center shadow-lg gap-4">
           <p className="font-tektur text-[#1a1a1a] text-xs sm:text-sm leading-6 sm:leading-7 font-semibold m-0">
-            Our collection embody freedom individuality and authenticity.We
+            Our collection embody freedom individuality and authenticity. We
             embrace diversity and transform it into a collective cultural
             experience.
           </p>

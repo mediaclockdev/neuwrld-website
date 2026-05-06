@@ -100,7 +100,7 @@ const Footer = () => {
         </div>
         <div className="border-t border-zinc-800 flex flex-col items-center py-3">
           <p className="text-zinc-400 font-inter font-normal text-sm lg:text-base font-tektur">
-            © 2025 Fashion Brand. All rights reserved.
+            © 2026 Neuwrld. All rights reserved.
           </p>
         </div>
       </footer>
