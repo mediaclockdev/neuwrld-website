@@ -4,6 +4,7 @@ import { loginAPI, verifyOtpAPI } from "../../features/auth/authSlice";
 import logo2 from "../../assets/svg/icons/logo2.svg";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { fetchUserProfile } from "../../features/auth/authSlice";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -34,32 +35,32 @@ const Login = () => {
     dispatch(loginAPI({ email: emailaddress }))
       .unwrap()
       .then(() => {
-        setStep("enterOtp");
+        toast.success("OTP sent successfully to your email!");
+        setTimeout(() => {
+          setStep("enterOtp");
+        }, 1000);
       })
-      .catch(() => {
-        alert("Failed to send OTP");
+      .catch((err) => {
+        toast.error(err?.message || "Failed to send OTP. Please try again.");
       });
   };
 
   // STEP 2 — VERIFY OTP API
-  const handleVerify = () => {
+  const handleVerify = async () => {
     const finalOtp = otp.join("");
 
     if (finalOtp.length !== 6) {
-      alert("Enter full 6-digit OTP");
+      toast.error("Please enter the full 6-digit code");
       return;
     }
 
-    dispatch(verifyOtpAPI({ otp: finalOtp }))
-      .unwrap()
-      .then(() => {
-        // LOAD PROFILE BEFORE REDIRECT
-        return dispatch(fetchUserProfile()).unwrap();
-      })
-      .then(() => {
-        navigate(from, { replace: true });
-      })
-      .catch(() => alert("Invalid OTP"));
+    try {
+      await dispatch(verifyOtpAPI({ otp: finalOtp })).unwrap();
+      toast.success("Verification successful!");
+      dispatch(fetchUserProfile());
+    } catch (err) {
+      toast.error(err?.message || "Invalid OTP. Please try again.");
+    }
   };
 
   const handleOtpChange = (value, index) => {
@@ -96,11 +97,22 @@ const Login = () => {
     setOtp(new Array(6).fill(""));
   };
 
+  const { isLoggedIn } = useSelector((state) => state.auth);
+
   useEffect(() => {
     if (step === "enterOtp") {
-      inputRefs.current[0].focus();
+      inputRefs.current[0]?.focus();
     }
   }, [step]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      const timer = setTimeout(() => {
+        navigate(from, { replace: true });
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoggedIn, navigate, from]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-black px-4 py-8 sm:px-6 lg:px-8">
@@ -290,7 +302,7 @@ const Login = () => {
                   clipRule="evenodd"
                 />
               </svg>
-              <p className="text-sm text-red-700 flex-1">
+              <p className="text-sm text-red-700 flex-1 font-tektur">
                 {typeof error === "string" ? error : error?.message}
               </p>
             </div>
