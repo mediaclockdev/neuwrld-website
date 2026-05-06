@@ -4,6 +4,8 @@ import { logout } from "../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
+import { toast } from "react-toastify";
+
 const ViewProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -16,6 +18,7 @@ const ViewProfile = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    toast.success("Logged out successfully");
   };
 
   /** ⏳ LOADING STATE **/

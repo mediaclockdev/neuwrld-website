@@ -387,7 +387,7 @@ const EmptyState = () => {
         You haven't placed any orders yet. Start shopping to see your orders
         here!
       </p>
-      <Link to="/products" className="px-6 py-3 bg-white text-black border border-black rounded-lg font-semibold hover:bg-black hover:text-white transition-colors shadow-md hover:shadow-lg font-tektur">
+      <Link to="/" className="px-6 py-3 bg-white text-black border border-black rounded-lg font-semibold hover:bg-black hover:text-white transition-colors shadow-md hover:shadow-lg font-tektur">
         Start Shopping
       </Link>
     </div>
