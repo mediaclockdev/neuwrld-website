@@ -68,7 +68,7 @@ const TrendingNow = () => {
     
     {/* Left image — lower start */}
     <div
-      className="absolute overflow-hidden"
+      className="absolute overflow-hidden  shadow-[0px_4px_4px_rgba(217,217,217,0.6)]"
       style={{ left: 0, top: "40px", width: "42%", height: "100%" }}
     >
       <img
@@ -80,7 +80,7 @@ const TrendingNow = () => {
 
     {/* Right image — higher start, slightly smaller */}
     <div
-      className="absolute overflow-hidden"
+      className="absolute overflow-hidden  shadow-[0px_4px_4px_rgba(217,217,217,0.6)]"
       style={{ left: "46%", top: 0, width: "38%", height: "85%" }}
     >
       <img
