@@ -394,8 +394,7 @@ const Checkout = () => {
 
                         <span className="text-lg sm:text-xl font-medium text-gray-800 font-tektur">
                           $
-                          {Number(item.price.replace(/[^0-9.]/g, "")) *
-                            item.quantity}
+                          {Number(item.price.replace(/[^0-9.]/g, "")).toFixed(2)}
                         </span>
                       </div>
                     </div>
@@ -447,7 +446,7 @@ const Checkout = () => {
                               e.key === "Enter" && handleApplyCoupon()
                             }
                             placeholder="Enter promo code"
-                            className="w-full border font-tektur border-gray-300 px-4 py-3 pl-10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm sm:text-base outline-none"
+                            className="w-full border font-tektur border-gray-300 px-4 py-3 pl-10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm sm:text-base outline-none text-black"
                           />
                           <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                         </div>

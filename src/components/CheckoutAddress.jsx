@@ -61,14 +61,7 @@ const CheckoutAddress = ({
           </button>
         )}
 
-        {!selectedAddress && addresses?.length === 0 && !showAddressForm && (
-          <button
-            onClick={handleAddNewClick}
-            className="px-6 py-3 bg-black text-white rounded-lg font-medium font-tektur"
-          >
-            + Add Shipping Address
-          </button>
-        )}
+
       </div>
 
       {/* Content */}
@@ -79,7 +72,7 @@ const CheckoutAddress = ({
             {addresses.map((addr) => (
               <label
                 key={addr.id}
-                className={`relative block cursor-pointer rounded-xl border p-4 transition ${
+                className={`relative block cursor-pointer rounded-xl border p-4 transition  ${
                   selectedAddress?.id === addr.id
                     ? "border-black bg-blue-50"
                     : "border-gray-200 hover:border-gray-300"
@@ -196,7 +189,7 @@ const CheckoutAddress = ({
               placeholder="Full Name *"
               value={addressForm.name}
               onChange={handleAddressChange}
-              className="w-full border px-4 py-3 rounded-lg font-tektur"
+              className="w-full border px-4 py-3 rounded-lg font-tektur text-black"
             />
 
             <input
@@ -204,7 +197,7 @@ const CheckoutAddress = ({
               placeholder="Phone Number *"
               value={addressForm.phone}
               onChange={handleAddressChange}
-              className="w-full border px-4 py-3 rounded-lg font-tektur"
+              className="w-full border px-4 py-3 rounded-lg font-tektur text-black"
             />
 
             <input
@@ -212,7 +205,7 @@ const CheckoutAddress = ({
               placeholder="Pincode *"
               value={addressForm.pincode}
               onChange={handleAddressChange}
-              className="w-full border px-4 py-3 rounded-lg font-tektur"
+              className="w-full border px-4 py-3 rounded-lg font-tektur text-black"
             />
 
             <input
@@ -220,7 +213,7 @@ const CheckoutAddress = ({
               placeholder="Address Line 1 *"
               value={addressForm.address_line_1}
               onChange={handleAddressChange}
-              className="w-full border px-4 py-3 rounded-lg font-tektur"
+              className="w-full border px-4 py-3 rounded-lg font-tektur text-black"
             />
 
             <input
@@ -228,7 +221,7 @@ const CheckoutAddress = ({
               placeholder="Address Line 2 (Optional)"
               value={addressForm.address_line_2}
               onChange={handleAddressChange}
-              className="w-full border px-4 py-3 rounded-lg font-tektur"
+              className="w-full border px-4 py-3 rounded-lg font-tektur text-black"
             />
 
             <input
@@ -236,7 +229,7 @@ const CheckoutAddress = ({
               placeholder="Landmark (Optional)"
               value={addressForm.landmark}
               onChange={handleAddressChange}
-              className="w-full border px-4 py-3 rounded-lg font-tektur"
+              className="w-full border px-4 py-3 rounded-lg font-tektur text-black"
             />
 
             <div className="grid sm:grid-cols-2 gap-3">
@@ -245,21 +238,21 @@ const CheckoutAddress = ({
                 placeholder="City *"
                 value={addressForm.city_name}
                 onChange={handleAddressChange}
-                className="w-full border px-4 py-3 rounded-lg font-tektur"
+                className="w-full border px-4 py-3 rounded-lg font-tektur text-black"
               />
 
               <select
                 name="state_id"
                 value={addressForm.state_id}
                 onChange={handleAddressChange}
-                className="w-full border px-4 py-3 rounded-lg bg-white font-tektur"
+                className="w-full border px-4 py-3 rounded-lg bg-white font-tektur text-black"
               >
                 <option value="">Select State *</option>
                 {states.map((state) => (
                   <option
                     key={state.id}
                     value={state.id}
-                    className="font-tektur"
+                    className="font-tektur text-black"
                   >
                     {state.name}
                   </option>
@@ -277,7 +270,7 @@ const CheckoutAddress = ({
 
               <button
                 onClick={handleCancelClick}
-                className="flex-1 border py-3 rounded-lg font-medium font-tektur"
+                className="flex-1 border py-3 rounded-lg font-medium font-tektur text-black"
               >
                 Cancel
               </button>
