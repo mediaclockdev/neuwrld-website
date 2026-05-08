@@ -122,13 +122,18 @@ const Header = () => {
   };
 
   return (
-    <div className="bg-black text-zinc-100 border-b border-zinc-800">
-      <header className="max-w-screen-2xl mx-auto px-5 lg:px-8 sticky top-0 z-50 py-0 lg:py-3">
-        <p className="font-medium font-tektur text-xs lg:text-base text-center text-gray-50 my-2">
-          LIMITED RELEASES. EXCLUSIVE DROPS. ELEGANCE IS NOW LIVE
-        </p>
-        <nav>
-          <div className="flex justify-between items-center lg:gap-4">
+   <div className="sticky lg:static top-0 left-0 w-full z-[1000] bg-black text-zinc-100 border-b border-zinc-800">
+    <header className="max-w-screen-2xl mx-auto">
+  
+  {/* NON STICKY TEXT */}
+  <p className="font-medium font-tektur text-xs lg:text-base text-center text-gray-50 py-2 px-5 lg:px-8">
+    LIMITED RELEASES. EXCLUSIVE DROPS. ELEGANCE IS NOW LIVE
+  </p>
+
+  {/* MOBILE STICKY HEADER ONLY */}
+<div className="bg-black border-t border-zinc-800 overflow-visible">
+    <nav className="px-5 lg:px-8 py-0 lg:py-3">
+          <div className="flex justify-between items-center lg:gap-4 ">
             <div className="flex justify-between items-center gap-4 lg:w-full lg:hidden">
               <div className="flex items-center gap-4">
                 <div>
@@ -698,34 +703,34 @@ const Header = () => {
             </div>
             {/* desktop icons */}
             <div
-              className="relative pb-6 -mb-8 flex items-end"
+              className="relative pb-6 -mb-8 flex items-end  z-[999]"
               onMouseLeave={() => setShowProfile(false)}
             >
               <ul className="flex items-center gap-4">
                 <li className="relative">
                   {/* SEARCH BOX */}
                   <div className="relative">
-                    <div className="flex items-center xl:w-80 lg:bg-zinc-900 px-3 py-2 rounded-sm focus-within:bg-zinc-950 focus-within:border border-zinc-700">
+                    <div className="flex items-center w-[130px] sm:w-[200px] lg:w-64 xl:w-80 bg-zinc-900 px-2 lg:px-3 py-1.5 lg:py-2 rounded-md focus-within:bg-zinc-950 focus-within:border border-zinc-700">
                       {/* icon */}
                       <img
                         src={searchicon}
                         alt="search icon"
-                        className="size-4"
+                        className="size-3.5 lg:size-4 shrink-0"
                       />
 
                       {/* input */}
                       <input
                         type="text"
-                        placeholder="Search for products"
+                        placeholder="Search..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full outline-none text-sm placeholder-zinc-500 text-zinc-100 px-2 py-1 rounded bg-transparent font-medium font-tektur"
+                        className="w-full outline-none text-xs lg:text-sm placeholder-zinc-500 text-zinc-100 px-2 rounded bg-transparent font-medium font-tektur"
                       />
                     </div>
 
                     {/* DROPDOWN */}
                     {search && (
-                      <div className="absolute top-12 left-0 w-full bg-zinc-900 shadow-2xl rounded-lg max-h-96 overflow-hidden z-[999] border border-zinc-700 animate-in fade-in slide-in-from-top-2 duration-200">
+                      <div className="fixed top-[120px] left-4 right-4 lg:absolute lg:top-12 lg:left-0 lg:right-auto lg:w-full bg-zinc-900 shadow-2xl rounded-lg max-h-96 overflow-hidden z-[999] border border-zinc-700 animate-in fade-in slide-in-from-top-2 duration-200">
                         {/* Loading state */}
                         {loading ? (
                           <div className="p-6 flex flex-col items-center justify-center gap-3">
@@ -855,7 +860,7 @@ const Header = () => {
                   />
 
                   {showProfile && (
-                    <div className="absolute right-0 top-12.5">
+                    <div className="absolute right-0 top-12.5 z-[9999]">
                       <ViewProfile />
                     </div>
                   )}
@@ -888,8 +893,9 @@ const Header = () => {
               </ul>
             </div>
           </div>
-        </nav>
-      </header>
+           </nav>
+  </div>
+</header>
     </div>
   );
 };

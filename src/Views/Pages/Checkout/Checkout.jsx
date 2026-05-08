@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Tag, Check, Gift, AlertCircle } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
-// import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchCartAPI } from "../../../features/cart/cartSlice";
 import CheckoutAddress from "../../../components/CheckoutAddress";
 import {
@@ -293,6 +293,16 @@ const Checkout = () => {
       <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+        <nav className="text-sm text-gray-400 font-tektur mb-4">
+          <ul className="flex items-center gap-2">
+            <li><Link to="/" className="hover:text-white transition">Home</Link></li>
+            <li><span>/</span></li>
+            <li><Link to="/cart" className="hover:text-white transition">Cart</Link></li>
+            <li><span>/</span></li>
+            <li><span className="text-white">Checkout</span></li>
+          </ul>
+        </nav>
+
         {/* Header */}
         <div className="mb-6 sm:mb-8">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white font-tektur  mb-2">

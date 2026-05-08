@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useMemo, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   fetchCartAPI,
   updateQuantityAPI,
@@ -186,6 +186,14 @@ const Cart = () => {
   return (
     <div className="min-h-screen bg-black">
       <div className="max-w-7xl mx-auto px-6 py-10">
+          <nav className="text-sm text-gray-400 font-tektur mb-4">
+            <ul className="flex items-center gap-2">
+              <li><Link to="/" className="hover:text-white transition">Home</Link></li>
+              <li><span>/</span></li>
+              <li><span className="text-white">Cart</span></li>
+            </ul>
+          </nav>
+          
           <h1 className="text-4xl font-semibold text-white font-tektur">Cart</h1>
           <p className="text-gray-300">{totalItems} items</p>
 
