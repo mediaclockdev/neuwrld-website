@@ -150,7 +150,7 @@ const Header = () => {
                       <>
                         {/* Backdrop overlay */}
                         <motion.div
-                          className="fixed inset-0 bg-black/40 z-40"
+                          className="fixed inset-0 bg-black/40 z-[9999]"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           exit={{ opacity: 0 }}
@@ -158,7 +158,7 @@ const Header = () => {
                           onClick={() => setIsMenuOpen(false)} // closes menu on backdrop click
                         />
                         <motion.div
-                          className="fixed top-0 left-0 h-full w-3/4 bg-zinc-900 z-50 shadow-lg text-zinc-100"
+                          className="fixed top-0 left-0 h-full w-3/4 bg-zinc-900 z-[9999] shadow-lg text-zinc-100"
                           key="mobile-menu"
                           initial={{ x: "-100%" }}
                           animate={{ x: 0 }}
@@ -612,7 +612,7 @@ const Header = () => {
                 {/* mobile logo */}
                 <div>
                   <Link to={"/"}>
-                    <img src={logo2} alt="logo" className="size-20" />
+                    <img src={logo2} alt="logo" className="size-20 mr-5" />
                   </Link>
                 </div>
               </div>
