@@ -11,6 +11,7 @@ import {
 } from "../../features/cart/cartSlice";
 
 import close from "../../assets/svg/icons/close.svg";
+import CheckoutMoreProducts from "../Product/CheckoutMoreProducts";
 
 /* ----------------------------------
    Helpers
@@ -293,7 +294,8 @@ const Cart = () => {
               >
                 Checkout
               </button>
-            </div>
+          </div>
+          <CheckoutMoreProducts product={productInfo}/>
           </div>
       </div>
     </div>

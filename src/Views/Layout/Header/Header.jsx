@@ -14,8 +14,10 @@ import women from "../../../assets/svg/icons/womenicon.svg";
 import home from "../../../assets/svg/icons/homeicon.svg";
 import newicon from "../../../assets/svg/icons/newicon.svg";
 import sale from "../../../assets/svg/icons/sale.svg";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../../features/auth/authSlice";
+import { toast } from "react-toastify";
 import { fetchCategoriesAPI } from "../../../features/categories/categoriesSlice";
 import MegaMenuDialog from "../../../components/MegaMenuDialog";
 import ViewProfile from "../../../components/ViewProfile";
@@ -28,12 +30,24 @@ const Header = () => {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [products, setProducts] = useState([]);
   const [searchloading, setSearchLoading] = useState(false);
+  const [expandedMobileCategory, setExpandedMobileCategory] = useState(null);
+  const [expandedMobileSubCategory, setExpandedMobileSubCategory] = useState(null);
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
+      // Fetch categories if not already loaded
+      if (!list || list.length === 0) {
+        dispatch(fetchCategoriesAPI());
+      }
     } else {
       document.body.style.overflow = "auto";
+      // Reset expanded states when menu closes
+      setExpandedMobileCategory(null);
+      setExpandedMobileSubCategory(null);
     }
   }, [isMenuOpen]);
   useEffect(() => {
@@ -100,6 +114,13 @@ const Header = () => {
   };
   const { isLoggedIn } = useSelector((state) => state.auth);
 
+  const handleLogout = () => {
+    dispatch(logout());
+    setIsMenuOpen(false);
+    toast.success("Logged out successfully");
+    navigate("/");
+  };
+
   return (
     <div className="bg-black text-zinc-100 border-b border-zinc-800">
       <header className="max-w-screen-2xl mx-auto px-5 lg:px-8 sticky top-0 z-50 py-0 lg:py-3">
@@ -163,63 +184,372 @@ const Header = () => {
                               </div>
                             </div>
                             <div className="px-4 ">
-                              <ul className="flex flex-col gap-6 relative">
+                              <ul className="flex flex-col gap-4 relative">
                                 <li>
-                                  <Link to={"/"}>
-                                    <div className="flex items-center gap-2 cursor-pointer">
-                                      <img
-                                        src={home}
-                                        alt="home icon"
-                                        className="size-5"
-                                      />
-                                      <p className="text-base cursor-pointer font-tektur font-medium">
-                                        Home
-                                      </p>
-                                    </div>
-                                  </Link>
-                                </li>
-                                <li>
-                                  <Link to="/category/men" onClick={() => setIsMenuOpen(false)}>
-                                    <div className="flex items-center gap-2 ">
-                                      <img
-                                        src={man}
-                                        alt="men icon"
-                                        className="size-6"
-                                      />
-                                      <p className="text-base cursor-pointer font-tektur font-medium">
-                                        Men
-                                      </p>
-                                    </div>
-                                  </Link>
-                                </li>
-                                <li>
-                                  <Link to="/category/women" onClick={() => setIsMenuOpen(false)}>
-                                    <div className="flex items-center gap-2">
-                                      <img
-                                        src={women}
-                                        alt="women icon"
-                                        className="size-6"
-                                      />
-                                      <p className="text-base cursor-pointer font-tektur font-medium">
-                                        Women
-                                      </p>
-                                    </div>
-                                  </Link>
-                                </li>
-                                {/* <li>
-                                  <div className="flex items-center gap-2">
+                                  <NavLink
+                                    to={"/"}
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className={({ isActive }) =>
+                                      `flex items-center gap-2 cursor-pointer p-2 rounded-lg transition-colors ${
+                                        isActive
+                                          ? "bg-zinc-800 text-blue-400"
+                                          : "hover:bg-zinc-800"
+                                      }`
+                                    }
+                                  >
                                     <img
-                                      src={newicon}
-                                      alt="new icon"
-                                      className="size-6"
+                                      src={home}
+                                      alt="home icon"
+                                      className="size-5"
                                     />
                                     <p className="text-base cursor-pointer font-tektur font-medium">
-                                      New Arrivals
+                                      Home
                                     </p>
-                                  </div>
-                                </li> */}
+                                  </NavLink>
+                                </li>
+
                                 <li>
-                                  <div className="flex items-center gap-2">
+                                  <div className="flex flex-col">
+                                    <div
+                                      onClick={() =>
+                                        setExpandedMobileCategory(
+                                          expandedMobileCategory === "men"
+                                            ? null
+                                            : "men",
+                                        )
+                                      }
+                                      className={`flex items-center justify-between cursor-pointer p-2 rounded-lg transition-colors ${
+                                        expandedMobileCategory === "men"
+                                          ? "bg-zinc-800 text-blue-400"
+                                          : "hover:bg-zinc-800"
+                                      }`}
+                                    >
+                                      <div className="flex items-center gap-2">
+                                        <img
+                                          src={man}
+                                          alt="men icon"
+                                          className="size-6"
+                                        />
+                                        <p className="text-base font-tektur font-medium">
+                                          Men
+                                        </p>
+                                      </div>
+                                      <motion.svg
+                                        animate={{
+                                          rotate:
+                                            expandedMobileCategory === "men"
+                                              ? 180
+                                              : 0,
+                                        }}
+                                        className="size-4"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                      >
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                      </motion.svg>
+                                    </div>
+
+                                    <AnimatePresence>
+                                      {expandedMobileCategory === "men" && (
+                                        <motion.div
+                                          initial={{ height: 0, opacity: 0 }}
+                                          animate={{ height: "auto", opacity: 1 }}
+                                          exit={{ height: 0, opacity: 0 }}
+                                          className="overflow-hidden pl-8 mt-2 space-y-2"
+                                        >
+                                          {/* Subcategories for Men */}
+                                          {(() => {
+                                            const mainCat = list.find(
+                                              (c) =>
+                                                c.slug?.toLowerCase() === "men",
+                                            );
+                                            if (!mainCat) return null;
+
+                                            // Support both nested structure (Men > Men > Categories) and flat (Men > Categories)
+                                            const data =
+                                              mainCat.children?.find(
+                                                (c) =>
+                                                  c.slug?.toLowerCase() ===
+                                                  "men",
+                                              ) || mainCat;
+
+                                            return data.children?.map(
+                                              (sub) => (
+                                                <div
+                                                  key={sub.id}
+                                                  className="flex flex-col"
+                                                >
+                                                  {sub.children &&
+                                                  sub.children.length > 0 ? (
+                                                    <>
+                                                      <div
+                                                        onClick={() =>
+                                                          setExpandedMobileSubCategory(
+                                                            expandedMobileSubCategory ===
+                                                              sub.id
+                                                              ? null
+                                                              : sub.id,
+                                                          )
+                                                        }
+                                                        className="flex items-center justify-between py-2 cursor-pointer text-sm font-tektur font-semibold text-zinc-200"
+                                                      >
+                                                        {sub.title || sub.name}
+                                                        <motion.svg
+                                                          animate={{
+                                                            rotate:
+                                                              expandedMobileSubCategory ===
+                                                              sub.id
+                                                                ? 180
+                                                                : 0,
+                                                          }}
+                                                          className="size-3"
+                                                          viewBox="0 0 24 24"
+                                                          fill="none"
+                                                          stroke="currentColor"
+                                                          strokeWidth="2"
+                                                        >
+                                                          <polyline points="6 9 12 15 18 9"></polyline>
+                                                        </motion.svg>
+                                                      </div>
+                                                      <AnimatePresence>
+                                                        {expandedMobileSubCategory ===
+                                                          sub.id && (
+                                                          <motion.div
+                                                            initial={{
+                                                              height: 0,
+                                                              opacity: 0,
+                                                            }}
+                                                            animate={{
+                                                              height: "auto",
+                                                              opacity: 1,
+                                                            }}
+                                                            exit={{
+                                                              height: 0,
+                                                              opacity: 0,
+                                                            }}
+                                                            className="overflow-hidden pl-4 space-y-1"
+                                                          >
+                                                            {sub.children?.map(
+                                                              (item) => (
+                                                                <NavLink
+                                                                  key={item.id}
+                                                                  to={`/products/men/${item.slug}`}
+                                                                  onClick={() =>
+                                                                    setIsMenuOpen(
+                                                                      false,
+                                                                    )
+                                                                  }
+                                                                  className="block py-1.5 text-sm font-tektur text-zinc-500 hover:text-blue-400"
+                                                                >
+                                                                  {item.title ||
+                                                                    item.name}
+                                                                </NavLink>
+                                                              ),
+                                                            )}
+                                                          </motion.div>
+                                                        )}
+                                                      </AnimatePresence>
+                                                    </>
+                                                  ) : (
+                                                    <NavLink
+                                                      to={`/products/men/${sub.slug}`}
+                                                      onClick={() =>
+                                                        setIsMenuOpen(false)
+                                                      }
+                                                      className="block py-2 text-sm font-tektur text-zinc-300 hover:text-blue-400"
+                                                    >
+                                                      {sub.title || sub.name}
+                                                    </NavLink>
+                                                  )}
+                                                </div>
+                                              ),
+                                            );
+                                          })()}
+                                        </motion.div>
+                                      )}
+                                    </AnimatePresence>
+                                  </div>
+                                </li>
+
+                                <li>
+                                  <div className="flex flex-col">
+                                    <div
+                                      onClick={() =>
+                                        setExpandedMobileCategory(
+                                          expandedMobileCategory === "women"
+                                            ? null
+                                            : "women",
+                                        )
+                                      }
+                                      className={`flex items-center justify-between cursor-pointer p-2 rounded-lg transition-colors ${
+                                        expandedMobileCategory === "women"
+                                          ? "bg-zinc-800 text-blue-400"
+                                          : "hover:bg-zinc-800"
+                                      }`}
+                                    >
+                                      <div className="flex items-center gap-2">
+                                        <img
+                                          src={women}
+                                          alt="women icon"
+                                          className="size-6"
+                                        />
+                                        <p className="text-base font-tektur font-medium">
+                                          Women
+                                        </p>
+                                      </div>
+                                      <motion.svg
+                                        animate={{
+                                          rotate:
+                                            expandedMobileCategory === "women"
+                                              ? 180
+                                              : 0,
+                                        }}
+                                        className="size-4"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                      >
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                      </motion.svg>
+                                    </div>
+
+                                    <AnimatePresence>
+                                      {expandedMobileCategory === "women" && (
+                                        <motion.div
+                                          initial={{ height: 0, opacity: 0 }}
+                                          animate={{ height: "auto", opacity: 1 }}
+                                          exit={{ height: 0, opacity: 0 }}
+                                          className="overflow-hidden pl-8 mt-2 space-y-2"
+                                        >
+                                          {/* Subcategories for Women */}
+                                          {(() => {
+                                            const mainCat = list.find(
+                                              (c) =>
+                                                c.slug?.toLowerCase() ===
+                                                "women",
+                                            );
+                                            if (!mainCat) return null;
+
+                                            const data =
+                                              mainCat.children?.find(
+                                                (c) =>
+                                                  c.slug?.toLowerCase() ===
+                                                  "women",
+                                              ) || mainCat;
+
+                                            return data.children?.map(
+                                              (sub) => (
+                                                <div
+                                                  key={sub.id}
+                                                  className="flex flex-col"
+                                                >
+                                                  {sub.children &&
+                                                  sub.children.length > 0 ? (
+                                                    <>
+                                                      <div
+                                                        onClick={() =>
+                                                          setExpandedMobileSubCategory(
+                                                            expandedMobileSubCategory ===
+                                                              sub.id
+                                                              ? null
+                                                              : sub.id,
+                                                          )
+                                                        }
+                                                        className="flex items-center justify-between py-2 cursor-pointer text-sm font-tektur font-semibold text-zinc-200"
+                                                      >
+                                                        {sub.title || sub.name}
+                                                        <motion.svg
+                                                          animate={{
+                                                            rotate:
+                                                              expandedMobileSubCategory ===
+                                                              sub.id
+                                                                ? 180
+                                                                : 0,
+                                                          }}
+                                                          className="size-3"
+                                                          viewBox="0 0 24 24"
+                                                          fill="none"
+                                                          stroke="currentColor"
+                                                          strokeWidth="2"
+                                                        >
+                                                          <polyline points="6 9 12 15 18 9"></polyline>
+                                                        </motion.svg>
+                                                      </div>
+                                                      <AnimatePresence>
+                                                        {expandedMobileSubCategory ===
+                                                          sub.id && (
+                                                          <motion.div
+                                                            initial={{
+                                                              height: 0,
+                                                              opacity: 0,
+                                                            }}
+                                                            animate={{
+                                                              height: "auto",
+                                                              opacity: 1,
+                                                            }}
+                                                            exit={{
+                                                              height: 0,
+                                                              opacity: 0,
+                                                            }}
+                                                            className="overflow-hidden pl-4 space-y-1"
+                                                          >
+                                                            {sub.children?.map(
+                                                              (item) => (
+                                                                <NavLink
+                                                                  key={item.id}
+                                                                  to={`/products/women/${item.slug}`}
+                                                                  onClick={() =>
+                                                                    setIsMenuOpen(
+                                                                      false,
+                                                                    )
+                                                                  }
+                                                                  className="block py-1.5 text-sm font-tektur text-zinc-500 hover:text-blue-400"
+                                                                >
+                                                                  {item.title ||
+                                                                    item.name}
+                                                                </NavLink>
+                                                              ),
+                                                            )}
+                                                          </motion.div>
+                                                        )}
+                                                      </AnimatePresence>
+                                                    </>
+                                                  ) : (
+                                                    <NavLink
+                                                      to={`/products/women/${sub.slug}`}
+                                                      onClick={() =>
+                                                        setIsMenuOpen(false)
+                                                      }
+                                                      className="block py-2 text-sm font-tektur text-zinc-300 hover:text-blue-400"
+                                                    >
+                                                      {sub.title || sub.name}
+                                                    </NavLink>
+                                                  )}
+                                                </div>
+                                              ),
+                                            );
+                                          })()}
+                                        </motion.div>
+                                      )}
+                                    </AnimatePresence>
+                                  </div>
+                                </li>
+
+                                <li>
+                                  <NavLink
+                                    to="/sale"
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className={({ isActive }) =>
+                                      `flex items-center gap-2 cursor-pointer p-2 rounded-lg transition-colors ${
+                                        isActive
+                                          ? "bg-zinc-800 text-blue-400"
+                                          : "hover:bg-zinc-800"
+                                      }`
+                                    }
+                                  >
                                     <img
                                       src={sale}
                                       alt="sales icon"
@@ -228,8 +558,44 @@ const Header = () => {
                                     <p className="text-base cursor-pointer font-tektur font-medium">
                                       Sale
                                     </p>
-                                  </div>
+                                  </NavLink>
                                 </li>
+
+                                {isLoggedIn && (
+                                  <>
+                                    <div className="border-t border-zinc-800 my-2"></div>
+                                    <li>
+                                      <Link
+                                        to="/orders"
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className="flex items-center gap-2 p-2 hover:bg-zinc-800 rounded-lg transition-colors"
+                                      >
+                                        <p className="text-base font-tektur font-medium">
+                                          My Orders
+                                        </p>
+                                      </Link>
+                                    </li>
+                                    <li>
+                                      <Link
+                                        to="/wishlist"
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className="flex items-center gap-2 p-2 hover:bg-zinc-800 rounded-lg transition-colors"
+                                      >
+                                        <p className="text-base font-tektur font-medium">
+                                          My Wishlist
+                                        </p>
+                                      </Link>
+                                    </li>
+                                    <li className="pt-4">
+                                      <button
+                                        onClick={handleLogout}
+                                        className="w-full bg-zinc-100 text-black font-bold py-3 rounded-lg font-tektur hover:bg-zinc-200 transition-colors"
+                                      >
+                                        LOGOUT
+                                      </button>
+                                    </li>
+                                  </>
+                                )}
                               </ul>
                             </div>
                           </div>

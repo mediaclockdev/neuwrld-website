@@ -42,10 +42,36 @@ const ProductDetails = () => {
   // IMAGE HANDLING
   // --------------------------------------------------------
   const galleryImages = useMemo(() => {
-    if (Array.isArray(data?.images) && data.images.length > 0) {
-      return data.images.map((img) => img.image);
+    const allImages = new Set();
+    const mainImg = data?.product?.image;
+
+    // Helper to get full URL
+    // Standard product image base: https://.../uploads/media/products/images/
+    const getFullUrl = (url) => {
+      if (!url || typeof url !== "string") return null;
+      if (url.startsWith("http")) return url;
+      
+      // If it's a relative path, we try to prefix it with the base URL from the main image
+      if (mainImg && mainImg.includes("/")) {
+        const baseUrl = mainImg.substring(0, mainImg.lastIndexOf("/") + 1);
+        return `${baseUrl}${url}`;
+      }
+      return null;
+    };
+
+    // 1. Add main image
+    const fullMain = getFullUrl(mainImg);
+    if (fullMain) allImages.add(fullMain);
+
+    // 2. Add gallery images
+    if (Array.isArray(data?.images)) {
+      data.images.forEach((img) => {
+        const full = getFullUrl(img.image);
+        if (full) allImages.add(full);
+      });
     }
-    return [];
+
+    return Array.from(allImages);
   }, [data]);
 
   // console.log("FINAL IMAGES 👉", galleryImages);
@@ -253,29 +279,33 @@ const ProductDetails = () => {
             {/* LEFT SIDE - IMAGES */}
             <div className="w-full lg:w-1/2">
               <div className="space-y-6 sticky top-4">
-                <div className="w-full">
+                <div className="w-full bg-white rounded-2xl overflow-hidden shadow-2xl border border-zinc-800">
                   {mainImage && (
                     <img
                       src={mainImage}
                       alt="Product"
-                      className="w-full h-[90vh] aspect-square object-cover object-top rounded shadow-md"
+                      className="w-full h-auto max-h-[70vh] sm:max-h-[600px] aspect-square object-contain p-6 sm:p-10 transition-all duration-500"
                     />
                   )}
                 </div>
 
-                <div className="flex flex-row gap-4 overflow-x-auto">
-                  {galleryImages.map((img, i) => (
-                    <img
-                      key={i}
-                      src={img}
-                      alt={`Product thumbnail ${i + 1}`}
-                      className={`w-20 h-20 rounded cursor-pointer border-2 flex-shrink-0 ${
-                        mainImage === img ? "border-black" : "border-gray-200"
-                      }`}
-                      onClick={() => setMainImage(img)}
-                    />
-                  ))}
-                </div>
+                {galleryImages.length > 0 && (
+                  <div className="flex flex-row gap-4 overflow-x-auto pb-4 scrollbar-hide">
+                    {galleryImages.map((img, i) => (
+                      <img
+                        key={i}
+                        src={img}
+                        alt={`Product thumbnail ${i + 1}`}
+                        className={`w-20 h-20 rounded-xl cursor-pointer border-2 flex-shrink-0 object-contain bg-white p-2 transition-all duration-300 ${
+                          mainImage === img 
+                            ? "border-white ring-2 ring-white/20" 
+                            : "border-transparent opacity-50 hover:opacity-100"
+                        }`}
+                        onClick={() => setMainImage(img)}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 

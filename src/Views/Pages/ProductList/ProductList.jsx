@@ -225,33 +225,33 @@ const ProductList = () => {
                   onClick={() => navigate(`/products/${product.product_sku}`)}
                 >
                   {/* Image Container */}
-                  <div className="relative aspect-[3/4] bg-black overflow-hidden">
+                  <div className="relative aspect-[1/1.5] lg:aspect-[3/4] bg-white overflow-hidden p-2 sm:p-4">
                     <img
                       src={product.image}
                       alt={product.product_name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
                       loading="lazy"
                       decoding="async"
                     />
 
                     {/* Badges */}
-                    <div className="absolute top-3 left-3 flex flex-col gap-2">
+                    <div className="absolute top-2 left-2 sm:top-3 sm:left-3 flex flex-col gap-1.5 sm:gap-2">
                       {discount && (
-                        <span className="bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded shadow-md">
+                        <span className="bg-red-500 text-white text-[10px] sm:text-xs font-semibold px-1.5 py-0.5 sm:px-2 sm:py-1 rounded shadow-md">
                           {discount}% OFF
                         </span>
                       )}
                       {product.out_of_stock && (
-                        <span className="bg-gray-900 text-white text-xs font-semibold px-2 py-1 rounded shadow-md">
+                        <span className="bg-gray-900 text-white text-[10px] sm:text-xs font-semibold px-1.5 py-0.5 sm:px-2 sm:py-1 rounded shadow-md">
                           OUT OF STOCK
                         </span>
                       )}
                     </div>
 
                     {/* Quick Actions */}
-                    <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+                    <div className="absolute top-2 right-2 sm:top-3 sm:right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
                       <button
-                        className="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100 transition-colors"
+                        className="bg-white p-1.5 sm:p-2 rounded-full shadow-lg hover:bg-gray-100 transition-colors"
                         aria-label="Add to wishlist"
                         onClick={(e) => {
                           e.preventDefault();
@@ -259,7 +259,7 @@ const ProductList = () => {
                         }}
                       >
                         <svg
-                          className={`w-5 h-5 transition-colors duration-200 ${
+                          className={`w-4 h-4 sm:w-5 sm:h-5 transition-colors duration-200 ${
                             isInWishlist(product.id)
                               ? "text-red-500 fill-red-500"
                               : "text-gray-700 fill-none"
@@ -281,17 +281,17 @@ const ProductList = () => {
                     <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-5 transition-opacity duration-300" />
                   </div>
                   {/* Product Info */}
-                  <div className="p-3 sm:p-4">
-                    <h3 className="text-sm sm:text-base font-tektur font-medium text-white line-clamp-2 mb-2 group-hover:text-gray-100 transition-colors">
+                  <div className="p-2.5 sm:p-4">
+                    <h3 className="text-xs sm:text-sm md:text-base font-tektur font-medium text-white line-clamp-2 mb-1 sm:mb-2 group-hover:text-gray-100 transition-colors">
                       {product.product_name}
                     </h3>
 
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="text-base sm:text-lg font-bold font-tektur text-white">
+                    <div className="flex items-center gap-1.5 sm:gap-2 mb-1 sm:mb-3">
+                      <span className="text-sm sm:text-base md:text-lg font-bold font-tektur text-white">
                         {product.price}
                       </span>
                       {product.old_price && (
-                        <span className="text-xs sm:text-sm font-tektur text-gray-400 line-through">
+                        <span className="text-[10px] sm:text-xs md:text-sm font-tektur text-gray-400 line-through">
                           {product.old_price}
                         </span>
                       )}
@@ -340,7 +340,7 @@ const ProductList = () => {
                       </h3>
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-lg sm:text-xl font-bold text-gray-900">
-                          {product.price}
+                            {product.price}
                         </span>
                         {product.old_price && (
                           <span className="text-sm text-gray-400 line-through">
