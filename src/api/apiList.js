@@ -37,5 +37,4 @@ export const ALL_APi_LIST = {
   myOrders: "my-orders",
 };
 
-export const BASE_URL =
-  "https://maroon-crane-692077.hostingersite.com/nuworld_v3/api/v1/";
+export const BASE_URL = "https://nuworld.mediaclocksoft.com.au/api/v1/";
