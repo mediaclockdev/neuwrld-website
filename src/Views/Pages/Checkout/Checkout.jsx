@@ -111,9 +111,18 @@ const Checkout = () => {
   //   // navigate("/payment");
   // };
   const handleAddressChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "phone") {
+      const numericValue = value.replace(/\D/g, "").slice(0, 10);
+      setAddressForm({
+        ...addressForm,
+        phone: numericValue,
+      });
+      return;
+    }
     setAddressForm({
       ...addressForm,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
@@ -141,7 +150,11 @@ const Checkout = () => {
     });
   };
 
+  const [isSavingAddress, setIsSavingAddress] = useState(false);
+
   const handleSaveAddress = async () => {
+    if (isSavingAddress) return;
+
     if (
       !addressForm.name ||
       !addressForm.phone ||
@@ -152,6 +165,12 @@ const Checkout = () => {
       return;
     }
 
+    if (addressForm.phone.length !== 10) {
+      alert("Please enter a valid 10-digit phone number");
+      return;
+    }
+
+    setIsSavingAddress(true);
     try {
       const savedAddress = await dispatch(
         addAddressAPI({
@@ -178,6 +197,8 @@ const Checkout = () => {
       setShowAddressForm(false);
     } catch {
       alert("Failed to save address");
+    } finally {
+      setIsSavingAddress(false);
     }
   };
 
@@ -332,6 +353,7 @@ const Checkout = () => {
               editingAddressId={editingAddressId}
               setEditingAddressId={setEditingAddressId}
               onEditAddress={handleEditAddress}
+              isSavingAddress={isSavingAddress}
             />
 
             {/* Product List */}

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import logo2 from "../../../assets/svg/icons/logo2.svg";
 import insta from "../../../assets/svg/icons/instagram.svg";
 import facebook from "../../../assets/svg/icons/facebook.svg";
@@ -12,7 +13,9 @@ const Footer = () => {
       <footer className="space-y-5 max-w-screen-2xl mx-auto px-5 lg:px-8 py-4">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 py-2 ">
           <div className="space-y-1 lg:space-y-2">
-            <img src={logo2} alt="logo" className="size-16" />
+            <Link to="/">
+              <img src={logo2} alt="logo" className="size-16" />
+            </Link>
             <p className="text-sm font-inter font-normal text-zinc-400 font-tektur">
               Your ultimate destination for contemporary fashion and timeless
               style.

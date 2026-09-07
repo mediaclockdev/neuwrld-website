@@ -14,6 +14,7 @@ const CheckoutAddress = ({
   editingAddressId = null,
   setEditingAddressId = () => {},
   onEditAddress,
+  isSavingAddress = false,
 }) => {
   const handleEditClick = (addr) => {
     if (onEditAddress) {
@@ -193,8 +194,11 @@ const CheckoutAddress = ({
             />
 
             <input
+              type="tel"
               name="phone"
-              placeholder="Phone Number *"
+              inputMode="numeric"
+              maxLength={10}
+              placeholder="Phone Number (10 digits) *"
               value={addressForm.phone}
               onChange={handleAddressChange}
               className="w-full border px-4 py-3 rounded-lg font-tektur text-black"
@@ -263,14 +267,23 @@ const CheckoutAddress = ({
             <div className="flex gap-3 pt-3">
               <button
                 onClick={handleSaveAddress}
-                className="flex-1 bg-black text-white py-3 rounded-lg font-medium font-tektur"
+                disabled={isSavingAddress}
+                className="flex-1 bg-black text-white py-3 rounded-lg font-medium font-tektur disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
               >
-                {editingAddressId ? "Update Address" : "Save Address"}
+                {isSavingAddress ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    {editingAddressId ? "Updating Address..." : "Saving Address..."}
+                  </>
+                ) : (
+                  editingAddressId ? "Update Address" : "Save Address"
+                )}
               </button>
 
               <button
                 onClick={handleCancelClick}
-                className="flex-1 border py-3 rounded-lg font-medium font-tektur text-black"
+                disabled={isSavingAddress}
+                className="flex-1 border py-3 rounded-lg font-medium font-tektur text-black disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 Cancel
               </button>

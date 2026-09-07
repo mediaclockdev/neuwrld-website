@@ -557,29 +557,6 @@ const Header = () => {
                                     </div>
                                   </li>
 
-                                  <li>
-                                    <NavLink
-                                      to="/sale"
-                                      onClick={() => setIsMenuOpen(false)}
-                                      className={({ isActive }) =>
-                                        `flex items-center gap-2 cursor-pointer p-2 rounded-lg transition-colors ${
-                                          isActive
-                                            ? "bg-zinc-800 text-blue-400"
-                                            : "hover:bg-zinc-800"
-                                        }`
-                                      }
-                                    >
-                                      <img
-                                        src={sale}
-                                        alt="sales icon"
-                                        className="size-6"
-                                      />
-                                      <p className="text-base cursor-pointer font-tektur font-medium">
-                                        Sale
-                                      </p>
-                                    </NavLink>
-                                  </li>
-
                                   {isLoggedIn && (
                                     <>
                                       <div className="border-t border-zinc-800 my-2"></div>
@@ -859,7 +836,7 @@ const Header = () => {
                           <img
                             src={heart}
                             alt="wishlist"
-                            className="size-4 lg:size-5 cursor-pointer"
+                            className="size-8 lg:size-5 cursor-pointer"
                           />
                         </div>
                       </div>
@@ -870,7 +847,7 @@ const Header = () => {
                     <img
                       src={user}
                       alt="user"
-                      className="size-5 cursor-pointer"
+                      className="size-8 lg:size-5 cursor-pointer"
                     />
 
                     {showProfile && (
@@ -891,7 +868,7 @@ const Header = () => {
                           <img
                             src={bag}
                             alt="cart"
-                            className="size-4 lg:size-5 cursor-pointer"
+                            className="size-8 lg:size-5 cursor-pointer"
                           />
                         </div>
                       </div>
