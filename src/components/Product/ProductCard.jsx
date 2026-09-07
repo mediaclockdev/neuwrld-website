@@ -13,7 +13,7 @@ const ProductCard = memo(({
   return (
     <div
       className="group bg-black rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100 hover:border-gray-200"
-      onClick={onClick || (() => navigate(`/products/${item.product_sku}`))}
+      onClick={onClick || (() => navigate(`/products/${item.sku || item.product_sku}`))}
     >
       {/* Image Container */}
       <div className="relative aspect-square w-full overflow-hidden bg-white">

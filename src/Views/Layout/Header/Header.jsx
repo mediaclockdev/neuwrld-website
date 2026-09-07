@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import { fetchCategoriesAPI } from "../../../features/categories/categoriesSlice";
 import MegaMenuDialog from "../../../components/MegaMenuDialog";
 import ViewProfile from "../../../components/ViewProfile";
+import { BASE_URL, ALL_APi_LIST } from "../../../api/apiList";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -61,7 +62,7 @@ const Header = () => {
     const fetchProducts = async () => {
       try {
         const res = await fetch(
-          `https://maroon-crane-692077.hostingersite.com/nuworld_v3/api/v1/products-search?q=${debouncedSearch}`,
+          `${BASE_URL}${ALL_APi_LIST.productSearch}?q=${debouncedSearch}`,
         );
 
         const data = await res.json();

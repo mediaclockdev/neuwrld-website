@@ -10,6 +10,7 @@ export const ALL_APi_LIST = {
   productList: "product-listing",
   product_details: "product",
   advance_search: "products-autocomplete",
+  productSearch: "products-search",
 
   dashboard: "home-landing",
   user: "getProfile",
