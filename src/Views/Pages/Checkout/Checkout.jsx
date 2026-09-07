@@ -34,7 +34,7 @@ const emptyAddressForm = {
 
 const Checkout = () => {
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [promo, setPromo] = useState("");
   const [selectedCoupon, setSelectedCoupon] = useState(null);
   const [stripeData, setStripeData] = useState(null);
@@ -612,13 +612,22 @@ const Checkout = () => {
                       key={stripeData.clientSecret}
                       stripeData={stripeData}
                       onSuccess={async () => {
-                        await postApi("checkout/stripe/confirm", {
-                          order_number: stripeData.orderNumber,
-                          payment_intent_id: stripeData.paymentIntentId,
-                        });
+                        try {
+                          await postApi("checkout/stripe/confirm", {
+                            order_number: stripeData.orderNumber,
+                            payment_intent_id: stripeData.paymentIntentId,
+                          });
+                          toast.success("Payment successful 🎉");
+                        } catch {
+                          // payment already captured - never strand the user here
+                          toast.warn(
+                            "Payment received, confirming your order..."
+                          );
+                        }
 
-                        toast.success("Payment successful 🎉");
-                         setStripeData(null);
+                        setStripeData(null);
+                        dispatch(fetchCartAPI());
+                        navigate("/orders", { replace: true });
                       }}
                     />
                   )}
