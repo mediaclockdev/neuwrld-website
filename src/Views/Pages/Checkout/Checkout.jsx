@@ -210,8 +210,9 @@ const Checkout = () => {
   };
 
   const handleSelectCoupon = (coupon) => {
-    setPromo(coupon.code);
-    setSelectedCoupon(coupon.code);
+    const code = coupon.code || coupon.coupon_code || "";
+    setPromo(code);
+    setSelectedCoupon(code);
   };
   const createOrder = async () => {
     const payload = {
@@ -504,34 +505,44 @@ const Checkout = () => {
                         </div>
 
                         <div className="space-y-2">
-                          {coupons.map((coupon) => (
-                            <div
-                              key={coupon.code}
-                              onClick={() => handleSelectCoupon(coupon)}
-                              className={`group relative border border-dashed rounded-lg p-4 transition-all cursor-pointer ${
-                                selectedCoupon === coupon.code
-                                  ? "border-blue-500 bg-blue-50"
-                                  : "border-gray-300 hover:border-blue-400 hover:bg-blue-50"
-                              }`}
-                            >
-                              <div className="flex justify-between items-center gap-4">
-                                <div className="flex-1">
-                                  <div className="flex items-center gap-2 mb-1">
-                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-tektur font-bold bg-gradient-to-r from-blue-600 to-purple-600 text-white tracking-wide">
-                                      {coupon.code}
-                                    </span>
+                          {coupons.map((coupon, idx) => {
+                            const code = coupon.code || coupon.coupon_code || "";
+                            const desc =
+                              coupon.description ||
+                              coupon.title ||
+                              coupon.name ||
+                              (coupon.discount ? `${coupon.discount}% OFF` : "");
+                            return (
+                              <div
+                                key={coupon.id || code || idx}
+                                onClick={() => handleSelectCoupon(coupon)}
+                                className={`group relative border border-dashed rounded-lg p-4 transition-all cursor-pointer ${
+                                  selectedCoupon === code
+                                    ? "border-blue-500 bg-blue-50"
+                                    : "border-gray-300 hover:border-blue-400 hover:bg-blue-50"
+                                }`}
+                              >
+                                <div className="flex justify-between items-center gap-4">
+                                  <div className="flex-1">
+                                    <div className="flex items-center gap-2 mb-1">
+                                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-tektur font-bold bg-gradient-to-r from-blue-600 to-purple-600 text-white tracking-wide">
+                                        {code}
+                                      </span>
+                                    </div>
+                                    {desc && (
+                                      <p className="text-sm text-gray-600 leading-relaxed font-tektur">
+                                        {desc}
+                                      </p>
+                                    )}
                                   </div>
-                                  <p className="text-sm text-gray-600 leading-relaxed font-tektur">
-                                    {coupon.description}
-                                  </p>
-                                </div>
 
-                                <button className="font-tektur text-sm font-semibold text-blue-600 group-hover:text-blue-700 transition-colors px-3 py-1.5 rounded-md group-hover:bg-blue-100">
-                                  Apply
-                                </button>
+                                  <button className="font-tektur text-sm font-semibold text-blue-600 group-hover:text-blue-700 transition-colors px-3 py-1.5 rounded-md group-hover:bg-blue-100">
+                                    Apply
+                                  </button>
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       </div>
                     )}

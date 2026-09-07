@@ -68,19 +68,38 @@ export const fetchCoupons = createAsyncThunk(
   "couponlist",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await fetch(`${BASE_URL}${ALL_APi_LIST.couponlist}`, {
+      const token = localStorage.getItem("token");
+      const headers = {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      };
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
+      const res = await fetch(`${BASE_URL}${ALL_APi_LIST.couponlist || "coupon-list"}`, {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+        headers,
       });
 
-      const data = await res.json();
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error("Invalid response from server");
+      }
 
-      if (!res.ok) throw new Error(data.message);
+      if (!res.ok) throw new Error(data?.message || "Failed to fetch coupons");
 
-      return data;
+      const list =
+        (Array.isArray(data?.data) && data.data) ||
+        (Array.isArray(data?.data?.coupons) && data.data.coupons) ||
+        (Array.isArray(data?.coupons) && data.coupons) ||
+        (Array.isArray(data) && data) ||
+        [];
+
+      return list;
     } catch (err) {
       return rejectWithValue(err.message);
     }
@@ -131,11 +150,12 @@ const couponSlice = createSlice({
       })
       .addCase(fetchCoupons.fulfilled, (state, action) => {
         state.loading = false;
-        state.coupons = action.payload.data;
+        state.coupons = action.payload || [];
       })
       .addCase(fetchCoupons.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.coupons = [];
       });
   },
 });

@@ -54,7 +54,6 @@ const ViewProfile = () => {
     );
   }
 
-  
   return (
     <div className="w-full max-w-sm bg-white shadow-lg rounded-lg p-4 sm:p-6">
       {/* User Info */}
@@ -82,7 +81,7 @@ const ViewProfile = () => {
         >
           Wishlist
         </Link>
-        <Link
+        {/* <Link
           // to="/addresses"
           className="text-zinc-700 hover:text-gray-900 transition-colors duration-500 font-tektur hover:underline"
         >
@@ -99,7 +98,7 @@ const ViewProfile = () => {
           className="text-zinc-700 hover:text-gray-900 transition-colors duration-500 font-tektur hover:underline"
         >
           Settings
-        </Link>
+        </Link> */}
       </nav>
 
       <div className="border-t border-gray-200 py-4 sm:py-6"></div>

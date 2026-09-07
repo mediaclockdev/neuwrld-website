@@ -21,8 +21,9 @@ export const ALL_APi_LIST = {
   removeCart: "remove-from-cart",
   getCart: "my-cart",
   updateQuantity: "update-quantity",
-  applyCoupon: "apply-coupon",
+  applyCoupon: "coupon/apply",
   couponlist: "coupon-list",
+  couponList: "coupon-list",
 
   // wishlist //
   addtoWishlist: "move-to-wishlist",
